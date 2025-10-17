@@ -9,14 +9,20 @@ public class ExperimentController : MonoBehaviour
 
     public void StartExperiment()
     {
-        if (recorder != null) recorder.StartRecording();
-        UpdateStatus("Recording...");
+        if (recorder != null) {
+            recorder.StartRecording();
+            LoggingManager.Instance.StartRecording("PLACEHOLDER_NAME");
+            UpdateStatus("Recording...");
+        }
     }
 
     public void StopExperiment()
     {
-        if (recorder != null) recorder.StopRecording();
-        UpdateStatus("Stopped. Data Saved.");
+        if (recorder != null) {
+            recorder.StopRecording();
+            LoggingManager.Instance.StopRecording();
+            UpdateStatus("Stopped. Data Saved.");
+        }
     }
 
     void UpdateStatus(string s)

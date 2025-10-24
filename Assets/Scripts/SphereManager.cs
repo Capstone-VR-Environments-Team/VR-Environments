@@ -79,17 +79,6 @@ public class SphereCollectionManager : MonoBehaviour
                 Random.Range(spawnAreaMin.z, spawnAreaMax.z)
             );
         }
-                
-        // Connect the sphere's trigger to this manager
-        TrialEndTrigger trigger = currentSphere.GetComponent<TrialEndTrigger>();
-        if (trigger != null)
-        {
-            trigger.onTrialEnd.AddListener(OnSphereInteracted);
-        }
-        else
-        {
-            Debug.LogError("Sphere prefab is missing TrialEndTrigger component!");
-        }
     }
     
     void EndTrial()
@@ -106,10 +95,6 @@ public class SphereCollectionManager : MonoBehaviour
     public void ResetTrial()
     {
         spheresCollected = 0;
-        if (currentSphere != null)
-        {
-            Destroy(currentSphere);
-        }
         SpawnNextSphere();
     }
 }

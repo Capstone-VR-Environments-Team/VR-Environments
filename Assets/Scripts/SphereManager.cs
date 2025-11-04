@@ -67,10 +67,6 @@ public class SphereCollectionManager : MonoBehaviour
     public void ResetTrial()
     {
         spheresCollected = 0;
-        foreach (var sphere in spheres)
-        {
-            sphere.ResetTrigger();
-        }
         SpawnNextSphere();
     }
 }

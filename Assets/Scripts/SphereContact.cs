@@ -3,11 +3,11 @@ using UnityEngine;
 public class SphereContact : MonoBehaviour
 {
     private bool hasBeenTriggered = false;
-    private SphereManager sphereManager;
+    private SphereCollectionManager sphereManager;
 
     void Start()
     {
-        sphereManager = FindObjectOfType<SphereManager>();
+        sphereManager = FindFirstObjectByType<SphereCollectionManager>();
     }
 
     void OnTriggerEnter(Collider other)

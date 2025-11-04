@@ -3,21 +3,26 @@ using UnityEngine;
 public class SphereContact : MonoBehaviour
 {
     private bool hasBeenTriggered = false;
-    
+    private SphereManager sphereManager;
+
+    void Start()
+    {
+        sphereManager = FindObjectOfType<SphereManager>();
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if (!hasBeenTriggered && other.CompareTag("GameController"))
         {
             hasBeenTriggered = true;
-            EndTrial();
+            Debug.Log("Sphere found!");
+            GetComponent<Renderer>().material.color = Color.green;
+            sphereManager.OnSphereInteracted();
         }
     }
-
-    void EndTrial()
+    
+    public void ResetTrigger()
     {
-        Debug.Log("Trial ended!");
-        GetComponent<Renderer>().material.color = Color.green;
-        //save data
-        //load next scene
+        hasBeenTriggered = false;
     }
 }

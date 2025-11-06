@@ -1,25 +1,10 @@
-using SFB;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
 
 public class CSVFileLoader : IFileLoader {
-    public override string[] getFilePaths(string startDirectory) {
-        string title = "Select CSV Files";
-        string directory = Application.persistentDataPath;
-        ExtensionFilter[] extensions = new[]
-        {
-            new ExtensionFilter("CSV Files", "csv"),
-            new ExtensionFilter("All Files", "*"),
-        };
-        bool multiselect = true;
-
-        string[] paths = StandaloneFileBrowser.OpenFilePanel(title, directory, extensions, multiselect);
-
-        return paths;
-    }
-
+    
     public override List<TrackingData> loadFile(string path) {
         List<TrackingData> trackingData = new List<TrackingData>();
         Dictionary<string, int> headerMap = new Dictionary<string, int>();

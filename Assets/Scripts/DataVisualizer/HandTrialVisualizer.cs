@@ -44,7 +44,7 @@ public class HandTrailVisualizer : MonoBehaviour {
     }
     void LoadFiles() {
         // Get multiple selected files
-        string[] filePaths = fileLoader.getFilePaths(Application.persistentDataPath);
+        string[] filePaths = FileSelector.getFilePaths(Application.persistentDataPath, "csv");
         
         // Load all the selected files and create their selected trails
         foreach (string file in filePaths) {

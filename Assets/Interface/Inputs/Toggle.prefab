@@ -228,19 +228,19 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 819a6f78eb959eb42b95c35b40dd883f, type: 3}
+    m_Font: {fileID: 12800000, guid: 3bc5fffd8225bd0489feb568ef964b32, type: 3}
     m_FontSize: 25
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 2
     m_MaxSize: 40
-    m_Alignment: 5
+    m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Show
+  m_Text: Show Hands
 --- !u!1 &8765195635869083202
 GameObject:
   m_ObjectHideFlags: 0

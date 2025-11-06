@@ -5,27 +5,30 @@ public class SphereCollectionManager : MonoBehaviour
 {
     [Header("Sphere Settings")]
     public GameObject spherePrefab;
-    public int totalSpheres = 5;
+    public static int totalSpheres = 3;
 
     public GameObject[] spheres;
 
     [Header("Spawn Locations")]
     
     public Vector3 spawnAreaMin = new Vector3(0, 0, 0);
-    public Vector3 spawnAreaMax = new Vector3(5, 5, 5);
+    public Vector3 spawnAreaMax = new Vector3(0, 0, 0);
     
     private int spheresCollected = 0;
     private GameObject currentSphere;
     
     void Start()
     {
-        for (int i = 0; i < totalSpheres; i++) {
-            spheres[i] = Instantiate(spherePrefab,
-                                    new Vector3(
-                                        Random.Range(spawnAreaMin.x, spawnAreaMax.x),
-                                        Random.Range(spawnAreaMin.y, spawnAreaMax.y),
-                                        Random.Range(spawnAreaMin.z, spawnAreaMax.z)),
+        spheres = new GameObject[totalSpheres];
+        for (int i = 0; i < spheres.Length; i++) {
+            this.spheres[i] = Instantiate(spherePrefab,
+                                    new Vector3(0, i, -8),
                                         Quaternion.identity);
+            Collider c = spheres[i].GetComponent<Collider>();
+            if (c) {
+                c.isTrigger = true;
+            }
+            this.spheres[i].SetActive(false);
         }
         SpawnNextSphere();
     }
@@ -52,13 +55,15 @@ public class SphereCollectionManager : MonoBehaviour
     
     void SpawnNextSphere()
     {
-        spheres[spheresCollected].SetActive(true);
-        currentSphere = spheres[spheresCollected];
+        if (spheresCollected < this.spheres.Length && this.spheres[spheresCollected] != null) {
+            this.spheres[spheresCollected].SetActive(true);
+            currentSphere = this.spheres[spheresCollected];
+        }
     }
     
     void EndTrial()
     {
-        Debug.Log("Trial complete! All spheres collected.");
+        Debug.Log("Trial complete! All spheres collected."); 
         // - Save data
         // - Load next trial
         ResetTrial();
@@ -67,6 +72,6 @@ public class SphereCollectionManager : MonoBehaviour
     public void ResetTrial()
     {
         spheresCollected = 0;
-        SpawnNextSphere();
+        // SpawnNextSphere();
     }
 }

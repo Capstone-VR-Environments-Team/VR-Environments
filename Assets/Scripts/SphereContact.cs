@@ -12,7 +12,7 @@ public class SphereContact : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (!hasBeenTriggered && other.CompareTag("GameController"))
+        if (other.CompareTag("GameController"))
         {
             hasBeenTriggered = true;
             Debug.Log("Sphere found!");

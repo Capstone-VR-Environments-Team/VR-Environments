@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 861560693967919521}
   - component: {fileID: 84728632423326076}
   - component: {fileID: 3006894725825466069}
+  - component: {fileID: 1672272941984658189}
   m_Layer: 5
   m_Name: CustomizeSession
   m_TagString: Untagged
@@ -76,6 +77,28 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1672272941984658189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 652060105826900238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba7def23bec03654e92e4b671557316e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SaveTrialSettings
+  configurationNameInput: {fileID: 752374185960790356}
+  showTargetsToggle: {fileID: 611336370283107016}
+  targetVisibleTimeInput: {fileID: 1862832328281336511}
+  showHandsToggle: {fileID: 1418023615022569829}
+  handVisibleTimeInput: {fileID: 8415165311406763237}
+  offsetTypeDropdown: {fileID: 7648482414821813941}
+  offsetXInput: {fileID: 7788332100040530990}
+  offsetYInput: {fileID: 2094944371886917560}
+  offsetZInput: {fileID: 605608848163725891}
+  targetRangeInput: {fileID: 6454565361438192101}
 --- !u!1001 &473491370036569089
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -200,6 +223,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3951041185202634121, guid: 258b5bbd4a22f4049b0ddf64674f95a5, type: 3}
   m_PrefabInstance: {fileID: 473491370036569089}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8415165311406763237 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8240041025098795236, guid: 258b5bbd4a22f4049b0ddf64674f95a5, type: 3}
+  m_PrefabInstance: {fileID: 473491370036569089}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TMP_InputField
 --- !u!1001 &920647907602719021
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -432,6 +466,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3951041185202634121, guid: 258b5bbd4a22f4049b0ddf64674f95a5, type: 3}
   m_PrefabInstance: {fileID: 2184025231031063754}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7788332100040530990 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8240041025098795236, guid: 258b5bbd4a22f4049b0ddf64674f95a5, type: 3}
+  m_PrefabInstance: {fileID: 2184025231031063754}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TMP_InputField
 --- !u!1001 &2326975084975868153
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -584,6 +629,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1721248558964440106, guid: f7da74402acc4cc479d84062138cd2a4, type: 3}
   m_PrefabInstance: {fileID: 2326975084975868153}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7648482414821813941 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5363731877073872460, guid: f7da74402acc4cc479d84062138cd2a4, type: 3}
+  m_PrefabInstance: {fileID: 2326975084975868153}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b743370ac3e4ec2a1668f5455a8ef8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TMP_Dropdown
 --- !u!1001 &2527622664850059147
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -835,6 +891,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5055714067288234704, guid: 2893c8bad5e66cc4697976f744cbbaf1, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5055714067288234704, guid: 2893c8bad5e66cc4697976f744cbbaf1, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5055714067288234704, guid: 2893c8bad5e66cc4697976f744cbbaf1, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1672272941984658189}
+    - target: {fileID: 5055714067288234704, guid: 2893c8bad5e66cc4697976f744cbbaf1, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5055714067288234704, guid: 2893c8bad5e66cc4697976f744cbbaf1, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnSaveButtonClicked
+      objectReference: {fileID: 0}
+    - target: {fileID: 5055714067288234704, guid: 2893c8bad5e66cc4697976f744cbbaf1, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: SaveTrialSettings, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5055714067288234704, guid: 2893c8bad5e66cc4697976f744cbbaf1, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 5752336313111185616, guid: 2893c8bad5e66cc4697976f744cbbaf1, type: 3}
       propertyPath: m_text
       value: Save Configuration
@@ -975,6 +1059,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3951041185202634121, guid: 258b5bbd4a22f4049b0ddf64674f95a5, type: 3}
   m_PrefabInstance: {fileID: 3155256801687550209}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6454565361438192101 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8240041025098795236, guid: 258b5bbd4a22f4049b0ddf64674f95a5, type: 3}
+  m_PrefabInstance: {fileID: 3155256801687550209}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TMP_InputField
 --- !u!1001 &4151553028049617584
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1206,6 +1301,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 394fac5ce0c225641b4ea1c8829df3c3, type: 3}
+--- !u!114 &752374185960790356 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5861996059857011395, guid: 394fac5ce0c225641b4ea1c8829df3c3, type: 3}
+  m_PrefabInstance: {fileID: 6568788189951662999}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TMP_InputField
 --- !u!224 &7241512676983623719 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4563839016906083248, guid: 394fac5ce0c225641b4ea1c8829df3c3, type: 3}
@@ -1432,6 +1538,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 258b5bbd4a22f4049b0ddf64674f95a5, type: 3}
+--- !u!114 &1862832328281336511 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8240041025098795236, guid: 258b5bbd4a22f4049b0ddf64674f95a5, type: 3}
+  m_PrefabInstance: {fileID: 7746364556200010331}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TMP_InputField
 --- !u!224 &6725130452208361426 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3951041185202634121, guid: 258b5bbd4a22f4049b0ddf64674f95a5, type: 3}
@@ -1538,6 +1655,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b7edc8cd3cf28da4b8b12719e28e26eb, type: 3}
+--- !u!114 &1418023615022569829 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8664147731030923808, guid: b7edc8cd3cf28da4b8b12719e28e26eb, type: 3}
+  m_PrefabInstance: {fileID: 7750950612020478789}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Toggle
 --- !u!224 &7959907040907455602 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 425499747931434807, guid: b7edc8cd3cf28da4b8b12719e28e26eb, type: 3}
@@ -1672,6 +1800,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 258b5bbd4a22f4049b0ddf64674f95a5, type: 3}
+--- !u!114 &2094944371886917560 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8240041025098795236, guid: 258b5bbd4a22f4049b0ddf64674f95a5, type: 3}
+  m_PrefabInstance: {fileID: 8018726658203635548}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TMP_InputField
 --- !u!224 &6457271739547005653 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3951041185202634121, guid: 258b5bbd4a22f4049b0ddf64674f95a5, type: 3}
@@ -1782,6 +1921,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b7edc8cd3cf28da4b8b12719e28e26eb, type: 3}
+--- !u!114 &611336370283107016 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8664147731030923808, guid: b7edc8cd3cf28da4b8b12719e28e26eb, type: 3}
+  m_PrefabInstance: {fileID: 8090394867745327336}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Toggle
 --- !u!224 &8476186267290314719 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 425499747931434807, guid: b7edc8cd3cf28da4b8b12719e28e26eb, type: 3}
@@ -1916,6 +2066,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 258b5bbd4a22f4049b0ddf64674f95a5, type: 3}
+--- !u!114 &605608848163725891 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8240041025098795236, guid: 258b5bbd4a22f4049b0ddf64674f95a5, type: 3}
+  m_PrefabInstance: {fileID: 8808213688084933287}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TMP_InputField
 --- !u!224 &5542212227483424558 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3951041185202634121, guid: 258b5bbd4a22f4049b0ddf64674f95a5, type: 3}

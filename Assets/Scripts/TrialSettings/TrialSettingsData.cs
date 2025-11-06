@@ -1,0 +1,29 @@
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+
+[Serializable]
+public class VisibilitySettings
+{
+    public bool ShowTargets;
+    public float TargetVisibleTime;
+    public bool ShowHands;
+    public float HandVisibleTime;
+}
+
+[Serializable]
+public class OffsetSettings
+{
+    public string OffsetType;
+    public Vector3 OffsetValues;
+    public float TargetRange;
+}
+
+[Serializable]
+public class TrialSettingsData
+{
+    public string ConfigurationName;
+    public VisibilitySettings VisibilitySettings;
+    public OffsetSettings OffsetSettings;
+}
+

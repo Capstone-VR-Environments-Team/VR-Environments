@@ -3,24 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class TrialSettings
+public class VisibilitySettings
 {
-    public float Close;
-    public bool HandsHidden;
-    public float HandVisibleTime;
-    public bool TargetsHidden;
+    public bool ShowTargets;
     public float TargetVisibleTime;
-    public string HandOffsetType;
-    public Vector3 HandOffsetValue;
-    public string SelectedBackground;
+    public bool ShowHands;
+    public float HandVisibleTime;
 }
 
 [Serializable]
-public class TrialData
+public class OffsetSettings
 {
-    public string TrialName;
-    public string Description;
-    public TrialSettings Settings;
-    public List<Vector3> Targets;
+    public string OffsetType;
+    public Vector3 OffsetValues;
+    public float TargetRange;
+}
+
+[Serializable]
+public class TrialSettingsData
+{
+    public string ConfigurationName;
+    public VisibilitySettings VisibilitySettings;
+    public OffsetSettings OffsetSettings;
 }
 

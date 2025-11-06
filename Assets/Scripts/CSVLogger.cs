@@ -6,7 +6,8 @@ using UnityEngine;
 
 public class CsvLogger : ILogger {
     private StringBuilder _buffer;           
-    private string _filePath;                
+    private string _filePath;
+    private long _time;
     private bool _initialized = false;
 
     public CsvLogger() {
@@ -21,7 +22,7 @@ public class CsvLogger : ILogger {
 
         _buffer.AppendLine(string.Format(CultureInfo.InvariantCulture,
             "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14}",
-            data.timeStamp,
+            data.timeStamp - _time,
             data.leftHandPos.x, data.leftHandPos.y, data.leftHandPos.z,
             data.leftHandRotation.x, data.leftHandRotation.y, data.leftHandRotation.z, data.leftHandRotation.w,
             data.rightHandPos.x, data.rightHandPos.y, data.rightHandPos.z,
@@ -49,11 +50,11 @@ public class CsvLogger : ILogger {
     }
 
     // Override the base InitLog to also create file path and header
-    public new void InitLog(string trialName) {
-        base.InitLog(trialName);
-
+    public override void InitLog(string trialName) {
+        _time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         string fileName = $"{trialName}_{DateTime.Now:yyyyMMdd_HHmmss}.csv";
         _filePath = Path.Combine(Application.persistentDataPath, fileName);
+        Debug.Log(_filePath);
         _buffer.Clear();
 
         WriteHeader();
@@ -65,5 +66,6 @@ public class CsvLogger : ILogger {
                            "Lx,Ly,Lz,LqX,LqY,LqZ,LqW," +
                            "Rx,Ry,Rz,RqX,RqY,RqZ,RqW");
     }
+
 }
 

@@ -215,10 +215,11 @@ MonoBehaviour:
   showRightPathsToggle: {fileID: 5893142554397111988}
   showOptimalPathsToggle: {fileID: 125287120449107581}
   pathDropdown: {fileID: 5974248675717393403}
-  averageText: {fileID: 8694742567519194057}
-  maximumText: {fileID: 714567933553058259}
-  minimumText: {fileID: 7246353626875378328}
-  stdevText: {fileID: 8452458475686635043}
+  statisticsManager:
+    averageText: {fileID: 8694742567519194057}
+    maximumText: {fileID: 714567933553058259}
+    minimumText: {fileID: 7246353626875378328}
+    stDevText: {fileID: 8452458475686635043}
 --- !u!1 &5678810600258792766
 GameObject:
   m_ObjectHideFlags: 0

@@ -21,23 +21,6 @@ public class InteractiveViewManager : MonoBehaviour
     [SerializeField] private TMP_Dropdown pathDropdown;
     public TMP_Dropdown PathDropdown => pathDropdown;
 
-    [SerializeField] private TMP_Text averageText;
-    public TMP_Text AverageText => averageText;
-
-    [SerializeField] private TMP_Text maximumText;
-    public TMP_Text MaximumText => maximumText;
-
-    [SerializeField] private TMP_Text minimumText;
-    public TMP_Text MinimumText => minimumText;
-
-    [SerializeField] private TMP_Text stDevText;
-    public TMP_Text StDevText => stDevText;
-
-    public void SetStatistics(Statistics statistics)
-    {
-        averageText.SetText(statistics.Average.ToString());
-        maximumText.SetText(statistics.Maximum.ToString());
-        minimumText.SetText(statistics.Minimum.ToString());
-        stDevText.SetText(statistics.StDev.ToString());
-    }
+    [SerializeField] private StatisticsManager statisticsManager;
+    public StatisticsManager StatisticsManager => statisticsManager;
 }

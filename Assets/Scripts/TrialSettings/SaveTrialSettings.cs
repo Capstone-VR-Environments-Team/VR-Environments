@@ -5,6 +5,7 @@ using TMPro;
 
 public class SaveTrialSettings : MonoBehaviour
 {
+    [Header("Configuration Name")]
     public TMP_InputField configurationNameInput;
 
     [Header("Visibility Settings")]
@@ -21,7 +22,20 @@ public class SaveTrialSettings : MonoBehaviour
     public TMP_InputField offsetZInput;
     public TMP_InputField targetRangeInput;
 
-    // Example button call
+    private List<Vector3> _tempTargetLocations = new List<Vector3>();
+
+    public void OnUploadLocationsClicked()
+    {
+        TargetImportData importedData = JsonFileManager.LoadFromFile<TargetImportData>("ImportedTargets");
+        if (importedData != null && importedData.targets != null)
+        {
+            _tempTargetLocations = importedData.targets;
+        }
+        else
+        {
+            Debug.LogError("Failed to load target locations from file.");
+        }
+    }
     public void OnSaveButtonClicked()
     {
         TrialSettingsData trial = new TrialSettingsData
@@ -43,7 +57,8 @@ public class SaveTrialSettings : MonoBehaviour
                     float.Parse(offsetZInput.text)
                 ),
                 TargetRange = float.Parse(targetRangeInput.text)
-            }
+            },
+            TargetLocations = _tempTargetLocations
         };
         JsonFileManager.SaveToFile(trial, trial.ConfigurationName);
     }

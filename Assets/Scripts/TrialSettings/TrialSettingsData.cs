@@ -3,6 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
+public class TrialSettingsData
+{
+    public string ConfigurationName;
+    public VisibilitySettings VisibilitySettings;
+    public OffsetSettings OffsetSettings;
+    public List<Vector3> TargetLocations;
+}
+
+[Serializable]
 public class VisibilitySettings
 {
     public bool ShowTargets;
@@ -20,10 +29,10 @@ public class OffsetSettings
 }
 
 [Serializable]
-public class TrialSettingsData
+public class TargetImportData
 {
-    public string ConfigurationName;
-    public VisibilitySettings VisibilitySettings;
-    public OffsetSettings OffsetSettings;
+    public List<Vector3> targets;
 }
+
+
 

@@ -25,7 +25,7 @@ public static class DataSlicer {
             var endKey = sortedKeys[i + 1];
 
             // Fast-forward to start of segment
-            while (cursor < totalCount && rawDataTimes[cursor] <= startKey.Timestamp) {
+            while (cursor < totalCount && rawDataTimes[cursor] < startKey.Timestamp) {
                 cursor++;
             }
 

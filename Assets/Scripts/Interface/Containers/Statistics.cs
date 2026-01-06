@@ -1,15 +1,31 @@
 public class Statistics
 {
-    public int Average;
-    public int Maximum;
-    public int Minimum;
-    public int StDev;
+    // Basic Metrics
+    public double Average { get; set; }
+    public double Max { get; set; }
+    public double Min { get; set; }
+    public double Median { get; set; }
 
-    public Statistics (int average, int maximum, int minimum, int stDev)
+    // Deviation
+    public double StDev { get; set; }
+
+    // Time Context
+    public double TimeOfMax { get; set; }
+    public double TimeOfMin { get; set; }
+    public double TotalDuration { get; set; }
+
+    public Statistics (double average, double maximum, double minimum, double median, double stDev, double timeOfMax, double timeOfMin, double totalDuration)
     {
         Average = average;
-        Maximum = maximum;
-        Minimum = minimum;
+        Max = maximum;
+        Min = minimum;
+        Median = median;
         StDev = stDev;
+        TimeOfMax = timeOfMax;
+        TimeOfMin = timeOfMin;
+        TotalDuration = totalDuration;
+    }
+
+    public Statistics() {
     }
 }

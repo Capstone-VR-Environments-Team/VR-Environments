@@ -24,6 +24,10 @@ public class ReviewPastSessionsManager : MonoBehaviour
     [SerializeField] private Button interactiveViewButton;
     public Button InteractiveViewButton => interactiveViewButton;
 
+    [SerializeField] private Button selectSessionButton;
+    public Button SelectSessionButton => selectSessionButton;
+
+
     public void SetSessionInfo(SessionInfo sessionInfo)
     {
         nameText.SetText(sessionInfo.Name.ToString());

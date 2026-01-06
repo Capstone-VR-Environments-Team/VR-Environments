@@ -19,8 +19,8 @@ public class StatisticsManager {
     public void SetStatistics(Statistics statistics)
     {
         averageText.SetText(statistics.Average.ToString());
-        maximumText.SetText(statistics.Maximum.ToString());
-        minimumText.SetText(statistics.Minimum.ToString());
+        maximumText.SetText(statistics.Max.ToString());
+        minimumText.SetText(statistics.Min.ToString());
         stDevText.SetText(statistics.StDev.ToString());
     }
 }

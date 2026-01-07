@@ -57,38 +57,7 @@ public class FullAnalysisManager : MonoBehaviour {
         var rightResults = ProcessHand(targetHits, rightPos, allTimes);
 
         // Display Combined Stats
-        //DisplayCombinedStats(leftResults, rightResults);
-        _statisticalViewManager.DeviationStatisticsManager.SetStatistics(rightResults.statsDist);
-
-        BaseChart devMagGraph = _statisticalViewManager.DeviationMagnitudeGraph;
-        BaseChart horizGraph = _statisticalViewManager.XAxisDeviationGraph;
-        BaseChart vertGraph = _statisticalViewManager.YAxisDeviationGraph;
-        devMagGraph.ClearData();
-        horizGraph.ClearData();
-        vertGraph.ClearData();
-
-        Debug.Log(allTimes.ToArray().ToString());
-        Debug.Log(rightResults.distVals.ToArray().ToString());
-
-        for (int i = 0; i < allTimes.Count; i++) {
-            devMagGraph.AddData(0, allTimes[i], rightResults.distVals[i]);
-            horizGraph.AddData(0, allTimes[i], rightResults.hVals[i]);
-            vertGraph.AddData(0, allTimes[i], rightResults.vVals[i]);
-        }
-
-        devMagGraph.RefreshChart();
-        horizGraph.RefreshChart();
-        vertGraph.RefreshChart();
-    }
-
-    // Helper struct to keep the massive amounts of data organized
-    private struct HandResultPackage {
-        public Statistics statsDist;
-        public Statistics statsH;
-        public Statistics statsV;
-        public List<double> distVals;
-        public List<double> hVals;
-        public List<double> vVals;
+        _statisticalViewManager.SetResults(leftResults, rightResults, allTimes);
     }
 
     private HandResultPackage ProcessHand(List<KeyPoint> hits, List<Vector3> positions, List<double> times) {
@@ -118,32 +87,4 @@ public class FullAnalysisManager : MonoBehaviour {
             statsV = DataAnalyzer.AnalyzeData(new AnalysisInputData { Values = vs, Timestamps = times })
         };
     }
-
-    //private void DisplayCombinedStats(HandResultPackage left, HandResultPackage right) {
-    //    if (statsDisplayText == null) return;
-
-    //    string report = $"<b>ANALYSIS REPORT</b>\nFolder: {Path.GetFileName(_currentFolderPath)}\n\n";
-
-    //    // --- LEFT HAND ---
-    //    report += "<b><color=blue>--- LEFT HAND ---</color></b>\n";
-    //    if (left.statsDist != null) {
-    //        report += $"Dist Error | Avg: {left.statsDist.Average:F3}, Max: {left.statsDist.Max:F3}\n";
-    //        report += $"Horz Dev   | Avg: {left.statsH.Average:F3}, Range: {left.statsH.Min:F3} to {left.statsH.Max:F3}\n";
-    //        report += $"Vert Dev   | Avg: {left.statsV.Average:F3}, Range: {left.statsV.Min:F3} to {left.statsV.Max:F3}\n\n";
-    //    } else {
-    //        report += "No valid data segments found for Left Hand.\n\n";
-    //    }
-
-    //    // --- RIGHT HAND ---
-    //    report += "<b><color=red>--- RIGHT HAND ---</color></b>\n";
-    //    if (right.statsDist != null) {
-    //        report += $"Dist Error | Avg: {right.statsDist.Average:F3}, Max: {right.statsDist.Max:F3}\n";
-    //        report += $"Horz Dev   | Avg: {right.statsH.Average:F3}, Range: {right.statsH.Min:F3} to {right.statsH.Max:F3}\n";
-    //        report += $"Vert Dev   | Avg: {right.statsV.Average:F3}, Range: {right.statsV.Min:F3} to {right.statsV.Max:F3}\n";
-    //    } else {
-    //        report += "No valid data segments found for Right Hand.\n";
-    //    }
-
-    //    statsDisplayText.text = report;
-    //}
 }

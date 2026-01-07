@@ -1,7 +1,10 @@
+using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using XCharts.Runtime;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Menu;
 
 public class StatisticalViewManager : MonoBehaviour
 {
@@ -18,17 +21,17 @@ public class StatisticalViewManager : MonoBehaviour
     public StatisticsManager TargetStatisticsManager => targetStatisticsManager;
 
     [Header("Graphs")]
-    [SerializeField] private LineChart xAxisDeviationGraph;
-    public LineChart XAxisDeviationGraph => xAxisDeviationGraph;
+    [SerializeField] private BaseChart xAxisDeviationGraph;
+    public BaseChart XAxisDeviationGraph => xAxisDeviationGraph;
 
-    [SerializeField] private LineChart yAxisDeviationGraph;
-    public LineChart YAxisDeviationGraph => yAxisDeviationGraph;
+    [SerializeField] private BaseChart yAxisDeviationGraph;
+    public BaseChart YAxisDeviationGraph => yAxisDeviationGraph;
 
-    [SerializeField] private LineChart deviationMagnitudeGraph;
-    public LineChart DeviationMagnitudeGraph => deviationMagnitudeGraph;
+    [SerializeField] private BaseChart deviationMagnitudeGraph;
+    public BaseChart DeviationMagnitudeGraph => deviationMagnitudeGraph;
 
-    [SerializeField] private LineChart eegSignalsGraph;
-    public LineChart EEGSignalsGraph => eegSignalsGraph;
+    [SerializeField] private BaseChart eegSignalsGraph;
+    public BaseChart EEGSignalsGraph => eegSignalsGraph;
 
     [Header("Control Panel")]
     [SerializeField] private TMP_Dropdown pathDropdown;
@@ -37,5 +40,98 @@ public class StatisticalViewManager : MonoBehaviour
     [SerializeField] private Button endAnalysisButton;
     public Button EndAnalysisButton => endAnalysisButton;
 
+    private HandResultPackage leftResults;
+    private HandResultPackage rightResults;
+    private List<double> allTimes;
 
+    private HandResultPackage currentResults;
+
+    public void SetResults(HandResultPackage leftResults, HandResultPackage rightResults, List<double> allTimes)
+    {
+        this.leftResults = leftResults;
+        this.rightResults = rightResults;
+        this.allTimes = allTimes;
+
+        UpdatePath();
+        RefreshData();
+    }
+
+    private void Start()
+    {
+        deviationDropdown.onValueChanged.AddListener(UpdateDeviationStatistics);
+        pathDropdown.onValueChanged.AddListener(UpdatePath);
+    }
+
+    private void UpdatePath()
+    {
+        UpdatePath(pathDropdown.value);
+    }
+
+    private void UpdatePath(int index)
+    {
+        string path = pathDropdown.options[index].text;
+
+        if (path == "Left Hand")
+        {
+            currentResults = leftResults;
+        }
+        else if (path == "Right Hand")
+        {
+            currentResults = rightResults;
+        }
+
+        RefreshData();
+    }
+
+    private void UpdateDeviationStatistics()
+    {
+        UpdateDeviationStatistics(deviationDropdown.value);
+    }
+
+    private void UpdateDeviationStatistics(int index)
+    {
+        string selectedDeviation = deviationDropdown.options[index].text;
+
+        if (selectedDeviation == "Up/Down")
+        {
+            deviationStatisticsManager.SetStatistics(currentResults.statsV);
+        }
+        else if (selectedDeviation == "Left/Right")
+        {
+            deviationStatisticsManager.SetStatistics(currentResults.statsH);
+        }
+        else if (selectedDeviation == "Total")
+        {
+            deviationStatisticsManager.SetStatistics(currentResults.statsDist);
+        }
+    }
+
+    private void UpdateGraphs()
+    {
+        UpdateGraph(deviationMagnitudeGraph, currentResults.distVals);
+        UpdateGraph(xAxisDeviationGraph, currentResults.hVals);
+        UpdateGraph(yAxisDeviationGraph, currentResults.vVals);
+    }
+
+    private void UpdateGraph(BaseChart graph, List<double> values)
+    {
+        graph.ClearData();
+        for (int i = 0; i < allTimes.Count; i++)
+        {
+            graph.AddData(0, allTimes[i], values[i]);
+        }
+        graph.RefreshChart();
+    }
+
+    private void RefreshData()
+    {
+        UpdateDeviationStatistics();
+        UpdateGraphs();
+    }
+
+    private void OnDestroy()
+    {
+        deviationDropdown.onValueChanged.RemoveAllListeners();
+        pathDropdown.onValueChanged.RemoveAllListeners();
+    }
 }

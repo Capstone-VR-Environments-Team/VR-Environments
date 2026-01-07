@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ReviewUIManager : MonoBehaviour {
     [SerializeField] private GameObject reviewPage;
@@ -10,12 +11,13 @@ public class ReviewUIManager : MonoBehaviour {
         ReviewPastSessionsManager reviewPastSessionsManager = reviewPage.GetComponent<ReviewPastSessionsManager>();
         reviewPastSessionsManager.InteractiveViewButton.onClick.AddListener(ShowInteractiveViewPage);
         reviewPastSessionsManager.StatisticalViewButton.onClick.AddListener(ShowStatisticalViewPage);
+        reviewPastSessionsManager.CancelButton.onClick.AddListener(GoHome);
+
         InteractiveViewManager interactiveViewManager = interactiveViewPage.GetComponent<InteractiveViewManager>();
         interactiveViewManager.EndReviewButton.onClick.AddListener(ShowReviewPage);
+
         StatisticalViewManager statisticalViewManager = statisticalViewPage.GetComponent<StatisticalViewManager>();
         statisticalViewManager.EndAnalysisButton.onClick.AddListener(ShowReviewPage);
-
-
     }
 
     public void ShowReviewPage() {
@@ -33,5 +35,10 @@ public class ReviewUIManager : MonoBehaviour {
         reviewPage.SetActive(false);
         statisticalViewPage.SetActive(false);
         interactiveViewPage.SetActive(true);
+    }
+
+    public void GoHome()
+    {
+        SceneManager.LoadScene("SampleScene");
     }
 }

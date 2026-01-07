@@ -35,6 +35,8 @@ public class ReviewUIManager : MonoBehaviour {
         reviewPage.SetActive(false);
         statisticalViewPage.SetActive(false);
         interactiveViewPage.SetActive(true);
+        InteractiveViewManager interactiveViewManager = interactiveViewPage.GetComponent<InteractiveViewManager>();
+        interactiveViewManager.EnterScreen();
     }
 
     public void GoHome()

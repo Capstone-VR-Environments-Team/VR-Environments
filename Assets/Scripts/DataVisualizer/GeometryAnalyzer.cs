@@ -29,7 +29,7 @@ public static class GeometryAnalyzer {
 
         // 3. Calculate the "Perpendicular" Axis (Vertical Plane Axis)
         // This is perpendicular to both the Line and our new Horizontal axis.
-        Vector3 axisV = Vector3.Cross(lineDir, axisH).normalized;
+        Vector3 axisV = Vector3.Cross(axisH, lineDir).normalized;
 
         // 4. Process all points
         // We use Point A as the "origin" of our calculation to find vectors

@@ -62,6 +62,7 @@ public class FullAnalysisManager : MonoBehaviour {
         _statisticalViewManager.SetResults(leftResults, rightResults, allTimes);
         _statisticalViewManager.SetTargets(targetData);
         _interactiveViewManager.SetStatistics(leftResults.statsDist, rightResults.statsDist);
+        _interactiveViewManager.SetPaths(rawData, targetHits);
 
     }
 

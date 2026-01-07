@@ -189,7 +189,7 @@ Canvas:
   serializedVersion: 3
   m_RenderMode: 1
   m_Camera: {fileID: 582067286}
-  m_PlaneDistance: 100
+  m_PlaneDistance: 1
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -362,6 +362,7 @@ GameObject:
   - component: {fileID: 582067286}
   - component: {fileID: 582067285}
   - component: {fileID: 582067288}
+  - component: {fileID: 582067289}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -487,6 +488,24 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &582067289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 582067284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1487ce381840a994da2230814b9ed807, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraController
+  moveSpeed: 8
+  lookSensitivity: 25
+  minPitch: -90
+  maxPitch: 90
+  zoomSpeed: 20
+  _on: 0
 --- !u!1 &747574156 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6209446807052157547, guid: 596c6a276b289314b94837d4c03b9965, type: 3}
@@ -674,7 +693,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1316651140460091962, guid: 3aff9412143cf5b42aa1d818223e80be, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -329.39398
+      value: -329.394
       objectReference: {fileID: 0}
     - target: {fileID: 1356768538139661242, guid: 3aff9412143cf5b42aa1d818223e80be, type: 3}
       propertyPath: m_FontData.m_Alignment
@@ -691,6 +710,10 @@ PrefabInstance:
     - target: {fileID: 1508071173048626129, guid: 3aff9412143cf5b42aa1d818223e80be, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -1.5689697
+      objectReference: {fileID: 0}
+    - target: {fileID: 1508071173048626129, guid: 3aff9412143cf5b42aa1d818223e80be, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -110.15996
       objectReference: {fileID: 0}
     - target: {fileID: 1670373187136714724, guid: 3aff9412143cf5b42aa1d818223e80be, type: 3}
       propertyPath: m_XAxes.Array.data[0].m_Type
@@ -1240,6 +1263,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5311845149681872483, guid: 3aff9412143cf5b42aa1d818223e80be, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -246.50003
+      objectReference: {fileID: 0}
     - target: {fileID: 5325479732845584684, guid: 3aff9412143cf5b42aa1d818223e80be, type: 3}
       propertyPath: m_SizeDelta.x
       value: 59
@@ -1315,6 +1342,10 @@ PrefabInstance:
     - target: {fileID: 5608353900562142783, guid: 3aff9412143cf5b42aa1d818223e80be, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 64.15619
+      objectReference: {fileID: 0}
+    - target: {fileID: 5724334372925293478, guid: 3aff9412143cf5b42aa1d818223e80be, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 47.498993
       objectReference: {fileID: 0}
     - target: {fileID: 5725028979504357554, guid: 3aff9412143cf5b42aa1d818223e80be, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -1734,7 +1765,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8004917012087778443, guid: 3aff9412143cf5b42aa1d818223e80be, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -329.39008
+      value: -329.3901
       objectReference: {fileID: 0}
     - target: {fileID: 8004917012087778443, guid: 3aff9412143cf5b42aa1d818223e80be, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -2185,7 +2216,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4695832062636959762, guid: 17397d062c6969b448d99352e8fb73ca, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5974248675717393403, guid: 17397d062c6969b448d99352e8fb73ca, type: 3}
       propertyPath: m_Options.m_Options.Array.data[0].m_Text
@@ -2278,6 +2309,10 @@ PrefabInstance:
     - target: {fileID: 8329732496173231461, guid: 17397d062c6969b448d99352e8fb73ca, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8720043386934760031, guid: 17397d062c6969b448d99352e8fb73ca, type: 3}
+      propertyPath: m_text
+      value: Right Hand
       objectReference: {fileID: 0}
     - target: {fileID: 8964285625812288362, guid: 17397d062c6969b448d99352e8fb73ca, type: 3}
       propertyPath: m_LocalPosition.z

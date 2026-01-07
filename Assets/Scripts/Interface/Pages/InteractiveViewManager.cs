@@ -23,6 +23,9 @@ public class InteractiveViewManager : MonoBehaviour
     [SerializeField] private Toggle showOptimalPathsToggle;
     public Toggle ShowOptimalPathsToggle => showOptimalPathsToggle;
 
+    [SerializeField] private Toggle showTargetsToggle;
+    public Toggle ShowTargetsToggle => showTargetsToggle;
+
     [Header("Statistics")]
     [SerializeField] private TMP_Dropdown pathDropdown;
     public TMP_Dropdown PathDropdown => pathDropdown;
@@ -33,6 +36,8 @@ public class InteractiveViewManager : MonoBehaviour
     private GameObject _leftLine;
     private GameObject _rightLine;
     private GameObject _targetLine;
+    private GameObject _targets;
+
     private CameraController _controller;
 
     private void Awake() {
@@ -45,6 +50,7 @@ public class InteractiveViewManager : MonoBehaviour
         showLeftPathsToggle.onValueChanged.AddListener(ToggleLeft);
         showRightPathsToggle.onValueChanged.AddListener(ToggleRight);
         showOptimalPathsToggle.onValueChanged.AddListener(ToggleOptimal);
+        showTargetsToggle.onValueChanged.AddListener(ToggleTargets);
         endReviewButton.onClick.AddListener(LeaveScreen);
     }
 
@@ -67,6 +73,9 @@ public class InteractiveViewManager : MonoBehaviour
         List<Vector3> rightPoints = new();
         List<Vector3> targetPoints = new();
 
+        _targets = new GameObject("Targets");
+        _targets.transform.position = Vector3.zero;
+
         // Split the data
         foreach (TrackingData data in rawData) {
             leftPoints.Add(data.leftHandPos);
@@ -75,6 +84,10 @@ public class InteractiveViewManager : MonoBehaviour
 
         foreach (KeyPoint point in targetData) {
             targetPoints.Add(point.Position);
+            GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            sphere.transform.SetParent(_targets.transform);
+            sphere.transform.localPosition = point.Position;
+            sphere.transform.localScale = new Vector3(1f, 1f, 1f);
         }
 
         if (leftPoints.Count > 1)
@@ -133,6 +146,10 @@ public class InteractiveViewManager : MonoBehaviour
         if (_targetLine)
             _targetLine.SetActive(isOn);
     }
+    private void ToggleTargets(bool isOn) {
+        if (_targets)
+            _targets.SetActive(isOn);
+    }
 
     private void LeaveScreen() {
         if (_leftLine)
@@ -141,6 +158,8 @@ public class InteractiveViewManager : MonoBehaviour
             _rightLine.SetActive(false);
         if (_targetLine)
             _targetLine.SetActive(false);
+        if (_targets)
+            _targets.SetActive(false);
         _controller.TurnOff();
     }
 
@@ -151,6 +170,8 @@ public class InteractiveViewManager : MonoBehaviour
             _rightLine.SetActive(true);
         if (_targetLine)
             _targetLine.SetActive(true);
+        if (_targets)
+            _targets.SetActive(true);
         _controller.TurnOn();
     }
 

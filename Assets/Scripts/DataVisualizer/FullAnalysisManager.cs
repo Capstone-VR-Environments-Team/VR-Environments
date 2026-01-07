@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
-using XCharts.Runtime;
 
 public class FullAnalysisManager : MonoBehaviour {
 
@@ -12,6 +11,7 @@ public class FullAnalysisManager : MonoBehaviour {
 
     [SerializeField] ReviewPastSessionsManager _reviewPastSessionsManager;
     [SerializeField] StatisticalViewManager _statisticalViewManager;
+    [SerializeField] InteractiveViewManager _interactiveViewManager;
 
 
     void Awake() {
@@ -56,8 +56,13 @@ public class FullAnalysisManager : MonoBehaviour {
         var leftResults = ProcessHand(targetHits, leftPos, allTimes);
         var rightResults = ProcessHand(targetHits, rightPos, allTimes);
 
+        Statistics targetData = TargetAnalyzer.AnalyzeData(targetHits);
+
         // Display Combined Stats
         _statisticalViewManager.SetResults(leftResults, rightResults, allTimes);
+        _statisticalViewManager.SetTargets(targetData);
+        _interactiveViewManager.SetStatistics(leftResults.statsDist, rightResults.statsDist);
+
     }
 
     private HandResultPackage ProcessHand(List<KeyPoint> hits, List<Vector3> positions, List<double> times) {

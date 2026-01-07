@@ -56,6 +56,11 @@ public class StatisticalViewManager : MonoBehaviour
         RefreshData();
     }
 
+    public void SetTargets(Statistics targetData)
+    {
+        targetStatisticsManager.SetStatistics(targetData);
+    }
+
     private void Start()
     {
         deviationDropdown.onValueChanged.AddListener(UpdateDeviationStatistics);

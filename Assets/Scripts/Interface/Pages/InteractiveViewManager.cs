@@ -23,4 +23,54 @@ public class InteractiveViewManager : MonoBehaviour
 
     [SerializeField] private StatisticsManager statisticsManager;
     public StatisticsManager StatisticsManager => statisticsManager;
+
+    private void Start()
+    {
+        pathDropdown.onValueChanged.AddListener(UpdatePath);
+    }
+
+    Statistics leftStatistics;
+    Statistics rightStatistics;
+
+    Statistics currentStatistics;
+
+    public void SetStatistics(Statistics leftStatistics, Statistics rightStatistics)
+    {
+        this.leftStatistics = leftStatistics;
+        this.rightStatistics = rightStatistics;
+
+        UpdatePath();
+        UpdateStatistics();
+    }
+
+    private void UpdatePath()
+    {
+        UpdatePath(pathDropdown.value);
+    }
+
+    private void UpdatePath(int index)
+    {
+        string path = pathDropdown.options[index].text;
+
+        if (path == "Left Hand")
+        {
+            currentStatistics = leftStatistics;
+        }
+        else if (path == "Right Hand")
+        {
+            currentStatistics = rightStatistics;
+        }
+
+        UpdateStatistics();
+    }
+
+    public void UpdateStatistics()
+    {
+        statisticsManager.SetStatistics(currentStatistics);
+    }
+
+    private void OnDestroy()
+    {
+        pathDropdown.onValueChanged.RemoveAllListeners();
+    }
 }

@@ -51,10 +51,13 @@ public class FullAnalysisManager : MonoBehaviour {
         // Prepare Lists for Both Hands
         List<Vector3> leftPos = rawData.Select(d => d.leftHandPos).ToList();
         List<Vector3> rightPos = rawData.Select(d => d.rightHandPos).ToList();
+        Debug.Log($"Times = {allTimes.Count}, lefts = {leftPos.Count}");
 
         // Run Analysis
         var leftResults = ProcessHand(targetHits, leftPos, allTimes);
         var rightResults = ProcessHand(targetHits, rightPos, allTimes);
+
+        Debug.Log($"Times = {allTimes.Count}, lefts2 = {leftResults.distVals.Count}");
 
         Statistics targetData = TargetAnalyzer.AnalyzeData(targetHits);
 

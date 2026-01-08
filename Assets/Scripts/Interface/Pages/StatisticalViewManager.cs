@@ -121,10 +121,11 @@ public class StatisticalViewManager : MonoBehaviour
     private void UpdateGraph(BaseChart graph, List<double> values)
     {
         graph.ClearData();
-        for (int i = 0; i < allTimes.Count; i++)
+        for (int i = 0; i < 10; i++)
         {
             graph.AddData(0, allTimes[i], values[i]);
         }
+        Debug.Log($"Times = {allTimes.Count}, vals = {values.Count}");
         graph.RefreshChart();
     }
 

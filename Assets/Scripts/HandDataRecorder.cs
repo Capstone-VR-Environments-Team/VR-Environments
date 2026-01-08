@@ -9,9 +9,9 @@ public class HandDataRecorder : MonoBehaviour
     void Update()
     {
         if (isRecording) {
-            Vector3 leftPos = leftHand.position;
+            Vector3 leftPos = leftHand.localPosition;
             Quaternion leftRot = leftHand.rotation;
-            Vector3 rightPos = rightHand.position;
+            Vector3 rightPos = rightHand.localPosition;
             Quaternion rightRot = rightHand.rotation;
 
             LoggingManager.Instance.currentTrackingData.leftHandPos = leftPos;

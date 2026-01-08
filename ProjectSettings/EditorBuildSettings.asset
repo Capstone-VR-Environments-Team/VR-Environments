@@ -8,8 +8,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/ReviewPastSession.unity
+    guid: 62326018162287048bbe0de7db69428c
   m_configObjects:
+    Varjo.XR.Settings: {fileID: 11400000, guid: e33f27682e3424f4da72867f20dc99ca, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: a481959dbbc4e794bb5e5e800c2766ac, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: ae1025c358ee2cd448ff4dffc37be2bb, type: 2}
     com.unity.xr.openxr.settings4: {fileID: 11400000, guid: e088fd0226c4e4944b3c3a48f88ebdc1, type: 2}
   m_UseUCBPForAssetBundles: 0

@@ -8,7 +8,7 @@ public class InteractiveViewManager : MonoBehaviour
 {
     [Header("Visualization Settings")]
     public Material lineMaterial;
-    public float lineWidth = 0.3f;
+    public float lineWidth = 2f;
 
     [Header("Control Panel")]
     [SerializeField] private Button endReviewButton;
@@ -87,7 +87,7 @@ public class InteractiveViewManager : MonoBehaviour
             GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             sphere.transform.SetParent(_targets.transform);
             sphere.transform.localPosition = point.Position;
-            sphere.transform.localScale = new Vector3(1f, 1f, 1f);
+            sphere.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
         }
 
         if (leftPoints.Count > 1)
@@ -184,8 +184,8 @@ public class InteractiveViewManager : MonoBehaviour
         lr.positionCount = points.Count;
         lr.SetPositions(points.ToArray());
         lr.material = lineMaterial != null ? lineMaterial : new Material(Shader.Find("Sprites/Default"));
-        lr.startWidth = lineWidth;
-        lr.endWidth = lineWidth;
+        lr.widthCurve = AnimationCurve.Constant(0,1,1);
+        lr.widthMultiplier = 0.01f;
         lr.startColor = color;
         lr.endColor = color;
         lr.useWorldSpace = true;

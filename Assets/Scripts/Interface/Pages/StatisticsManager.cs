@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using System;
 
 [System.Serializable]
 public class StatisticsManager {
@@ -18,9 +19,9 @@ public class StatisticsManager {
 
     public void SetStatistics(Statistics statistics)
     {
-        averageText.SetText(statistics.Average.ToString());
-        maximumText.SetText(statistics.Maximum.ToString());
-        minimumText.SetText(statistics.Minimum.ToString());
-        stDevText.SetText(statistics.StDev.ToString());
+        averageText.SetText(Math.Round(statistics.Average, 4).ToString());
+        maximumText.SetText(Math.Round(statistics.Max, 4).ToString());
+        minimumText.SetText(Math.Round(statistics.Min, 4).ToString());
+        stDevText.SetText(Math.Round(statistics.StDev, 4).ToString());
     }
 }

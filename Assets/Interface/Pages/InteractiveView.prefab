@@ -210,10 +210,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9702fe6a82324b64a97063483bcdbd32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ReviewSessionManager
+  lineMaterial: {fileID: 0}
+  lineWidth: 0.3
   endReviewButton: {fileID: 5260002050807037933}
   showLeftPathsToggle: {fileID: 4442736562739334966}
   showRightPathsToggle: {fileID: 5893142554397111988}
   showOptimalPathsToggle: {fileID: 125287120449107581}
+  showTargetsToggle: {fileID: 2415446641206854459}
   pathDropdown: {fileID: 5974248675717393403}
   statisticsManager:
     averageText: {fileID: 8694742567519194057}
@@ -1244,7 +1247,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8488475400319283988, guid: b7edc8cd3cf28da4b8b12719e28e26eb, type: 3}
       propertyPath: m_Text
-      value: Show Right Paths
+      value: Show Right Path
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1587,7 +1590,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8488475400319283988, guid: b7edc8cd3cf28da4b8b12719e28e26eb, type: 3}
       propertyPath: m_Text
-      value: Show Left Paths
+      value: Show Left Path
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1725,6 +1728,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b7edc8cd3cf28da4b8b12719e28e26eb, type: 3}
+--- !u!114 &2415446641206854459 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8664147731030923808, guid: b7edc8cd3cf28da4b8b12719e28e26eb, type: 3}
+  m_PrefabInstance: {fileID: 6465022374794320155}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Toggle
 --- !u!224 &6656305255219328556 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 425499747931434807, guid: b7edc8cd3cf28da4b8b12719e28e26eb, type: 3}
@@ -2065,7 +2079,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8488475400319283988, guid: b7edc8cd3cf28da4b8b12719e28e26eb, type: 3}
       propertyPath: m_Text
-      value: Show Optimal Paths
+      value: Show Optimal Path
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

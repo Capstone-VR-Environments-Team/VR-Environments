@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
@@ -6,7 +7,6 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject customizationPage;
     [SerializeField] private GameObject startNewPage;
     [SerializeField] private GameObject liveViewPage;
-    [SerializeField] private GameObject reviewSessionPage;
 
     void Start()
     {
@@ -19,7 +19,6 @@ public class UIManager : MonoBehaviour
         customizationPage.SetActive(false);
         startNewPage.SetActive(false);
         liveViewPage.SetActive(false);
-        reviewSessionPage.SetActive(false);
     }
 
     public void ShowCustomizationPage()
@@ -28,7 +27,6 @@ public class UIManager : MonoBehaviour
         customizationPage.SetActive(true);
         startNewPage.SetActive(false);
         liveViewPage.SetActive(false);
-        reviewSessionPage.SetActive(false);
     }
     public void ShowStartNewPage()
     {
@@ -36,7 +34,6 @@ public class UIManager : MonoBehaviour
         customizationPage.SetActive(false);
         startNewPage.SetActive(true);
         liveViewPage.SetActive(false);
-        reviewSessionPage.SetActive(false);
     }
     public void ShowLiveViewPage()
     {
@@ -44,15 +41,10 @@ public class UIManager : MonoBehaviour
         customizationPage.SetActive(false);
         startNewPage.SetActive(false);
         liveViewPage.SetActive(true);
-        reviewSessionPage.SetActive(false);
     }
 
     public void ShowReviewSessionPage()
     {
-        homePage.SetActive(false);
-        customizationPage.SetActive(false);
-        startNewPage.SetActive(false);
-        liveViewPage.SetActive(false);
-        reviewSessionPage.SetActive(true);
+        SceneManager.LoadScene("ReviewPastSession");
     }
 }

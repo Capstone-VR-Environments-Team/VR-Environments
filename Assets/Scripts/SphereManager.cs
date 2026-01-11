@@ -22,7 +22,7 @@ public class SphereCollectionManager : MonoBehaviour
         spheres = new GameObject[totalSpheres];
         for (int i = 0; i < spheres.Length; i++) {
             this.spheres[i] = Instantiate(spherePrefab,
-                                    new Vector3(0, i, -8),
+                                    new Vector3(0, i, -7.5f),
                                         Quaternion.identity);
             Collider c = spheres[i].GetComponent<Collider>();
             if (c) {

@@ -34,10 +34,10 @@ RectTransform:
   - {fileID: 3926977377059537500}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.00018311, y: -0.0025635}
-  m_SizeDelta: {x: 1053.3, y: 606.33}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4902472961765098399
 CanvasRenderer:
@@ -95,6 +95,7 @@ MonoBehaviour:
   cancelButton: {fileID: 7839109267286867944}
   statisticalViewButton: {fileID: 1487708883094874386}
   interactiveViewButton: {fileID: 718989047240064475}
+  selectSessionButton: {fileID: 5601379430892468383}
 --- !u!1001 &834742365862191695
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -213,6 +214,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1521818648614108883, guid: 2893c8bad5e66cc4697976f744cbbaf1, type: 3}
   m_PrefabInstance: {fileID: 834742365862191695}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5601379430892468383 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5055714067288234704, guid: 2893c8bad5e66cc4697976f744cbbaf1, type: 3}
+  m_PrefabInstance: {fileID: 834742365862191695}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1001 &2378880991964284713
 PrefabInstance:
   m_ObjectHideFlags: 0

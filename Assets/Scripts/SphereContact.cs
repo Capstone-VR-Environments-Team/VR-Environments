@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class SphereContact : MonoBehaviour
 {
-    //private bool hasBeenTriggered = false;
     private SphereManager sphereManager;
 
     void Start()
@@ -14,7 +13,6 @@ public class SphereContact : MonoBehaviour
     {
         if (other.CompareTag("GameController"))
         {
-            // hasBeenTriggered = true;
             Debug.Log("Sphere found!");
             GetComponent<Renderer>().material.color = Color.green;
 

@@ -280,6 +280,10 @@ MonoBehaviour:
     rightHandPos: {x: 0, y: 0, z: 0}
     leftHandRotation: {x: 0, y: 0, z: 0, w: 0}
     rightHandRotation: {x: 0, y: 0, z: 0, w: 0}
+  collectedTimingData:
+    TargetHits: []
+    TargetProximityHits: []
+    Notes: []
 --- !u!114 &23134606
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3545,7 +3549,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2103034908508103666, guid: 246b11ef67518904f8abf338a2d8f227, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -304.09216
+      value: -304.0922
       objectReference: {fileID: 0}
     - target: {fileID: 2156094156477705535, guid: 246b11ef67518904f8abf338a2d8f227, type: 3}
       propertyPath: m_Pivot.x

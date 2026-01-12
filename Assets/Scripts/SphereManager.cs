@@ -16,6 +16,7 @@ public class SphereManager : MonoBehaviour
     public GameObject rightHand;
 
     [Header("Spawn Locations")]
+    public GameObject headset;
     
     private int spheresCollected = 0;
     private GameObject currentSphere;
@@ -37,9 +38,10 @@ public class SphereManager : MonoBehaviour
         offsetValues = LoadTrialSettings.Instance.GetOffsetValues();
         totalSpheres = sphereVectors.Count;
         spheres = new GameObject[totalSpheres];
+        Vector3 headsetPosition = headset.transform.position;
         for (int i = 0; i < totalSpheres; i++) {
             spheres[i] = Instantiate(spherePrefab,
-                                    new Vector3(sphereVectors[i].x, sphereVectors[i].y, sphereVectors[i].z),
+                                    sphereVectors[i] + headsetPosition,
                                     Quaternion.identity);
             Collider c = spheres[i].GetComponent<Collider>();
             if (c) {
@@ -47,8 +49,8 @@ public class SphereManager : MonoBehaviour
             }
             spheres[i].SetActive(false);
         }
-        leftHand.transform.position = leftHand.transform.position + offsetValues;
-        rightHand.transform.position = rightHand.transform.position + offsetValues;
+        leftHand.transform.localPosition = offsetValues;
+        rightHand.transform.localPosition = offsetValues;
         ApplyVisibilitySettings();
         SpawnNextSphere();
     }
@@ -89,9 +91,9 @@ public class SphereManager : MonoBehaviour
     void ApplyVisibilitySettings()
     {
         if (leftHand != null)
-            leftHand.SetActive(showHands);
+            leftHand.GetComponent<MeshRenderer>().enabled = showHands;
         if (rightHand != null)
-            rightHand.SetActive(showHands);
+            rightHand.GetComponent<MeshRenderer>().enabled = showHands;
 
         if (showHands && handVisibleTime > 0)
         {

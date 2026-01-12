@@ -25,7 +25,7 @@ public class OffsetSettings
 {
     public string OffsetType;
     public Vector3 OffsetValues;
-    public float TargetRange;
+    public float TargetProximity;
 }
 
 [Serializable]

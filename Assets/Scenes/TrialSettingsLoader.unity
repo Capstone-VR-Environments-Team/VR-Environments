@@ -388,7 +388,7 @@ GameObject:
   - component: {fileID: 239143738}
   - component: {fileID: 239143737}
   - component: {fileID: 239143736}
-  - component: {fileID: 239143735}
+  - component: {fileID: 239143740}
   m_Layer: 1
   m_Name: GameManager
   m_TagString: Untagged
@@ -396,22 +396,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &239143735
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 239143734}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d64de56aee876fc489757a867f84c15d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  spherePrefab: {fileID: 8961088975295740174, guid: 5bd2216af10f6c042abe25d3b461c0af, type: 3}
-  spheres: []
-  spawnAreaMin: {x: 0, y: 0, z: 0}
-  spawnAreaMax: {x: 5, y: 5, z: 5}
 --- !u!64 &239143736
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -505,6 +489,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &239143740
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 239143734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d64de56aee876fc489757a867f84c15d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SphereManager
+  spherePrefab: {fileID: 8961088975295740174, guid: 5bd2216af10f6c042abe25d3b461c0af, type: 3}
+  spheres: []
 --- !u!1 &251783300
 GameObject:
   m_ObjectHideFlags: 0
@@ -3222,10 +3220,14 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 820559205330960530, guid: 246b11ef67518904f8abf338a2d8f227, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 820559205330960530, guid: 246b11ef67518904f8abf338a2d8f227, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 820559205330960530, guid: 246b11ef67518904f8abf338a2d8f227, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 820559205330960530, guid: 246b11ef67518904f8abf338a2d8f227, type: 3}
@@ -3233,7 +3235,15 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 864807284}
     - target: {fileID: 820559205330960530, guid: 246b11ef67518904f8abf338a2d8f227, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 239143740}
+    - target: {fileID: 820559205330960530, guid: 246b11ef67518904f8abf338a2d8f227, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 820559205330960530, guid: 246b11ef67518904f8abf338a2d8f227, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 820559205330960530, guid: 246b11ef67518904f8abf338a2d8f227, type: 3}
@@ -3241,11 +3251,23 @@ PrefabInstance:
       value: StartExperiment
       objectReference: {fileID: 0}
     - target: {fileID: 820559205330960530, guid: 246b11ef67518904f8abf338a2d8f227, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: BeginTrial
+      objectReference: {fileID: 0}
+    - target: {fileID: 820559205330960530, guid: 246b11ef67518904f8abf338a2d8f227, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: ExperimentController, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 820559205330960530, guid: 246b11ef67518904f8abf338a2d8f227, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: SphereManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 820559205330960530, guid: 246b11ef67518904f8abf338a2d8f227, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 820559205330960530, guid: 246b11ef67518904f8abf338a2d8f227, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 2103034908508103666, guid: 246b11ef67518904f8abf338a2d8f227, type: 3}

@@ -1,35 +1,55 @@
 using UnityEngine;
 using UnityEngine.Events;
+using System.Collections;
+using System.Collections.Generic;
 
-public class SphereCollectionManager : MonoBehaviour
+public class SphereManager : MonoBehaviour
 {
     [Header("Sphere Settings")]
     public GameObject spherePrefab;
-    public static int totalSpheres = 3;
+    public static int totalSpheres;
 
     public GameObject[] spheres;
 
+    [Header("Hand References")]
+    //public GameObject leftHand;
+    //public GameObject rightHand;
+
     [Header("Spawn Locations")]
-    
-    public Vector3 spawnAreaMin = new Vector3(0, 0, 0);
-    public Vector3 spawnAreaMax = new Vector3(0, 0, 0);
     
     private int spheresCollected = 0;
     private GameObject currentSphere;
-    
-    void Start()
+    private bool showHands;
+    private bool showTargets;
+    private float targetVisibleTime;
+    private float handVisibleTime;
+    private float targetProximity;
+    private Vector3 offsetValues;
+
+    public void BeginTrial()
     {
+        List<Vector3> sphereVectors = LoadTrialSettings.Instance.GetLoadedTargets();
+        showHands = LoadTrialSettings.Instance.GetShowHands();
+        showTargets = LoadTrialSettings.Instance.GetShowTargets();
+        targetVisibleTime = LoadTrialSettings.Instance.GetTargetVisibleTime();
+        handVisibleTime = LoadTrialSettings.Instance.GetHandVisibleTime();
+        targetProximity = LoadTrialSettings.Instance.GetTargetProximity();
+        offsetValues = LoadTrialSettings.Instance.GetOffsetValues();
+        totalSpheres = sphereVectors.Count;
         spheres = new GameObject[totalSpheres];
-        for (int i = 0; i < spheres.Length; i++) {
-            this.spheres[i] = Instantiate(spherePrefab,
-                                    new Vector3(0, i, -7.5f),
-                                        Quaternion.identity);
+        for (int i = 0; i < totalSpheres; i++) {
+            spheres[i] = Instantiate(spherePrefab,
+                                    new Vector3(sphereVectors[i].x, sphereVectors[i].y, sphereVectors[i].z),
+                                    Quaternion.identity);
             Collider c = spheres[i].GetComponent<Collider>();
             if (c) {
                 c.isTrigger = true;
             }
-            this.spheres[i].SetActive(false);
+            spheres[i].SetActive(false);
         }
+        //leftHand.transform.position = leftHand.transform.position + offsetValues;
+        //rightHand.transform.position = rightHand.transform.position + offsetValues;
+        ApplyVisibilitySettings();
         SpawnNextSphere();
     }
     
@@ -38,7 +58,7 @@ public class SphereCollectionManager : MonoBehaviour
         spheresCollected++;
         Debug.Log($"Sphere collected! {spheresCollected}/{totalSpheres}");
         
-        if (currentSphere != null)
+        if (currentSphere)
         {
             currentSphere.SetActive(false);
         }
@@ -56,11 +76,52 @@ public class SphereCollectionManager : MonoBehaviour
     void SpawnNextSphere()
     {
         if (spheresCollected < this.spheres.Length && this.spheres[spheresCollected] != null) {
-            this.spheres[spheresCollected].SetActive(true);
+            this.spheres[spheresCollected].SetActive(showTargets);
             currentSphere = this.spheres[spheresCollected];
+            
+            if (showTargets && targetVisibleTime > 0)
+            {
+                StartCoroutine(HideSphereAfterDelay(targetVisibleTime));
+            }
         }
     }
-    
+
+    void ApplyVisibilitySettings()
+    {
+        //if (leftHand != null)
+        //    leftHand.SetActive(showHands);
+        //if (rightHand != null)
+        //    rightHand.SetActive(showHands);
+        
+        if (showHands && handVisibleTime > 0)
+        {
+            StartCoroutine(HideHandsAfterDelay(handVisibleTime));
+        }
+    }
+
+    IEnumerator HideSphereAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        
+        if (currentSphere != null)
+        {
+            currentSphere.SetActive(false);
+            Debug.Log("Target hidden after visibility time expired");
+        }
+    }
+
+    IEnumerator HideHandsAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        
+        //if (leftHand != null)
+        //    leftHand.SetActive(false);
+        //if (rightHand != null)
+        //    rightHand.SetActive(false);
+        
+        Debug.Log("Hands hidden after visibility time expired");
+    }
+
     void EndTrial()
     {
         Debug.Log("Trial complete! All spheres collected."); 

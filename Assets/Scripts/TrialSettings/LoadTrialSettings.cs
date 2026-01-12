@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
-using TMPro;
+using System;
 
-public class LoadTrialSettings : MonoBehaviour
+public class LoadTrialSettings : Singleton<LoadTrialSettings>
 {
 
     [Header("Data Storage")]
@@ -37,5 +37,68 @@ public class LoadTrialSettings : MonoBehaviour
             return currentTrialData.TargetLocations;
         }
         return new List<Vector3>();
+    }
+
+    public bool GetShowHands()
+    {
+        if (currentTrialData != null)
+        {
+            return currentTrialData.VisibilitySettings.ShowHands;
+        }
+        return true;
+    }
+
+    public bool GetShowTargets()
+    {
+        if (currentTrialData != null)
+        {
+            return currentTrialData.VisibilitySettings.ShowTargets;
+        }
+        return true;
+    }
+
+    public float GetTargetVisibleTime()
+    {
+        if (currentTrialData != null)
+        {
+            return currentTrialData.VisibilitySettings.TargetVisibleTime;
+        }
+        return 0.0f;
+    }
+
+    public float GetHandVisibleTime()
+    {
+        if (currentTrialData != null)
+        {
+            return currentTrialData.VisibilitySettings.HandVisibleTime;
+        }
+        return 0.0f;
+    }
+
+    public string GetOffsetType()
+    {
+        if (currentTrialData != null)
+        {
+            return currentTrialData.OffsetSettings.OffsetType;
+        }
+        return "None";
+    }
+
+    public Vector3 GetOffsetValues()
+    {
+        if (currentTrialData != null)
+        {
+            return currentTrialData.OffsetSettings.OffsetValues;
+        }
+        return Vector3.zero;
+    }
+
+    public float GetTargetProximity()
+    {
+        if (currentTrialData != null)
+        {
+            return currentTrialData.OffsetSettings.TargetProximity;
+        }
+        return 0.0f;
     }
 }

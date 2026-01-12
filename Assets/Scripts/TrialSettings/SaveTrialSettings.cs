@@ -56,7 +56,7 @@ public class SaveTrialSettings : MonoBehaviour
                     float.Parse(offsetYInput.text),
                     float.Parse(offsetZInput.text)
                 ),
-                TargetRange = float.Parse(targetRangeInput.text)
+                TargetProximity = float.Parse(targetRangeInput.text)
             },
             TargetLocations = _tempTargetLocations
         };

@@ -18,8 +18,6 @@ public class SphereContact : MonoBehaviour
             Debug.Log("Sphere found!");
             GetComponent<Renderer>().material.color = Color.green;
 
-            // --- NEW: Log the Hit ---
-            // Pass the Sphere's position (the target location), not the hand's position
             LoggingManager.Instance.LogTargetHit(transform.position);
 
             sphereManager.OnSphereInteracted();

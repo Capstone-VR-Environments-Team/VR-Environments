@@ -44,7 +44,6 @@ public class LoggingManager : Singleton<LoggingManager>
         logging = false;
     }
 
-    // --- NEW: Helper to get time since start ---
     public double GetTrialTime()
     {
         if (!logging) return 0.0;
@@ -52,7 +51,6 @@ public class LoggingManager : Singleton<LoggingManager>
         return (currentTime - _startTime) / 1000.0; // Convert to Seconds
     }
 
-    // --- NEW: Logging Methods ---
     public void LogTargetHit(Vector3 targetLocation)
     {
         if (!logging) return;

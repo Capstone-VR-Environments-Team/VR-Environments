@@ -1758,7 +1758,7 @@ GameObject:
   - component: {fileID: 410543575}
   - component: {fileID: 410543574}
   m_Layer: 0
-  m_Name: Capsule
+  m_Name: RightCapsule
   m_TagString: GameController
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3144,7 +3144,7 @@ GameObject:
   - component: {fileID: 1291317700}
   - component: {fileID: 1291317699}
   m_Layer: 0
-  m_Name: Capsule
+  m_Name: LeftCapsule
   m_TagString: GameController
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3416,8 +3416,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   spherePrefab: {fileID: 8961088975295740174, guid: 5bd2216af10f6c042abe25d3b461c0af, type: 3}
   spheres: []
-  spawnAreaMin: {x: 0, y: 0, z: 0}
-  spawnAreaMax: {x: 5, y: 5, z: 5}
+  leftHand: {fileID: 1291317697}
+  rightHand: {fileID: 410543572}
 --- !u!64 &1656044203
 MeshCollider:
   m_ObjectHideFlags: 0

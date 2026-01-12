@@ -12,8 +12,8 @@ public class SphereManager : MonoBehaviour
     public GameObject[] spheres;
 
     [Header("Hand References")]
-    //public GameObject leftHand;
-    //public GameObject rightHand;
+    public GameObject leftHand;
+    public GameObject rightHand;
 
     [Header("Spawn Locations")]
     
@@ -47,8 +47,8 @@ public class SphereManager : MonoBehaviour
             }
             spheres[i].SetActive(false);
         }
-        //leftHand.transform.position = leftHand.transform.position + offsetValues;
-        //rightHand.transform.position = rightHand.transform.position + offsetValues;
+        leftHand.transform.position = leftHand.transform.position + offsetValues;
+        rightHand.transform.position = rightHand.transform.position + offsetValues;
         ApplyVisibilitySettings();
         SpawnNextSphere();
     }
@@ -88,11 +88,11 @@ public class SphereManager : MonoBehaviour
 
     void ApplyVisibilitySettings()
     {
-        //if (leftHand != null)
-        //    leftHand.SetActive(showHands);
-        //if (rightHand != null)
-        //    rightHand.SetActive(showHands);
-        
+        if (leftHand != null)
+            leftHand.SetActive(showHands);
+        if (rightHand != null)
+            rightHand.SetActive(showHands);
+
         if (showHands && handVisibleTime > 0)
         {
             StartCoroutine(HideHandsAfterDelay(handVisibleTime));
@@ -114,11 +114,11 @@ public class SphereManager : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         
-        //if (leftHand != null)
-        //    leftHand.SetActive(false);
-        //if (rightHand != null)
-        //    rightHand.SetActive(false);
-        
+        if (leftHand != null)
+            leftHand.SetActive(false);
+        if (rightHand != null)
+            rightHand.SetActive(false);
+
         Debug.Log("Hands hidden after visibility time expired");
     }
 

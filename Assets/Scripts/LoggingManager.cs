@@ -1,6 +1,6 @@
-using UnityEngine;
-using System.IO;
 using System;
+using System.IO;
+using UnityEngine;
 
 public class LoggingManager : Singleton<LoggingManager>
 {
@@ -12,6 +12,7 @@ public class LoggingManager : Singleton<LoggingManager>
     public CollectedTimingData collectedTimingData = new CollectedTimingData();
     private long _startTime;
     private string _currentTrialName;
+    private string _directory;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -34,14 +35,34 @@ public class LoggingManager : Singleton<LoggingManager>
         // Reset data for new trial
         collectedTimingData = new CollectedTimingData();
 
-        logger.InitLog(name);
+        _directory = CreateSaveDirectory();
+
+        logger.InitLog(name, _directory);
         logging = true;
     } 
 
     public void StopRecording() { 
+
         logger.SaveLog(); // Save CSV
         SaveTimingData(); // Save JSON
         logging = false;
+    }
+
+    public string CreateSaveDirectory()
+    {
+        string folderName = $"{_currentTrialName}_{DateTime.Now:yyyyMMdd_HHmmss}";
+
+        string rootPath = Application.persistentDataPath;
+
+        string directoryPath = Path.Combine(rootPath, folderName);
+
+        if (!Directory.Exists(directoryPath))
+        {
+            Directory.CreateDirectory(directoryPath);
+            Debug.Log($"Directory created at: {directoryPath}");
+        }
+
+        return directoryPath;
     }
 
     public double GetTrialTime()
@@ -73,7 +94,7 @@ public class LoggingManager : Singleton<LoggingManager>
     {
         string json = JsonUtility.ToJson(collectedTimingData, true);
         string fileName = $"{_currentTrialName}_{DateTime.Now:yyyyMMdd_HHmmss}_Timing.json";
-        string filePath = Path.Combine(Application.persistentDataPath, fileName);
+        string filePath = Path.Combine(_directory, fileName);
 
         try
         {

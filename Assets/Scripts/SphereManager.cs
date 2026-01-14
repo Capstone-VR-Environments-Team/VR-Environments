@@ -25,6 +25,7 @@ public class SphereManager : MonoBehaviour
     private float handVisibleTime;
     private float targetProximity;
     private Vector3 offsetValues;
+    private int offsetType;
 
     public void BeginTrial()
     {
@@ -35,6 +36,7 @@ public class SphereManager : MonoBehaviour
         handVisibleTime = LoadTrialSettings.Instance.GetHandVisibleTime();
         targetProximity = LoadTrialSettings.Instance.GetTargetProximity();
         offsetValues = LoadTrialSettings.Instance.GetOffsetValues();
+        offsetType = LoadTrialSettings.Instance.GetOffsetType();
         totalSpheres = sphereVectors.Count;
         spheres = new GameObject[totalSpheres];
         Vector3 headsetPosition = headset.transform.position;
@@ -48,8 +50,10 @@ public class SphereManager : MonoBehaviour
             }
             spheres[i].SetActive(false);
         }
-        leftHand.transform.localPosition = offsetValues;
-        rightHand.transform.localPosition = offsetValues;
+        if (offsetType > 0) 
+        {
+            ApplyOffsetSettings();
+        }
         ApplyVisibilitySettings();
         SpawnNextSphere();
     }
@@ -101,6 +105,12 @@ public class SphereManager : MonoBehaviour
         {
             StartCoroutine(HideHandsAfterDelay(handVisibleTime));
         }
+    }
+
+    void ApplyOffsetSettings()  
+    {
+        leftHand.transform.localPosition = offsetValues;
+        rightHand.transform.localPosition = offsetValues;
     }
 
     IEnumerator HideSphereAfterDelay(float delay)

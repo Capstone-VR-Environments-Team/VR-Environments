@@ -75,13 +75,24 @@ public class LoadTrialSettings : Singleton<LoadTrialSettings>
         return 0.0f;
     }
 
-    public string GetOffsetType()
+    public int GetOffsetType()
     {
         if (currentTrialData != null)
         {
-            return currentTrialData.OffsetSettings.OffsetType;
+            if (currentTrialData.OffsetSettings.OffsetType == "NONE")
+            {
+                return 0;
+            }
+            else if (currentTrialData.OffsetSettings.OffsetType == "STATIC")
+            {
+                return 1;
+            }
+            else if (currentTrialData.OffsetSettings.OffsetType == "DYNAMIC")
+            {
+                return 2;
+            }
         }
-        return "None";
+        return -1;
     }
 
     public Vector3 GetOffsetValues()

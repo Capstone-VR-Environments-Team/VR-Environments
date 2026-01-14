@@ -50,7 +50,7 @@ public class LoggingManager : Singleton<LoggingManager>
 
     public string CreateSaveDirectory()
     {
-        string folderName = $"{_currentTrialName}_{DateTime.Now:yyyyMMdd_HHmmss}.csv";
+        string folderName = $"{_currentTrialName}_{DateTime.Now:yyyyMMdd_HHmmss}";
 
         string rootPath = Application.persistentDataPath;
 

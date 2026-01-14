@@ -50,10 +50,10 @@ public class CsvLogger : ILogger {
     }
 
     // Override the base InitLog to also create file path and header
-    public override void InitLog(string trialName) {
+    public override void InitLog(string trialName, string directory) {
         _time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         string fileName = $"{trialName}_{DateTime.Now:yyyyMMdd_HHmmss}.csv";
-        _filePath = Path.Combine(Application.persistentDataPath, fileName);
+        _filePath = Path.Combine(directory, fileName);
         Debug.Log(_filePath);
         _buffer.Clear();
 

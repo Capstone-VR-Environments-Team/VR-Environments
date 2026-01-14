@@ -13,6 +13,7 @@ public class LoggingManager : Singleton<LoggingManager>
     private long _startTime;
     private string _currentTrialName;
     private string _directory;
+    private Vector3 _headsetPosition;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -28,10 +29,10 @@ public class LoggingManager : Singleton<LoggingManager>
         }
     }
 
-    public void StartRecording(string name) {
+    public void StartRecording(string name, Vector3 headsetPosition) {
         _currentTrialName = name;
         _startTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-        
+        _headsetPosition = headsetPosition;
         // Reset data for new trial
         collectedTimingData = new CollectedTimingData();
 
@@ -69,19 +70,19 @@ public class LoggingManager : Singleton<LoggingManager>
     {
         if (!logging) return 0.0;
         long currentTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-        return (currentTime - _startTime) / 1000.0; // Convert to Seconds
+        return (currentTime - _startTime); // Convert to Seconds
     }
 
     public void LogTargetHit(Vector3 targetLocation)
     {
         if (!logging) return;
-        collectedTimingData.TargetHits.Add(new HitEvent(GetTrialTime(), targetLocation));
+        collectedTimingData.TargetHits.Add(new HitEvent(GetTrialTime(), targetLocation - _headsetPosition));
     }
 
     public void LogProximityHit(Vector3 targetLocation)
     {
         if (!logging) return;
-        collectedTimingData.TargetProximityHits.Add(new HitEvent(GetTrialTime(), targetLocation));
+        collectedTimingData.TargetProximityHits.Add(new HitEvent(GetTrialTime(), targetLocation - _headsetPosition));
     }
 
     public void LogNote(string content, double timestamp)

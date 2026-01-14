@@ -717,6 +717,14 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 7380540079198319159, guid: 8f69c61ce0fd14a42a8c4d3a55070776, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -3.2910461
+      objectReference: {fileID: 0}
+    - target: {fileID: 7380540079198319159, guid: 8f69c61ce0fd14a42a8c4d3a55070776, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -33.789764
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

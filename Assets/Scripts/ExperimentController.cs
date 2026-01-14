@@ -15,7 +15,7 @@ public class ExperimentController : MonoBehaviour
         if (recorder != null) {
             sphereManager.BeginTrial(headsetPosition);
             recorder.StartRecording(headsetPosition);
-            LoggingManager.Instance.StartRecording("PLACEHOLDER_NAME");
+            LoggingManager.Instance.StartRecording("PLACEHOLDER_NAME", headsetPosition);
             UpdateStatus("Recording...");
         }
     }

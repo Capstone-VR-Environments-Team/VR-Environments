@@ -6,13 +6,21 @@ using UnityEngine;
 public static class JsonLoader {
     [Serializable]
     private class JsonWrapper {
-        public List<HitEntry> target_hits;
+        public List<HitEntry> TargetHits;
+        public List<HitEntry> TargetProximityHits;
+        public List<Note> Notes;
     }
 
     [Serializable]
     private class HitEntry {
         public double time;
         public Vector3 location;
+    }
+
+    [Serializable]
+    private class Note {
+        public double time;
+        public string content;
     }
 
     public static List<KeyPoint> LoadKeyPoints(string filePath) {
@@ -25,8 +33,8 @@ public static class JsonLoader {
         string jsonContent = File.ReadAllText(filePath);
         JsonWrapper data = JsonUtility.FromJson<JsonWrapper>(jsonContent);
 
-        if (data != null && data.target_hits != null) {
-            foreach (var hit in data.target_hits) {
+        if (data != null && data.TargetHits != null) {
+            foreach (var hit in data.TargetHits) {
                 keyPoints.Add(new KeyPoint {
                     Timestamp = hit.time,
                     Position = hit.location

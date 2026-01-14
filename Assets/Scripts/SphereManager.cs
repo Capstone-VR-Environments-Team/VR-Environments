@@ -16,7 +16,6 @@ public class SphereManager : MonoBehaviour
     public GameObject rightHand;
 
     [Header("Spawn Locations")]
-    public GameObject headset;
     
     private int spheresCollected = 0;
     private GameObject currentSphere;
@@ -27,7 +26,7 @@ public class SphereManager : MonoBehaviour
     private float targetProximity;
     private Vector3 offsetValues;
 
-    public void BeginTrial()
+    public void BeginTrial(Vector3 headsetPosition)
     {
         List<Vector3> sphereVectors = LoadTrialSettings.Instance.GetLoadedTargets();
         showHands = LoadTrialSettings.Instance.GetShowHands();
@@ -38,7 +37,6 @@ public class SphereManager : MonoBehaviour
         offsetValues = LoadTrialSettings.Instance.GetOffsetValues();
         totalSpheres = sphereVectors.Count;
         spheres = new GameObject[totalSpheres];
-        Vector3 headsetPosition = headset.transform.position;
         for (int i = 0; i < totalSpheres; i++) {
             spheres[i] = Instantiate(spherePrefab,
                                     sphereVectors[i] + headsetPosition,

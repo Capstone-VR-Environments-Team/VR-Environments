@@ -299,6 +299,7 @@ MonoBehaviour:
   recorder: {fileID: 14778774}
   statusText: {fileID: 0}
   sphereManager: {fileID: 1656044202}
+  headset: {fileID: 330585543}
 --- !u!4 &23134607
 Transform:
   m_ObjectHideFlags: 0
@@ -3439,7 +3440,6 @@ MonoBehaviour:
   spheres: []
   leftHand: {fileID: 1291317697}
   rightHand: {fileID: 410543572}
-  headset: {fileID: 330585543}
 --- !u!64 &1656044203
 MeshCollider:
   m_ObjectHideFlags: 0

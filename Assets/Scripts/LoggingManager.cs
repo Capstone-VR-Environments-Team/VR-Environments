@@ -13,6 +13,9 @@ public class LoggingManager : Singleton<LoggingManager>
     private long _startTime;
     private string _currentTrialName;
     private string _directory;
+    private Vector3 _headsetPosition;
+    private float _logTimer = 0f;
+    private const float LogInterval = 0.025f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -24,20 +27,28 @@ public class LoggingManager : Singleton<LoggingManager>
     void Update()
     {
         if (logging) {
-            logger.LogData(new TrackingData(currentTrackingData));
+            // Accumulate time passed since last frame
+            _logTimer += Time.deltaTime;
+
+            // Check if 25ms has passed
+            if (_logTimer >= LogInterval) {
+                logger.LogData(new TrackingData(currentTrackingData));
+                _logTimer -= LogInterval;
+            }
         }
     }
 
-    public void StartRecording(string name) {
+    public void StartRecording(string name, Vector3 headsetPosition) {
         _currentTrialName = name;
         _startTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-        
+        _headsetPosition = headsetPosition;
         // Reset data for new trial
         collectedTimingData = new CollectedTimingData();
 
         _directory = CreateSaveDirectory();
 
         logger.InitLog(name, _directory);
+        _logTimer = 0f;
         logging = true;
     } 
 
@@ -69,19 +80,19 @@ public class LoggingManager : Singleton<LoggingManager>
     {
         if (!logging) return 0.0;
         long currentTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-        return (currentTime - _startTime) / 1000.0; // Convert to Seconds
+        return (currentTime - _startTime);
     }
 
     public void LogTargetHit(Vector3 targetLocation)
     {
         if (!logging) return;
-        collectedTimingData.TargetHits.Add(new HitEvent(GetTrialTime(), targetLocation));
+        collectedTimingData.TargetHits.Add(new HitEvent(GetTrialTime(), targetLocation - _headsetPosition));
     }
 
     public void LogProximityHit(Vector3 targetLocation)
     {
         if (!logging) return;
-        collectedTimingData.TargetProximityHits.Add(new HitEvent(GetTrialTime(), targetLocation));
+        collectedTimingData.TargetProximityHits.Add(new HitEvent(GetTrialTime(), targetLocation - _headsetPosition));
     }
 
     public void LogNote(string content, double timestamp)

@@ -299,6 +299,7 @@ MonoBehaviour:
   recorder: {fileID: 14778774}
   statusText: {fileID: 0}
   sphereManager: {fileID: 1656044202}
+  headset: {fileID: 330585543}
 --- !u!4 &23134607
 Transform:
   m_ObjectHideFlags: 0
@@ -715,6 +716,14 @@ PrefabInstance:
     - target: {fileID: 7043693964492663783, guid: 8f69c61ce0fd14a42a8c4d3a55070776, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7380540079198319159, guid: 8f69c61ce0fd14a42a8c4d3a55070776, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -3.2910461
+      objectReference: {fileID: 0}
+    - target: {fileID: 7380540079198319159, guid: 8f69c61ce0fd14a42a8c4d3a55070776, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -33.789764
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3439,7 +3448,6 @@ MonoBehaviour:
   spheres: []
   leftHand: {fileID: 1291317697}
   rightHand: {fileID: 410543572}
-  headset: {fileID: 330585543}
 --- !u!64 &1656044203
 MeshCollider:
   m_ObjectHideFlags: 0

@@ -5,13 +5,14 @@ public class HandDataRecorder : MonoBehaviour
     public Transform leftHand;
     public Transform rightHand;
     public bool isRecording = false; 
+    private Vector3 _headsetStartPosition;
 
     void Update()
     {
         if (isRecording) {
-            Vector3 leftPos = leftHand.localPosition;
+            Vector3 leftPos = leftHand.position - _headsetStartPosition;
             Quaternion leftRot = leftHand.rotation;
-            Vector3 rightPos = rightHand.localPosition;
+            Vector3 rightPos = rightHand.position - _headsetStartPosition;
             Quaternion rightRot = rightHand.rotation;
 
             LoggingManager.Instance.currentTrackingData.leftHandPos = leftPos;
@@ -21,9 +22,10 @@ public class HandDataRecorder : MonoBehaviour
         }
     }
 
-    public void StartRecording()
+    public void StartRecording(Vector3 headsetPosition)
     {
         isRecording = true;
+        _headsetStartPosition = headsetPosition;   
     }
 
     public void StopRecording()

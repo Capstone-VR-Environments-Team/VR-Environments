@@ -14,6 +14,8 @@ public class LoggingManager : Singleton<LoggingManager>
     private string _currentTrialName;
     private string _directory;
     private Vector3 _headsetPosition;
+    private float _logTimer = 0f;
+    private const float LogInterval = 0.025f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -25,7 +27,14 @@ public class LoggingManager : Singleton<LoggingManager>
     void Update()
     {
         if (logging) {
-            logger.LogData(new TrackingData(currentTrackingData));
+            // Accumulate time passed since last frame
+            _logTimer += Time.deltaTime;
+
+            // Check if 25ms has passed
+            if (_logTimer >= LogInterval) {
+                logger.LogData(new TrackingData(currentTrackingData));
+                _logTimer -= LogInterval;
+            }
         }
     }
 
@@ -39,6 +48,7 @@ public class LoggingManager : Singleton<LoggingManager>
         _directory = CreateSaveDirectory();
 
         logger.InitLog(name, _directory);
+        _logTimer = 0f;
         logging = true;
     } 
 

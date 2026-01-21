@@ -80,7 +80,7 @@ public class LoggingManager : Singleton<LoggingManager>
     {
         if (!logging) return 0.0;
         long currentTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-        return (currentTime - _startTime); // Convert to Seconds
+        return (currentTime - _startTime);
     }
 
     public void LogTargetHit(Vector3 targetLocation)

@@ -60,7 +60,7 @@ public  class FileManager: Singleton<FileManager>
     {
         string folderName = $"{name}_{DateTime.Now:yyyyMMdd_HHmmss}";
 
-        string rootPath = Application.persistentDataPath;
+        string rootPath = Path.Combine(Application.persistentDataPath, "TrialRuns");
 
         _collectedDataDirectoryPath = Path.Combine(rootPath, folderName);
 

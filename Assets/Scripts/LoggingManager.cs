@@ -84,7 +84,7 @@ public class LoggingManager : Singleton<LoggingManager>
         LiveTrialViewManager ui = FindFirstObjectByType<LiveTrialViewManager>();
         if (ui != null)
         {
-            TimeSpan t = TimeSpan.FromSeconds(time);
+            TimeSpan t = TimeSpan.FromSeconds(time / 1000);
             string timeString = string.Format("{0:D1}:{1:D2}", t.Minutes, t.Seconds);
             ui.AppendToLog($"{timeString} - {noteContent}");
         }
@@ -101,14 +101,6 @@ public class LoggingManager : Singleton<LoggingManager>
         if (!logging) return;
 
         collectedTimingData.Notes.Add(new NoteEvent(timestamp, content));
-
-        LiveTrialViewManager ui = FindFirstObjectByType<LiveTrialViewManager>();
-        if (ui != null)
-        {
-            TimeSpan t = TimeSpan.FromSeconds(timestamp);
-            string timeString = string.Format("{0:D1}:{1:D2}", t.Minutes, t.Seconds);
-            ui.AppendToLog($"{timeString} - {content}");
-        }
     }
 
     private void SaveTimingData()

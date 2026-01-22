@@ -1,4 +1,5 @@
 using TMPro;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -64,6 +65,11 @@ public class LiveTrialViewManager : MonoBehaviour
         if (noteInput != null && !string.IsNullOrEmpty(noteInput.text) && _currentNoteStartTime >= 0)
         {
             LoggingManager.Instance.LogNote(noteInput.text, _currentNoteStartTime);
+        
+            TimeSpan t = TimeSpan.FromSeconds(_currentNoteStartTime / 1000);
+            string timeString = string.Format("{0:D1}:{1:D2}", t.Minutes, t.Seconds);
+            AppendToLog($"{timeString} - {noteInput.text}");
+        
 
             noteInput.text = "";
             _currentNoteStartTime = -1.0;

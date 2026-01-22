@@ -14,7 +14,6 @@ public class SphereContact : MonoBehaviour
         if (other.CompareTag("GameController"))
         {
             Debug.Log("Sphere found!");
-            GetComponent<Renderer>().material.color = Color.green;
 
             LoggingManager.Instance.LogTargetHit(transform.position);
 

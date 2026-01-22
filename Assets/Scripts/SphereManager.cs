@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Events;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -47,8 +46,7 @@ public class SphereManager : MonoBehaviour
             }
             spheres[i].SetActive(false);
         }
-        leftHand.transform.localPosition = offsetValues;
-        rightHand.transform.localPosition = offsetValues;
+        ApplyOffsetSettings();
         ApplyVisibilitySettings();
         SpawnNextSphere();
     }
@@ -76,36 +74,48 @@ public class SphereManager : MonoBehaviour
     void SpawnNextSphere()
     {
         if (spheresCollected < this.spheres.Length && this.spheres[spheresCollected] != null) {
-            this.spheres[spheresCollected].SetActive(showTargets);
             currentSphere = this.spheres[spheresCollected];
             
-            if (showTargets && targetVisibleTime > 0)
+            if (!showTargets && targetVisibleTime > 0)
             {
                 StartCoroutine(HideSphereAfterDelay(targetVisibleTime));
+            } else
+            {
+                currentSphere.GetComponent<MeshRenderer>().enabled = showTargets;
             }
         }
     }
 
     void ApplyVisibilitySettings()
     {
-        if (leftHand != null)
-            leftHand.GetComponent<MeshRenderer>().enabled = showHands;
-        if (rightHand != null)
-            rightHand.GetComponent<MeshRenderer>().enabled = showHands;
-
-        if (showHands && handVisibleTime > 0)
+        if (!showHands && handVisibleTime > 0)
         {
             StartCoroutine(HideHandsAfterDelay(handVisibleTime));
+        } else
+        {
+            if (leftHand != null)
+            {
+                leftHand.GetComponent<MeshRenderer>().enabled = showHands;
+            }
+            if (rightHand != null)
+            {
+                rightHand.GetComponent<MeshRenderer>().enabled = showHands;
+            }
         }
     }
 
+    void ApplyOffsetSettings()
+    {
+        leftHand.transform.localPosition = offsetValues;
+        rightHand.transform.localPosition = offsetValues;
+    }
     IEnumerator HideSphereAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
         
         if (currentSphere != null)
         {
-            currentSphere.SetActive(false);
+            currentSphere.GetComponent<MeshRenderer>().enabled = false;
             Debug.Log("Target hidden after visibility time expired");
         }
     }
@@ -113,11 +123,15 @@ public class SphereManager : MonoBehaviour
     IEnumerator HideHandsAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
-        
+
         if (leftHand != null)
-            leftHand.SetActive(false);
+        {
+            leftHand.GetComponent<MeshRenderer>().enabled = false;
+        }
         if (rightHand != null)
-            rightHand.SetActive(false);
+        {
+            rightHand.GetComponent<MeshRenderer>().enabled = false;
+        }
 
         Debug.Log("Hands hidden after visibility time expired");
     }

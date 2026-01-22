@@ -76,29 +76,33 @@ public class SphereManager : MonoBehaviour
     void SpawnNextSphere()
     {
         if (spheresCollected < this.spheres.Length && this.spheres[spheresCollected] != null) {
-            this.spheres[spheresCollected].GetComponent<MeshRenderer>().enabled = showTargets;
             currentSphere = this.spheres[spheresCollected];
             
             if (!showTargets && targetVisibleTime > 0)
             {
                 StartCoroutine(HideSphereAfterDelay(targetVisibleTime));
+            } else
+            {
+                currentSphere.GetComponent<MeshRenderer>().enabled = showTargets;
             }
         }
     }
 
     void ApplyVisibilitySettings()
     {
-        if (leftHand != null)
-        {
-            leftHand.GetComponent<MeshRenderer>().enabled = showHands;
-        }
-        if (rightHand != null)
-        {
-            rightHand.GetComponent<MeshRenderer>().enabled = showHands;
-        }
         if (!showHands && handVisibleTime > 0)
         {
             StartCoroutine(HideHandsAfterDelay(handVisibleTime));
+        } else
+        {
+            if (leftHand != null)
+            {
+                leftHand.GetComponent<MeshRenderer>().enabled = showHands;
+            }
+            if (rightHand != null)
+            {
+                rightHand.GetComponent<MeshRenderer>().enabled = showHands;
+            }
         }
     }
 

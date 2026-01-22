@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System;
+using System.Windows.Forms.VisualStyles;
 
 public class LoadTrialSettings : Singleton<LoadTrialSettings>
 {
@@ -75,19 +76,51 @@ public class LoadTrialSettings : Singleton<LoadTrialSettings>
         return 0.0f;
     }
 
-    public string GetOffsetType()
+    public int GetOffsetType()
     {
         if (currentTrialData != null)
         {
-            return currentTrialData.OffsetSettings.OffsetType;
+            if (currentTrialData.OffsetSettings.OffsetType == "NONE")
+            {
+                return 0;
+            }
+            else if (currentTrialData.OffsetSettings.OffsetType == "STATIC")
+            {
+                return 1;
+            }
+            else if (currentTrialData.OffsetSettings.OffsetType == "RANDOM")
+            {
+                return 2;
+            }
         }
-        return "None";
+        return -1;
+    }
+
+    public static float GetRandomOffset(float standardDeviation)
+    {
+        float u1 = 1.0f - UnityEngine.Random.value;
+        float u2 = 1.0f - UnityEngine.Random.value;
+
+        double randStdNormal = Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Sin(2.0 * Math.PI * u2);
+
+        return (float)(randStdNormal * standardDeviation);
     }
 
     public Vector3 GetOffsetValues()
     {
         if (currentTrialData != null)
         {
+            int offsetType = GetOffsetType();
+            if (offsetType == 0)
+            {
+                return Vector3.zero;
+            } else if (offsetType == 2)
+            {
+                float xOffset = GetRandomOffset(currentTrialData.OffsetSettings.OffsetValues.x);
+                float yOffset = GetRandomOffset(currentTrialData.OffsetSettings.OffsetValues.y);
+                float zOffset = GetRandomOffset(currentTrialData.OffsetSettings.OffsetValues.z);
+                return new Vector3(xOffset, yOffset, zOffset);
+            }
             return currentTrialData.OffsetSettings.OffsetValues;
         }
         return Vector3.zero;

@@ -75,13 +75,11 @@ public class SphereManager : MonoBehaviour
     {
         if (spheresCollected < this.spheres.Length && this.spheres[spheresCollected] != null) {
             currentSphere = this.spheres[spheresCollected];
+            currentSphere.SetActive(true);
             
             if (!showTargets && targetVisibleTime > 0)
             {
                 StartCoroutine(HideSphereAfterDelay(targetVisibleTime));
-            } else
-            {
-                currentSphere.GetComponent<MeshRenderer>().enabled = showTargets;
             }
         }
     }
@@ -146,6 +144,13 @@ public class SphereManager : MonoBehaviour
     
     public void ResetTrial()
     {
+        spheresCollected = 0;
+        if (spheres != null){
+            foreach(GameObject s in spheres){
+                Destroy(s);
+            }
+            spheres = null;
+        }
         spheresCollected = 0;
         // SpawnNextSphere();
     }

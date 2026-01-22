@@ -1,12 +1,13 @@
 using System;
+using System.Globalization;
 using System.IO;
 using System.Text;
-using System.Globalization;
 using UnityEngine;
 
 public class CsvLogger : ILogger {
     private StringBuilder _buffer;           
     private string _filePath;
+    private string _fileName;
     private long _time;
     private bool _initialized = false;
 
@@ -35,13 +36,15 @@ public class CsvLogger : ILogger {
         WriteHeader();
     }
 
-    public override void SaveLog() {
+    public override void SaveLog(string directory) {
         if (!_initialized) {
             Debug.LogWarning("CsvLogger not initialized. Call InitLog() before saving.");
             return;
         }
 
         try {
+            _filePath = Path.Combine(directory, _fileName);
+            Debug.Log(_filePath);
             File.WriteAllText(_filePath, _buffer.ToString());
             Debug.Log($"CSV log saved to: {_filePath}");
         } catch (Exception e) {
@@ -50,11 +53,9 @@ public class CsvLogger : ILogger {
     }
 
     // Override the base InitLog to also create file path and header
-    public override void InitLog(string trialName, string directory) {
+    public override void InitLog(string trialName) {
         _time = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-        string fileName = $"{trialName}_{DateTime.Now:yyyyMMdd_HHmmss}.csv";
-        _filePath = Path.Combine(directory, fileName);
-        Debug.Log(_filePath);
+        _fileName = $"{trialName}_{DateTime.Now:yyyyMMdd_HHmmss}.csv";
         _buffer.Clear();
 
         WriteHeader();

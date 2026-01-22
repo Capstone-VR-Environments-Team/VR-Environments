@@ -26,7 +26,7 @@ public class SaveTrialSettings : MonoBehaviour
 
     public void OnUploadLocationsClicked()
     {
-        TargetImportData importedData = JsonFileManager.LoadFromFile<TargetImportData>("ImportedTargets");
+        TargetImportData importedData = FileManager.Instance.LoadFromFile<TargetImportData>("ImportedTargets");
         if (importedData != null && importedData.targets != null)
         {
             _tempTargetLocations = importedData.targets;
@@ -60,7 +60,7 @@ public class SaveTrialSettings : MonoBehaviour
             },
             TargetLocations = _tempTargetLocations
         };
-        JsonFileManager.SaveToFile(trial, trial.ConfigurationName);
+        FileManager.Instance.SaveSettingsFile(trial, trial.ConfigurationName);
     }
 }
 

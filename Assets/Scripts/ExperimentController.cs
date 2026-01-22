@@ -23,7 +23,6 @@ public class ExperimentController : MonoBehaviour
     public void StopExperiment()
     {
         if (recorder != null) {
-            recorder.StopRecording();
             LoggingManager.Instance.StopRecording();
             sphereManager.ResetTrial();
             UpdateStatus("Stopped. Data Saved.");

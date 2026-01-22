@@ -23,4 +23,19 @@ public class StartNewSessionManager : MonoBehaviour
 
     [SerializeField] private Button beginSessionButton;
     public Button BeginSessionButton => beginSessionButton;
+
+    private TrialSettingsData _trialSettingsData;
+
+    public void OnBeginTrialButtonClicked()
+    {
+        _trialSettingsData = LoadTrialSettings.Instance.GetTrialSettings();
+        TrialSessionInformation trialSession = new TrialSessionInformation
+        {
+            SessionName = sessionNameInput.text,
+            ParticipantID = participantIDInput.text,
+            Notes = notesInput.text,
+            TrialSettings = _trialSettingsData
+        };
+        FileManager.Instance.SetTrialSessionInformation(trialSession);
+    }
 }

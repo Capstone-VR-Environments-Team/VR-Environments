@@ -1,6 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
+
+[Serializable]
+public class TrialSessionInformation
+{
+    public string SessionName;
+    public string ParticipantID;
+    public string Notes;
+    public TrialSettingsData TrialSettings;
+}
 
 [Serializable]
 public class TrialSettingsData

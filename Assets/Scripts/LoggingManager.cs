@@ -45,36 +45,22 @@ public class LoggingManager : Singleton<LoggingManager>
         // Reset data for new trial
         collectedTimingData = new CollectedTimingData();
 
-        _directory = CreateSaveDirectory();
 
-        logger.InitLog(name, _directory);
+        logger.InitLog(name);
         _logTimer = 0f;
         logging = true;
-    } 
+    }
 
-    public void StopRecording() { 
-
-        logger.SaveLog(); // Save CSV
+    public void StopRecording()
+    {
+        if (logging == false) return;
+        _directory = FileManager.Instance.SaveSessionInformation();
+        logger.SaveLog(_directory); // Save CSV
         SaveTimingData(); // Save JSON
         logging = false;
     }
 
-    public string CreateSaveDirectory()
-    {
-        string folderName = $"{_currentTrialName}_{DateTime.Now:yyyyMMdd_HHmmss}";
 
-        string rootPath = Application.persistentDataPath;
-
-        string directoryPath = Path.Combine(rootPath, folderName);
-
-        if (!Directory.Exists(directoryPath))
-        {
-            Directory.CreateDirectory(directoryPath);
-            Debug.Log($"Directory created at: {directoryPath}");
-        }
-
-        return directoryPath;
-    }
 
     public double GetTrialTime()
     {
@@ -83,10 +69,25 @@ public class LoggingManager : Singleton<LoggingManager>
         return (currentTime - _startTime);
     }
 
-    public void LogTargetHit(Vector3 targetLocation)
+    public void LogTargetHit(Vector3 targetLocation, int targetId)
     {
         if (!logging) return;
-        collectedTimingData.TargetHits.Add(new HitEvent(GetTrialTime(), targetLocation - _headsetPosition));
+
+        double time = GetTrialTime();
+
+        collectedTimingData.TargetHits.Add(new HitEvent(time, targetLocation - _headsetPosition));
+
+        string noteContent = $"Target {targetId} hit";
+
+        collectedTimingData.Notes.Add(new NoteEvent(time, noteContent));
+
+        LiveTrialViewManager ui = FindFirstObjectByType<LiveTrialViewManager>();
+        if (ui != null)
+        {
+            TimeSpan t = TimeSpan.FromSeconds(time);
+            string timeString = string.Format("{0:D1}:{1:D2}", t.Minutes, t.Seconds);
+            ui.AppendToLog($"{timeString} - {noteContent}");
+        }
     }
 
     public void LogProximityHit(Vector3 targetLocation)
@@ -98,7 +99,16 @@ public class LoggingManager : Singleton<LoggingManager>
     public void LogNote(string content, double timestamp)
     {
         if (!logging) return;
+
         collectedTimingData.Notes.Add(new NoteEvent(timestamp, content));
+
+        LiveTrialViewManager ui = FindFirstObjectByType<LiveTrialViewManager>();
+        if (ui != null)
+        {
+            TimeSpan t = TimeSpan.FromSeconds(timestamp);
+            string timeString = string.Format("{0:D1}:{1:D2}", t.Minutes, t.Seconds);
+            ui.AppendToLog($"{timeString} - {content}");
+        }
     }
 
     private void SaveTimingData()

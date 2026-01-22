@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Events;
 
 public class SphereManager : MonoBehaviour
 {
@@ -16,6 +18,9 @@ public class SphereManager : MonoBehaviour
 
     [Header("Spawn Locations")]
     
+    [Header("Events")]
+    public HandDataRecorder recorder;
+
     private int spheresCollected = 0;
     private GameObject currentSphere;
     private bool showHands;
@@ -40,8 +45,16 @@ public class SphereManager : MonoBehaviour
             spheres[i] = Instantiate(spherePrefab,
                                     sphereVectors[i] + headsetPosition,
                                     Quaternion.identity);
+
+            SphereContact sc = spheres[i].GetComponent<SphereContact>();
+            if (sc != null)
+            {
+                sc.targetId = i + 1;
+            }
+
             Collider c = spheres[i].GetComponent<Collider>();
-            if (c) {
+            if (c)
+            {
                 c.isTrigger = true;
             }
             spheres[i].SetActive(false);
@@ -50,17 +63,17 @@ public class SphereManager : MonoBehaviour
         ApplyVisibilitySettings();
         SpawnNextSphere();
     }
-    
+
     public void OnSphereInteracted()
     {
         spheresCollected++;
         Debug.Log($"Sphere collected! {spheresCollected}/{totalSpheres}");
-        
+
         if (currentSphere)
         {
             currentSphere.SetActive(false);
         }
-        
+
         if (spheresCollected >= totalSpheres)
         {
             EndTrial();
@@ -70,7 +83,7 @@ public class SphereManager : MonoBehaviour
             SpawnNextSphere();
         }
     }
-    
+
     void SpawnNextSphere()
     {
         if (spheresCollected < this.spheres.Length && this.spheres[spheresCollected] != null) {
@@ -110,7 +123,7 @@ public class SphereManager : MonoBehaviour
     IEnumerator HideSphereAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
-        
+
         if (currentSphere != null)
         {
             currentSphere.GetComponent<MeshRenderer>().enabled = false;
@@ -136,12 +149,12 @@ public class SphereManager : MonoBehaviour
 
     void EndTrial()
     {
-        Debug.Log("Trial complete! All spheres collected."); 
-        // - Save data
+        Debug.Log("Trial complete! All spheres collected.");
+        recorder.StopRecording();
         // - Load next trial
         ResetTrial();
     }
-    
+
     public void ResetTrial()
     {
         spheresCollected = 0;

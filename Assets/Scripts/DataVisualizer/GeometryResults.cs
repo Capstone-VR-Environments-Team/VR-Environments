@@ -10,7 +10,7 @@ public class Geometry {
 
 
 public class GeometryResults {
-    public Geometry total;
-    public Geometry search;
-    public Geometry approach;
+    public Geometry total = new Geometry();
+    public Geometry search = new Geometry();
+    public Geometry approach = new Geometry();
 }

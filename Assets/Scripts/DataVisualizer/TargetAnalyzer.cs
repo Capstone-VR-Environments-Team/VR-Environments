@@ -22,8 +22,12 @@ public static class TargetAnalyzer
         for (int i = 1; i < hitTimeStamps.Count; i++)
         {
             totalTimes.Add(hitTimeStamps[i] - hitTimeStamps[i - 1]);
-            searchTimes.Add(hitTimeStamps[i] - proxTimeStamps[i-1]);
-            preSearchTimes.Add(proxTimeStamps[i-1] - hitTimeStamps[i-1]);
+            if (proxTimeStamps != null && i-1 < proxTimeStamps.Count){
+                searchTimes.Add(hitTimeStamps[i] - proxTimeStamps[i-1]);
+                preSearchTimes.Add(proxTimeStamps[i-1] - hitTimeStamps[i-1]);
+            } else {
+                preSearchTimes.Add(hitTimeStamps[i] - hitTimeStamps[i-1]);
+            }
 
         }
 

@@ -6,7 +6,7 @@ public static class DataAnalyzer {
     public static Statistics AnalyzeData(List<double> values, List<double> times) {
         // Return null or empty result if data is invalid
         if (values == null || values.Count == 0) {
-            return null;
+            return new Statistics();
         }
 
         var results = new Statistics();

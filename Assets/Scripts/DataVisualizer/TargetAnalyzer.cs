@@ -13,7 +13,7 @@ public static class TargetAnalyzer
             return null;
         }
 
-        List<double> timeStamps = targetData.Select(keyPoint => keyPoint.Timestamp).ToList();
+        List<double> timeStamps = targetData.Select(keyPoint => keyPoint.time).ToList();
 
         List<double> times = new();
         for (int i = 1; i < timeStamps.Count; i++)

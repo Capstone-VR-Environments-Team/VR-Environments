@@ -12,6 +12,7 @@ public static class GeometryAnalyzer {
 
         if (lineDir == Vector3.zero) {
             Debug.LogError("GeometryAnalyzer: Line points are identical. Cannot form a line.");
+            Debug.LogError("Point A: " + input.LinePointA.ToString() + " Point B: " + input.LinePointB.ToString());
             return null;
         }
 
@@ -50,7 +51,12 @@ public static class GeometryAnalyzer {
 
             Vector3 diff = point - closestPointOnLine;
 
-            results.DistancesFromLine.Add(diff.magnitude);
+            if (input.Mode == AnalysisMode.LineToTarget) {
+                // Perpendicular distance to the path
+                results.DistancesFromLine.Add(diff.magnitude);
+            } else {
+                results.DistancesFromLine.Add(Vector3.Distance(point, input.LinePointB));
+            }
             results.PlaneAxisH.Add(Vector3.Dot(diff, axisH));
             results.PlaneAxisV.Add(Vector3.Dot(diff, axisV));
         }

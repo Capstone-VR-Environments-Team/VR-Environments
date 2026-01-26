@@ -83,10 +83,10 @@ public class InteractiveViewManager : MonoBehaviour
         }
 
         foreach (KeyPoint point in targetData) {
-            targetPoints.Add(point.Position);
+            targetPoints.Add(point.location);
             GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             sphere.transform.SetParent(_targets.transform);
-            sphere.transform.localPosition = point.Position;
+            sphere.transform.localPosition = point.location;
             sphere.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
         }
 

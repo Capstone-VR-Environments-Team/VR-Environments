@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class FullAnalysisManager : MonoBehaviour {
@@ -41,7 +42,7 @@ public class FullAnalysisManager : MonoBehaviour {
         }
 
         // Load Data
-        List<KeyPoint> targetHits = JsonLoader.LoadKeyPoints(jsonPath);
+        JsonWrapper trialInfo = JsonLoader.LoadKeyPoints(jsonPath);
         List<TrackingData> rawData = _csvLoader.loadFile(csvPath);
 
         if (rawData == null || rawData.Count == 0) return;
@@ -54,35 +55,39 @@ public class FullAnalysisManager : MonoBehaviour {
         Debug.Log($"Times = {allTimes.Count}, lefts = {leftPos.Count}");
 
         // Run Analysis
-        var leftResults = ProcessHand(targetHits, leftPos, allTimes);
-        var rightResults = ProcessHand(targetHits, rightPos, allTimes);
+        var leftResults = ProcessHand(trialInfo.TargetHits, trialInfo.TargetProximityHits, leftPos, allTimes);
+        var rightResults = ProcessHand(trialInfo.TargetHits, trialInfo.TargetProximityHits, rightPos, allTimes);
 
         Debug.Log($"Times = {allTimes.Count}, lefts2 = {leftResults.distVals.Count}");
 
-        Statistics targetData = TargetAnalyzer.AnalyzeData(targetHits);
+        Statistics targetData = TargetAnalyzer.AnalyzeData(trialInfo.TargetHits);
 
         // Display Combined Stats
         _statisticalViewManager.SetResults(leftResults, rightResults, allTimes);
         _statisticalViewManager.SetTargets(targetData);
         _interactiveViewManager.SetStatistics(leftResults.statsDist, rightResults.statsDist);
-        _interactiveViewManager.SetPaths(rawData, targetHits);
+        _interactiveViewManager.SetPaths(rawData, trialInfo.TargetHits);
 
     }
 
-    private HandResultPackage ProcessHand(List<KeyPoint> hits, List<Vector3> positions, List<double> times) {
+    private HandResultPackage ProcessHand(List<KeyPoint> hits, List<KeyPoint> prox, List<Vector3> positions, List<double> times) {
         // Slice
-        List<SegmentAnalysisResult> segments = DataSlicer.AnalyzeSegments(hits, positions, times);
+        SlicingResult segments = DataSlicer.AnalyzeSegments(hits, prox, positions, times);
 
         // Aggregate
         var dists = new List<double>();
         var hs = new List<double>();
         var vs = new List<double>();
+        var types = new List<AnalysisMode>();
 
-        foreach (var seg in segments) {
+        foreach (var seg in segments.SegmentResults) {
             if (seg.GeometryData != null) {
+                int count = seg.GeometryData.DistancesFromLine.Count;
+
                 dists.AddRange(seg.GeometryData.DistancesFromLine);
                 hs.AddRange(seg.GeometryData.PlaneAxisH);
                 vs.AddRange(seg.GeometryData.PlaneAxisV);
+                types.AddRange(Enumerable.Repeat(seg.Mode, count));
             }
         }
 
@@ -91,9 +96,11 @@ public class FullAnalysisManager : MonoBehaviour {
             distVals = dists,
             hVals = hs,
             vVals = vs,
+            pointTypes = types,
             statsDist = DataAnalyzer.AnalyzeData(new AnalysisInputData { Values = dists, Timestamps = times }),
             statsH = DataAnalyzer.AnalyzeData(new AnalysisInputData { Values = hs, Timestamps = times }),
-            statsV = DataAnalyzer.AnalyzeData(new AnalysisInputData { Values = vs, Timestamps = times })
+            statsV = DataAnalyzer.AnalyzeData(new AnalysisInputData { Values = vs, Timestamps = times }),
+            statsSearchTime = DataAnalyzer.AnalyzeData(new AnalysisInputData { Values = segments.SearchTimes, Timestamps = segments.SearchTimeTimestamps })
         };
     }
 }

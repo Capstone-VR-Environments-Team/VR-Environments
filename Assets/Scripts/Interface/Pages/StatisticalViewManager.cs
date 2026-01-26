@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using XCharts.Runtime;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Menu;
 
 public class StatisticalViewManager : MonoBehaviour
 {
@@ -113,18 +111,62 @@ public class StatisticalViewManager : MonoBehaviour
 
     private void UpdateGraphs()
     {
-        UpdateGraph(deviationMagnitudeGraph, currentResults.distVals);
-        UpdateGraph(xAxisDeviationGraph, currentResults.hVals);
-        UpdateGraph(yAxisDeviationGraph, currentResults.vVals);
+        UpdateGraph(deviationMagnitudeGraph, currentResults.distVals, currentResults.pointTypes);
+        UpdateGraph(xAxisDeviationGraph, currentResults.hVals, currentResults.pointTypes);
+        UpdateGraph(yAxisDeviationGraph, currentResults.vVals, currentResults.pointTypes);
     }
 
-    private void UpdateGraph(BaseChart graph, List<double> values)
+    private void UpdateGraph(BaseChart graph, List<double> values, List<AnalysisMode> pointTypes)
     {
         graph.ClearData();
-        for (int i = 0; i < 10; i++)
-        {
-            graph.AddData(0, allTimes[i], values[i]);
+        graph.RemoveAllSerie();
+
+        int count = Mathf.Min(values.Count, allTimes.Count);
+        if (count == 0) { return; }
+        AnalysisMode previousType = AnalysisMode.LineToTarget;
+
+        Color approachColor = new Color{ r = 106.0f / 255.0f, g = 153.0f / 255.0f, b = 77.0f / 255.0f, a = 1 }; 
+        Color homingColor = Color.purple;
+
+        int currentSerieIndex = -1;
+
+        for (int i = 0; i < count; i++) {
+            double timestamp = allTimes[i];
+            double val = values[i];
+            AnalysisMode currentType = pointTypes[i];
+
+            // Handle Switch between mode
+            if (i == 0 || currentType != previousType) {
+                currentSerieIndex++;
+
+                var newSerie = graph.AddSerie<Line>($"Segment_{currentSerieIndex}");
+
+                // Configure Style
+                newSerie.lineStyle.width = 2.0f;
+
+                // Set Color based on Mode
+                if (currentType == AnalysisMode.PointToTarget)
+                {
+                    newSerie.lineStyle.color = homingColor;
+                    newSerie.itemStyle.color = homingColor;
+                } 
+                else
+                {
+                    newSerie.lineStyle.color = approachColor;
+                    newSerie.itemStyle.color = approachColor;
+                }
+
+                if (i > 0) {
+                    graph.AddData(currentSerieIndex - 1, timestamp, val);
+                }
+            }
+
+            // Add the current data to the current series
+            graph.AddData(currentSerieIndex, timestamp, val);
+
+            previousType = currentType;
         }
+
         Debug.Log($"Times = {allTimes.Count}, vals = {values.Count}");
         graph.RefreshChart();
     }

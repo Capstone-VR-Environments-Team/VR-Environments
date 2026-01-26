@@ -65,8 +65,7 @@ public class FullAnalysisManager : MonoBehaviour {
         TargetAnalysisResults targetData = TargetAnalyzer.AnalyzeData(trialInfo.TargetHits, trialInfo.TargetProximityHits);
 
         // Display Combined Stats
-        _statisticalViewManager.SetResults(leftResults, rightResults, allTimes);
-        _statisticalViewManager.SetTargets(targetData.targetToTargetTimes);
+        _statisticalViewManager.SetResults(leftResults, rightResults, targetData, allTimes);
         _interactiveViewManager.SetStatistics(leftResults.total.statsDist, rightResults.total.statsDist);
         _interactiveViewManager.SetPaths(rawData, trialInfo.TargetHits);
 

@@ -35,34 +35,61 @@ public class StatisticalViewManager : MonoBehaviour
     [SerializeField] private TMP_Dropdown pathDropdown;
     public TMP_Dropdown PathDropdown => pathDropdown;
 
+    [SerializeField] private TMP_Dropdown componentDropdown;
+    public TMP_Dropdown ComponentDropdown => componentDropdown;
+
     [SerializeField] private Button endAnalysisButton;
     public Button EndAnalysisButton => endAnalysisButton;
 
-    private HandResultPackage leftResults;
-    private HandResultPackage rightResults;
     private List<double> allTimes;
+    HandResultPackage leftResults;
+    HandResultPackage rightResults;
 
-    private HandResultPackage currentResults;
+    Dictionary<PathType, Dictionary<ComponentType, DeviationData>> resultsMap;
+    TargetAnalysisResults targetData;
+    HandResultPackage currentResults;
+    DeviationData currentDeviationData;
 
-    public void SetResults(HandResultPackage leftResults, HandResultPackage rightResults, List<double> allTimes)
+    PathType currentPath = PathType.RightHand;
+    ComponentType currentComponent = ComponentType.Overall;
+
+    public void SetResults(HandResultPackage leftResults, HandResultPackage rightResults,
+        TargetAnalysisResults targetData, List<double> allTimes)
     {
+        this.allTimes = allTimes;
+        this.targetData = targetData;
         this.leftResults = leftResults;
         this.rightResults = rightResults;
-        this.allTimes = allTimes;
+        resultsMap = new Dictionary<PathType, Dictionary<ComponentType, DeviationData>>()
+        {
+            {
+                PathType.LeftHand, new Dictionary<ComponentType, DeviationData>()
+                {
+                    { ComponentType.Overall, leftResults.total },
+                    { ComponentType.Approach, leftResults.approach },
+                    { ComponentType.Search, leftResults.search }
+                }
+            },
+            {
+                PathType.RightHand, new Dictionary<ComponentType, DeviationData>()
+                {
+                    { ComponentType.Overall, rightResults.total },
+                    { ComponentType.Approach, rightResults.approach },
+                    { ComponentType.Search, rightResults.search }
+                }
+            }
+        };
 
         UpdatePath();
+        UpdateComponent();
         RefreshData();
-    }
-
-    public void SetTargets(Statistics targetData)
-    {
-        targetStatisticsManager.SetStatistics(targetData);
     }
 
     private void Start()
     {
         deviationDropdown.onValueChanged.AddListener(UpdateDeviationStatistics);
         pathDropdown.onValueChanged.AddListener(UpdatePath);
+        componentDropdown.onValueChanged.AddListener(UpdateComponent);
     }
 
     private void UpdatePath()
@@ -77,10 +104,40 @@ public class StatisticalViewManager : MonoBehaviour
         if (path == "Left Hand")
         {
             currentResults = leftResults;
+            currentPath = PathType.LeftHand;
         }
         else if (path == "Right Hand")
         {
             currentResults = rightResults;
+            currentPath = PathType.RightHand;
+        }
+
+        RefreshData();
+    }
+
+    private void UpdateComponent()
+    {
+        UpdateComponent(componentDropdown.value);
+    }
+
+    private void UpdateComponent(int index)
+    {
+        string component = componentDropdown.options[index].text;
+
+        if (component == "Overall")
+        {
+            targetStatisticsManager.SetStatistics(targetData.targetToTargetTimes);
+            currentComponent = ComponentType.Overall;
+        }
+        else if (component == "Approach")
+        {
+            targetStatisticsManager.SetStatistics(targetData.preSearchTimes);
+            currentComponent = ComponentType.Approach;
+        }
+        else if (component == "Search")
+        {
+            targetStatisticsManager.SetStatistics(targetData.searchTimes);
+            currentComponent = ComponentType.Search;
         }
 
         RefreshData();
@@ -97,15 +154,15 @@ public class StatisticalViewManager : MonoBehaviour
 
         if (selectedDeviation == "Up/Down")
         {
-            deviationStatisticsManager.SetStatistics(currentResults.statsV);
+            deviationStatisticsManager.SetStatistics(currentDeviationData.statsV);
         }
         else if (selectedDeviation == "Left/Right")
         {
-            deviationStatisticsManager.SetStatistics(currentResults.statsH);
+            deviationStatisticsManager.SetStatistics(currentDeviationData.statsH);
         }
         else if (selectedDeviation == "Total")
         {
-            deviationStatisticsManager.SetStatistics(currentResults.statsDist);
+            deviationStatisticsManager.SetStatistics(currentDeviationData.statsDist);
         }
     }
 
@@ -173,6 +230,8 @@ public class StatisticalViewManager : MonoBehaviour
 
     private void RefreshData()
     {
+        currentDeviationData = resultsMap[currentPath][currentComponent];
+
         UpdateDeviationStatistics();
         UpdateGraphs();
     }
@@ -181,5 +240,19 @@ public class StatisticalViewManager : MonoBehaviour
     {
         deviationDropdown.onValueChanged.RemoveAllListeners();
         pathDropdown.onValueChanged.RemoveAllListeners();
+        componentDropdown.onValueChanged.RemoveAllListeners();
+    }
+
+    private enum PathType
+    {
+        LeftHand,
+        RightHand
+    }
+
+    private enum ComponentType
+    {
+        Overall,
+        Approach,
+        Search
     }
 }

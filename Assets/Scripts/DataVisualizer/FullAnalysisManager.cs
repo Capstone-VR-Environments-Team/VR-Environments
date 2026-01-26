@@ -1,8 +1,10 @@
+using NUnit.Framework;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using XUGL;
 
 public class FullAnalysisManager : MonoBehaviour {
 
@@ -65,7 +67,7 @@ public class FullAnalysisManager : MonoBehaviour {
         // Display Combined Stats
         _statisticalViewManager.SetResults(leftResults, rightResults, allTimes);
         _statisticalViewManager.SetTargets(targetData.targetToTargetTimes);
-        _interactiveViewManager.SetStatistics(leftResults.statsDist, rightResults.statsDist);
+        _interactiveViewManager.SetStatistics(leftResults.total.statsDist, rightResults.total.statsDist);
         _interactiveViewManager.SetPaths(rawData, trialInfo.TargetHits);
 
     }
@@ -75,31 +77,69 @@ public class FullAnalysisManager : MonoBehaviour {
         SlicingResult segments = DataSlicer.AnalyzeSegments(hits, prox, positions, times);
 
         // Aggregate
-        var dists = new List<double>();
-        var hs = new List<double>();
-        var vs = new List<double>();
-        var types = new List<AnalysisMode>();
+        var totalDists = new List<double>();
+        var totalHs = new List<double>();
+        var totalVs = new List<double>();
+        var totalTimes = new List<double>();
+        var totalTypes = new List<AnalysisMode>();
+
+        var searchDists = new List<double>();
+        var searchHs = new List<double>();
+        var searchVs = new List<double>();
+        var searchTimes = new List<double>();
+
+        var approachDists = new List<double>();
+        var approachHs = new List<double>();
+        var approachVs = new List<double>();
+        var approachTimes = new List<double>();
 
         foreach (var seg in segments.SegmentResults) {
             if (seg.GeometryData != null) {
-                int count = seg.GeometryData.DistancesFromLine.Count;
 
-                dists.AddRange(seg.GeometryData.DistancesFromLine);
-                hs.AddRange(seg.GeometryData.PlaneAxisH);
-                vs.AddRange(seg.GeometryData.PlaneAxisV);
-                types.AddRange(Enumerable.Repeat(seg.Mode, count));
+                var totalData = seg.GeometryData.total;
+                int count = totalData.DistancesFromLine.Count;
+                totalDists.AddRange(totalData.DistancesFromLine);
+                totalHs.AddRange(totalData.PlaneAxisH);
+                totalVs.AddRange(totalData.PlaneAxisV);
+                totalTimes.AddRange(totalData.Timestamps);
+                totalTypes.AddRange(Enumerable.Repeat(seg.Mode, count));
+
+                var searchData = seg.GeometryData.search;
+                searchDists.AddRange(searchData.DistancesFromLine);
+                searchHs.AddRange(searchData.PlaneAxisH);
+                searchVs.AddRange(searchData.PlaneAxisV);
+                searchTimes.AddRange(searchData.Timestamps);
+
+                var approachData = seg.GeometryData.approach;
+                approachDists.AddRange(approachData.DistancesFromLine);
+                approachHs.AddRange(approachData.PlaneAxisH);
+                approachVs.AddRange(approachData.PlaneAxisV);
+                approachTimes.AddRange(approachData.Timestamps);
+
             }
         }
 
         // Stats
         return new HandResultPackage {
-            distVals = dists,
-            hVals = hs,
-            vVals = vs,
-            pointTypes = types,
+            distVals = totalDists,
+            hVals = totalHs,
+            vVals = totalVs,
+            pointTypes = totalTypes,
+            total = analyzeSetOfData(totalDists, totalHs, totalVs, totalTimes),
+            search = analyzeSetOfData(searchDists, searchHs, searchVs, searchTimes),
+            approach = analyzeSetOfData(approachDists, approachHs, approachVs, approachTimes)
+        };
+    }
+
+    private DeviationData analyzeSetOfData(List<double> dists, List<double> hs, List<double> vs, List<double> times) {
+
+        DeviationData result = new() {
             statsDist = DataAnalyzer.AnalyzeData(dists, times),
             statsH = DataAnalyzer.AnalyzeData(hs, times),
-            statsV = DataAnalyzer.AnalyzeData(vs, times),
+            statsV = DataAnalyzer.AnalyzeData(vs, times)
         };
+
+        return result;
+
     }
 }

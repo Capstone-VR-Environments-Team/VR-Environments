@@ -48,3 +48,9 @@ public class TargetAnalysisResults {
     public Statistics searchTimes;
     public Statistics preSearchTimes;
 }
+
+public class DeviationData {
+    public Statistics statsDist;
+    public Statistics statsH;
+    public Statistics statsV;
+}

@@ -41,7 +41,8 @@ public static class GeometryAnalyzer {
         // Process all points
         Vector3 origin = input.LinePointA;
 
-        foreach (var point in input.Points) {
+        for(int i = 0; i < input.Points.Count; i++) {
+            var point = input.Points[i];
             // Vector from Line Origin to the data point
             Vector3 v = point - origin;
 
@@ -53,12 +54,21 @@ public static class GeometryAnalyzer {
 
             if (input.Mode == AnalysisMode.LineToTarget) {
                 // Perpendicular distance to the path
-                results.DistancesFromLine.Add(diff.magnitude);
+                results.total.DistancesFromLine.Add(diff.magnitude);
+                results.approach.DistancesFromLine.Add(diff.magnitude);
+                results.approach.PlaneAxisH.Add(Vector3.Dot(diff, axisH));
+                results.approach.PlaneAxisV.Add(Vector3.Dot(diff, axisV));
+                results.approach.Timestamps.Add(input.Timestamps[i]);
             } else {
-                results.DistancesFromLine.Add(Vector3.Distance(point, input.LinePointB));
+                results.total.DistancesFromLine.Add(Vector3.Distance(point, input.LinePointB));
+                results.search.DistancesFromLine.Add(Vector3.Distance(point, input.LinePointB));
+                results.search.PlaneAxisH.Add(Vector3.Dot(diff, axisH));
+                results.search.PlaneAxisV.Add(Vector3.Dot(diff, axisV));
+                results.search.Timestamps.Add(input.Timestamps[i]);
             }
-            results.PlaneAxisH.Add(Vector3.Dot(diff, axisH));
-            results.PlaneAxisV.Add(Vector3.Dot(diff, axisV));
+            results.total.PlaneAxisH.Add(Vector3.Dot(diff, axisH));
+            results.total.PlaneAxisV.Add(Vector3.Dot(diff, axisV));
+            results.total.Timestamps.Add(input.Timestamps[i]);
         }
 
         return results;

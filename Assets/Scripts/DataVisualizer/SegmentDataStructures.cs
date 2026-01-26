@@ -41,3 +41,10 @@ public class SlicingResult {
     public List<double> SearchTimes { get; set; } = new List<double>();
     public List<double> SearchTimeTimestamps { get; set; } = new List<double>();
 }
+
+
+public class TargetAnalysisResults {
+    public Statistics targetToTargetTimes;
+    public Statistics searchTimes;
+    public Statistics preSearchTimes;
+}

@@ -60,11 +60,11 @@ public class FullAnalysisManager : MonoBehaviour {
 
         Debug.Log($"Times = {allTimes.Count}, lefts2 = {leftResults.distVals.Count}");
 
-        Statistics targetData = TargetAnalyzer.AnalyzeData(trialInfo.TargetHits);
+        TargetAnalysisResults targetData = TargetAnalyzer.AnalyzeData(trialInfo.TargetHits, trialInfo.TargetProximityHits);
 
         // Display Combined Stats
         _statisticalViewManager.SetResults(leftResults, rightResults, allTimes);
-        _statisticalViewManager.SetTargets(targetData);
+        _statisticalViewManager.SetTargets(targetData.targetToTargetTimes);
         _interactiveViewManager.SetStatistics(leftResults.statsDist, rightResults.statsDist);
         _interactiveViewManager.SetPaths(rawData, trialInfo.TargetHits);
 
@@ -97,10 +97,9 @@ public class FullAnalysisManager : MonoBehaviour {
             hVals = hs,
             vVals = vs,
             pointTypes = types,
-            statsDist = DataAnalyzer.AnalyzeData(new AnalysisInputData { Values = dists, Timestamps = times }),
-            statsH = DataAnalyzer.AnalyzeData(new AnalysisInputData { Values = hs, Timestamps = times }),
-            statsV = DataAnalyzer.AnalyzeData(new AnalysisInputData { Values = vs, Timestamps = times }),
-            statsSearchTime = DataAnalyzer.AnalyzeData(new AnalysisInputData { Values = segments.SearchTimes, Timestamps = segments.SearchTimeTimestamps })
+            statsDist = DataAnalyzer.AnalyzeData(dists, times),
+            statsH = DataAnalyzer.AnalyzeData(hs, times),
+            statsV = DataAnalyzer.AnalyzeData(vs, times),
         };
     }
 }

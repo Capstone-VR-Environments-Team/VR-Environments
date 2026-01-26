@@ -62,10 +62,6 @@ public static class DataSlicer {
                     });
                 }
 
-                // Calculate Search Time
-                double searchDuration = endKey.time - proxHit.time;
-                results.SearchTimes.Add(searchDuration);
-                results.SearchTimeTimestamps.Add(endKey.time);
             }
             else {
                 // --- STANDARD SEGMENT CASE ---

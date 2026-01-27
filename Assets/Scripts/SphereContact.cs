@@ -18,8 +18,6 @@ public class SphereContact : MonoBehaviour
             hasBeenTriggered = true;
             Debug.Log($"Sphere {targetId} found!");
 
-            LoggingManager.Instance.LogTargetHit(transform.position, targetId);
-
             sphereManager.OnSphereInteracted();
         }
     }

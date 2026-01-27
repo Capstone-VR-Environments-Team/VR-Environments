@@ -8,15 +8,16 @@ public class ExperimentController : MonoBehaviour
     public TMP_Text statusText; // use Text if not using TMP
     public SphereManager sphereManager;
     public GameObject headset;
+    public LiveTrialViewManager trialViewManager;
 
-    public void StartExperiment()
+    private Vector3 headsetPosition;
+
+    public void PrimeExperiment()
     {
-        Vector3 headsetPosition = headset.transform.position;
+        headsetPosition = headset.transform.position;
         if (recorder != null) {
             sphereManager.BeginTrial(headsetPosition);
-            recorder.StartRecording(headsetPosition);
-            LoggingManager.Instance.StartRecording("PLACEHOLDER_NAME", headsetPosition);
-            UpdateStatus("Recording...");
+            UpdateStatus("Prepping Trial");
         }
     }
 
@@ -25,8 +26,17 @@ public class ExperimentController : MonoBehaviour
         if (recorder != null) {
             LoggingManager.Instance.StopRecording();
             sphereManager.ResetTrial();
+            recorder.StopRecording();
             UpdateStatus("Stopped. Data Saved.");
+            trialViewManager.StopTimer();
         }
+    }
+
+    public void StartExperiment() {
+        LoggingManager.Instance.StartRecording("PLACEHOLDER_NAME", headsetPosition);
+        trialViewManager.StartTimer();
+        recorder.StartRecording(headsetPosition);
+        UpdateStatus("Recording...");
     }
 
     void UpdateStatus(string s)

@@ -14,6 +14,9 @@ public class StartNewSessionManager : MonoBehaviour
     [SerializeField] private Button uploadConfigurationButton;
     public Button UploadConfigurationButton => uploadConfigurationButton;
 
+    [SerializeField] private TMP_Text configurationFileNameText;
+    public TMP_Text ConfigurationFileNameText => configurationFileNameText;
+
     [SerializeField] private TMP_InputField notesInput;
     public TMP_InputField NotesInput => notesInput;
 
@@ -38,4 +41,12 @@ public class StartNewSessionManager : MonoBehaviour
         };
         FileManager.Instance.SetTrialSessionInformation(trialSession);
     }
+
+    public void clearInputs()
+    {
+        sessionNameInput.text = "";
+        participantIDInput.text = "";
+        notesInput.text = "";
+        configurationFileNameText.SetText("No File Uploaded");
+    }   
 }

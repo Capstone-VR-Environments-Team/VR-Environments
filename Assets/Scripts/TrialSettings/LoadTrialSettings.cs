@@ -3,12 +3,14 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using System;
 using System.Windows.Forms.VisualStyles;
+using TMPro;
 
 public class LoadTrialSettings : Singleton<LoadTrialSettings>
 {
 
     [Header("Data Storage")]
     public TrialSettingsData currentTrialData;
+    public TMP_Text uploadedFile;
 
     public void OnUploadSettingsClicked()
     {
@@ -17,13 +19,14 @@ public class LoadTrialSettings : Singleton<LoadTrialSettings>
         if (loadedData != null)
         {
             currentTrialData = loadedData;
-
+            uploadedFile.SetText(fileName);
             Debug.Log($"Loaded Configuration: {currentTrialData.ConfigurationName}");
             Debug.Log($"Target Count: {currentTrialData.TargetLocations.Count}");
 
         }
         else
         {
+            uploadedFile.SetText("File Upload Failed");
             Debug.LogError("Failed to load settings file.");
         }
     }

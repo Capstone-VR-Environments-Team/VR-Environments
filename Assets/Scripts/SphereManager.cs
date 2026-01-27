@@ -20,6 +20,7 @@ public class SphereManager : MonoBehaviour
     
     [Header("Events")]
     public HandDataRecorder recorder;
+    public ExperimentController experimentController;
 
     private int spheresCollected = 0;
     private GameObject currentSphere;
@@ -28,6 +29,7 @@ public class SphereManager : MonoBehaviour
     private float targetVisibleTime;
     private float handVisibleTime;
     private float targetProximity;
+    private bool started = false;
     private Vector3 offsetValues;
 
     public void BeginTrial(Vector3 headsetPosition)
@@ -59,30 +61,19 @@ public class SphereManager : MonoBehaviour
             }
             spheres[i].SetActive(false);
         }
-        ApplyOffsetSettings();
-        ApplyVisibilitySettings();
+        
         SpawnNextSphere();
     }
 
     public void OnSphereInteracted()
     {
-        spheresCollected++;
-        Debug.Log($"Sphere collected! {spheresCollected}/{totalSpheres}");
-
-        if (currentSphere)
-        {
-            currentSphere.SetActive(false);
+        if (spheresCollected == 0) {
+            if (!started) StartTrial();
+            return;
         }
-
-        if (spheresCollected >= totalSpheres)
-        {
-            EndTrial();
-        }
-        else
-        {
-            SpawnNextSphere();
-        }
+        HandleSphereInteract();
     }
+
 
     void SpawnNextSphere()
     {
@@ -165,6 +156,39 @@ public class SphereManager : MonoBehaviour
             spheres = null;
         }
         spheresCollected = 0;
+        started = false;
         // SpawnNextSphere();
     }
+
+    void StartTrial() {
+        Debug.Log("Beginning Start Process");
+        started = true;
+        StartCoroutine(DelayStart(3.0f));
+    }
+
+    IEnumerator DelayStart(float waitTime) {
+        yield return new WaitForSeconds(waitTime);
+
+        experimentController.StartExperiment();
+        ApplyOffsetSettings();
+        ApplyVisibilitySettings();
+        HandleSphereInteract();
+        Debug.Log("Trial Started");
+    }
+
+    void HandleSphereInteract() {
+        spheresCollected++;
+        Debug.Log($"Sphere collected! {spheresCollected}/{totalSpheres}");
+
+        if (currentSphere) {
+            currentSphere.SetActive(false);
+        }
+
+        if (spheresCollected >= totalSpheres) {
+            EndTrial();
+        } else {
+            SpawnNextSphere();
+        }
+    }
+
 }

@@ -36,9 +36,20 @@ public class SaveTrialSettings : MonoBehaviour
         }
         else
         {
+            fileUploaded.SetText("File Upload Failed");
             Debug.LogError("Failed to load target locations from file.");
         }
     }
+
+    public float SafeParse(string input, float defaultValue)
+    {
+        if (float.TryParse(input, out float result))
+        {
+            return result;
+        }
+        return defaultValue;
+    }
+
     public void OnSaveButtonClicked()
     {
         TrialSettingsData trial = new TrialSettingsData
@@ -47,19 +58,19 @@ public class SaveTrialSettings : MonoBehaviour
             VisibilitySettings = new VisibilitySettings
             {
                 ShowTargets = showTargetsToggle.isOn,
-                TargetVisibleTime = float.Parse(targetVisibleTimeInput.text),
+                TargetVisibleTime = SafeParse(targetVisibleTimeInput.text, 0),
                 ShowHands = showHandsToggle.isOn,
-                HandVisibleTime = float.Parse(handVisibleTimeInput.text),
+                HandVisibleTime = SafeParse(handVisibleTimeInput.text, 0)
             },
             OffsetSettings = new OffsetSettings
             {
                 OffsetType = offsetTypeDropdown.options[offsetTypeDropdown.value].text,
                 OffsetValues = new Vector3(
-                    float.Parse(offsetXInput.text),
-                    float.Parse(offsetYInput.text),
-                    float.Parse(offsetZInput.text)
+                    SafeParse(offsetXInput.text, 0),
+                    SafeParse(offsetYInput.text, 0),
+                    SafeParse(offsetZInput.text, 0)
                 ),
-                TargetProximity = float.Parse(targetRangeInput.text)
+                TargetProximity = SafeParse(targetRangeInput.text, 0)
             },
             TargetLocations = _tempTargetLocations
         };

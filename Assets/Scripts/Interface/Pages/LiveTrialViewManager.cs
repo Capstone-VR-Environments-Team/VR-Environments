@@ -46,6 +46,12 @@ public class LiveTrialViewManager : MonoBehaviour
 
         if (logButton != null)
             logButton.onClick.AddListener(OnSaveNoteClicked);
+
+        TrialSessionInformation trialInfo = FileManager.Instance.GetTrialSessionInformation();
+        if (experimentNameText != null && trialInfo != null)
+            experimentNameText.SetText(trialInfo.SessionName);
+        if (participantIDText != null && trialInfo != null)
+            participantIDText.SetText(trialInfo.ParticipantID);
     }
 
     private void OnNoteValueChanged(string text)

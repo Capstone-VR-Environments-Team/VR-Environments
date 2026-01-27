@@ -31,6 +31,11 @@ public  class FileManager: Singleton<FileManager>
         _trialSessionInformation = info;
     }
 
+    public TrialSessionInformation GetTrialSessionInformation()
+    {
+        return _trialSessionInformation;
+    }
+
     public string SaveSessionInformation()
     {
         string json = JsonUtility.ToJson(_trialSessionInformation, true);

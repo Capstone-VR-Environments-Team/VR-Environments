@@ -178,6 +178,7 @@ public class SphereManager : MonoBehaviour
 
     void HandleSphereInteract() {
         spheresCollected++;
+        LoggingManager.Instance.LogTargetHit(currentSphere.transform.position, spheresCollected);
         Debug.Log($"Sphere collected! {spheresCollected}/{totalSpheres}");
 
         if (currentSphere) {

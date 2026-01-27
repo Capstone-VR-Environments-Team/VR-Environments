@@ -26,6 +26,7 @@ public class ExperimentController : MonoBehaviour
         if (recorder != null) {
             LoggingManager.Instance.StopRecording();
             sphereManager.ResetTrial();
+            recorder.StopRecording();
             UpdateStatus("Stopped. Data Saved.");
             trialViewManager.StopTimer();
         }
@@ -34,6 +35,7 @@ public class ExperimentController : MonoBehaviour
     public void StartExperiment() {
         LoggingManager.Instance.StartRecording("PLACEHOLDER_NAME", headsetPosition);
         trialViewManager.StartTimer();
+        recorder.StartRecording(headsetPosition);
         UpdateStatus("Recording...");
     }
 

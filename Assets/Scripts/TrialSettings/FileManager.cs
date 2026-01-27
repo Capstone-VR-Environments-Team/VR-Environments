@@ -42,7 +42,7 @@ public  class FileManager: Singleton<FileManager>
         return _collectedDataDirectoryPath;
     }
 
-    public T LoadFromFile<T>(string fileName)
+    public (T data, string fileName) LoadFromFile<T>()
     {
         string filePath = FileSelector.getFilePath(Application.persistentDataPath, "json");
 
@@ -53,7 +53,8 @@ public  class FileManager: Singleton<FileManager>
         }
 
         string json = File.ReadAllText(filePath);
-        return JsonUtility.FromJson<T>(json);
+        string fileName = Path.GetFileName(filePath);
+        return (JsonUtility.FromJson<T>(json), fileName);
     }
 
     public void CreateSaveDirectory(string name)

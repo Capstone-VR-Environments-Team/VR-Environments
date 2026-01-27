@@ -12,7 +12,7 @@ public class LoadTrialSettings : Singleton<LoadTrialSettings>
 
     public void OnUploadSettingsClicked()
     {
-        TrialSettingsData loadedData = FileManager.Instance.LoadFromFile<TrialSettingsData>("TrialSettings");
+        var (loadedData, fileName) = FileManager.Instance.LoadFromFile<TrialSettingsData>();
 
         if (loadedData != null)
         {

@@ -7,6 +7,7 @@ public class SaveTrialSettings : MonoBehaviour
 {
     [Header("Configuration Name")]
     public TMP_InputField configurationNameInput;
+    public TMP_Text fileUploaded;
 
     [Header("Visibility Settings")]
 
@@ -26,9 +27,11 @@ public class SaveTrialSettings : MonoBehaviour
 
     public void OnUploadLocationsClicked()
     {
-        TargetImportData importedData = FileManager.Instance.LoadFromFile<TargetImportData>("ImportedTargets");
+        var (importedData, fileName) = FileManager.Instance.LoadFromFile<TargetImportData>();
         if (importedData != null && importedData.targets != null)
         {
+            Debug.Log("filename: " + fileName);
+            fileUploaded.SetText(fileName);
             _tempTargetLocations = importedData.targets;
         }
         else

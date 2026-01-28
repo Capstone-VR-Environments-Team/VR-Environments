@@ -55,6 +55,9 @@ public class LiveTrialViewManager : MonoBehaviour
             goHomeButton.gameObject.SetActive(false);
         }
 
+        beginTrialButton.interactable = true;
+        logButton.interactable = true;
+
         if (noteInput != null)
             noteInput.onValueChanged.AddListener(OnNoteValueChanged);
 
@@ -70,15 +73,10 @@ public class LiveTrialViewManager : MonoBehaviour
 
     private void OnEnable()
     {
-        if (endTrialButton != null)
-        {
-            endTrialButton.gameObject.SetActive(true);
-        }
-
-        if (goHomeButton != null)
-        {
-            goHomeButton.gameObject.SetActive(false);
-        }
+        endTrialButton.gameObject.SetActive(true);
+        goHomeButton.gameObject.SetActive(false);
+        beginTrialButton.interactable = true;
+        logButton.interactable = true;
 
         if (notesView != null)
         {
@@ -206,6 +204,12 @@ public class LiveTrialViewManager : MonoBehaviour
 
         endTrialButton.gameObject.SetActive(false);
         goHomeButton.gameObject.SetActive(true);
+    }
+
+    public void disableButtonsOnEnd()
+    {
+        beginTrialButton.interactable = false;
+        logButton.interactable = false;
     }
 
     void UpdateTimerDisplay()

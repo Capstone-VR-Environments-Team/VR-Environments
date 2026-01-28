@@ -77,4 +77,10 @@ public  class FileManager: Singleton<FileManager>
         }
     }
 
+    public void ResetFileManager()
+    {
+        _collectedDataDirectoryPath = null;
+        _trialSessionInformation = null;
+    }
+
 }

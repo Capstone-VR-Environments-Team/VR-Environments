@@ -29,6 +29,7 @@ public class ExperimentController : MonoBehaviour
             recorder.StopRecording();
             UpdateStatus("Stopped. Data Saved.");
             trialViewManager.StopTimer();
+            FileManager.Instance.ResetFileManager();
         }
     }
 

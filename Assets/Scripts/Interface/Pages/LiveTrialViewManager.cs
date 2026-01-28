@@ -45,38 +45,18 @@ public class LiveTrialViewManager : MonoBehaviour
 
     private void Start()
     {
-        if (endTrialButton != null)
-        {
-            endTrialButton.gameObject.SetActive(true);
-        }
-
-        if (goHomeButton != null)
-        {
-            goHomeButton.gameObject.SetActive(false);
-        }
-
-        beginTrialButton.interactable = true;
-        logButton.interactable = true;
-
         if (noteInput != null)
             noteInput.onValueChanged.AddListener(OnNoteValueChanged);
 
         if (logButton != null)
             logButton.onClick.AddListener(OnSaveNoteClicked);
-
-        TrialSessionInformation trialInfo = FileManager.Instance.GetTrialSessionInformation();
-        if (experimentNameText != null && trialInfo != null)
-            experimentNameText.SetText(trialInfo.SessionName);
-        if (participantIDText != null && trialInfo != null)
-            participantIDText.SetText(trialInfo.ParticipantID);
+        ResetLiveTrialViewManager();
+        
     }
 
     private void OnEnable()
     {
-        endTrialButton.gameObject.SetActive(true);
-        goHomeButton.gameObject.SetActive(false);
-        beginTrialButton.interactable = true;
-        logButton.interactable = true;
+        ResetLiveTrialViewManager();
 
         if (notesView != null)
         {
@@ -210,6 +190,20 @@ public class LiveTrialViewManager : MonoBehaviour
     {
         beginTrialButton.interactable = false;
         logButton.interactable = false;
+    }
+
+    public void ResetLiveTrialViewManager()
+    {
+        endTrialButton.gameObject.SetActive(true);
+        goHomeButton.gameObject.SetActive(false);
+        beginTrialButton.interactable = true;
+        logButton.interactable = true;
+
+        TrialSessionInformation trialInfo = FileManager.Instance.GetTrialSessionInformation();
+        if (experimentNameText != null && trialInfo != null)
+            experimentNameText.SetText(trialInfo.SessionName);
+        if (participantIDText != null && trialInfo != null)
+            participantIDText.SetText(trialInfo.ParticipantID);
     }
 
     void UpdateTimerDisplay()

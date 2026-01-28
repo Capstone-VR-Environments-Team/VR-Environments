@@ -1,8 +1,6 @@
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class SphereManager : MonoBehaviour
 {
@@ -54,15 +52,29 @@ public class SphereManager : MonoBehaviour
                 sc.targetId = i + 1;
             }
 
-            Collider c = spheres[i].GetComponent<Collider>();
+            SphereCollider c = spheres[i].GetComponent<SphereCollider>();
             if (c)
             {
                 c.isTrigger = true;
             }
+            GameObject proximityObject = new GameObject();
+            proximityObject.transform.SetParent(spheres[i].transform);
+            SphereCollider triggerCollider = proximityObject.AddComponent<SphereCollider>();
+            triggerCollider.isTrigger = true;
+            triggerCollider.radius = c.radius + targetProximity;
+            triggerCollider.center = c.center;
+            ProximityAlertTrigger proximityAlert = proximityObject.AddComponent<ProximityAlertTrigger>();
+            proximityAlert.Initialize(i + 1);
+            proximityAlert.OnProximityEnter += OnProximityEnter;
             spheres[i].SetActive(false);
         }
         
         SpawnNextSphere();
+    }
+
+    private void OnProximityEnter(int targetId)
+    {
+        LoggingManager.Instance.LogProximityHit(currentSphere.transform.position);
     }
 
     public void OnSphereInteracted()

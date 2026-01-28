@@ -2,6 +2,7 @@ using TMPro;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Net;
 
 public class LiveTrialViewManager : MonoBehaviour
 {
@@ -14,6 +15,9 @@ public class LiveTrialViewManager : MonoBehaviour
 
     [SerializeField] private Button endTrialButton;
     public Button EndTrialButton => endTrialButton;
+
+    [SerializeField] private Button goHomeButton;
+    public Button GoHomeButton => goHomeButton;
 
     [Header("Data Panel")]
     [SerializeField] private TMP_Text experimentNameText;
@@ -41,6 +45,16 @@ public class LiveTrialViewManager : MonoBehaviour
 
     private void Start()
     {
+        if (endTrialButton != null)
+        {
+            endTrialButton.gameObject.SetActive(true);
+        }
+
+        if (goHomeButton != null)
+        {
+            goHomeButton.gameObject.SetActive(false);
+        }
+
         if (noteInput != null)
             noteInput.onValueChanged.AddListener(OnNoteValueChanged);
 
@@ -52,6 +66,46 @@ public class LiveTrialViewManager : MonoBehaviour
             experimentNameText.SetText(trialInfo.SessionName);
         if (participantIDText != null && trialInfo != null)
             participantIDText.SetText(trialInfo.ParticipantID);
+    }
+
+    private void OnEnable()
+    {
+        if (endTrialButton != null)
+        {
+            endTrialButton.gameObject.SetActive(true);
+        }
+
+        if (goHomeButton != null)
+        {
+            goHomeButton.gameObject.SetActive(false);
+        }
+
+        if (notesView != null)
+        {
+            Transform parentTransform = notesView.transform;
+            ScrollRect scrollRect = notesView.GetComponent<ScrollRect>();
+            if (scrollRect != null && scrollRect.content != null)
+            {
+                parentTransform = scrollRect.content;
+            }
+
+            foreach (Transform child in parentTransform)
+            {
+                Destroy(child.gameObject);
+            }
+        }
+
+        if (noteInput != null)
+        {
+            noteInput.text = ""; 
+        }
+
+        _currentNoteStartTime = -1.0; 
+
+        if (timerText != null && !isRunning)
+        {
+            timerText.text = "00:00";
+        }
     }
 
     private void OnNoteValueChanged(string text)
@@ -144,6 +198,14 @@ public class LiveTrialViewManager : MonoBehaviour
         isRunning = false;
         elapsedTime = 0f;
         UpdateTimerDisplay();
+
+        double time = LoggingManager.Instance.GetTrialTime();
+        TimeSpan t = TimeSpan.FromSeconds(time / 1000);
+        string timeString = string.Format("{0:D1}:{1:D2}", t.Minutes, t.Seconds);
+        AppendToLog($"{timeString} - Data has been saved to folder");
+
+        endTrialButton.gameObject.SetActive(false);
+        goHomeButton.gameObject.SetActive(true);
     }
 
     void UpdateTimerDisplay()

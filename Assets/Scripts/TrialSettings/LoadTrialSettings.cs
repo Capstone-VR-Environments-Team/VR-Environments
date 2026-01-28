@@ -135,7 +135,7 @@ public class LoadTrialSettings : Singleton<LoadTrialSettings>
     {
         if (currentTrialData != null)
         {
-            return currentTrialData.OffsetSettings.TargetProximity;
+            return (currentTrialData.OffsetSettings.TargetProximity / 100.0f); // Convert to cm
         }
         return 0.0f;
     }

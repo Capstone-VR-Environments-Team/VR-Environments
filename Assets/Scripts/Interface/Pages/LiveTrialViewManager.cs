@@ -2,6 +2,7 @@ using TMPro;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Net;
 
 public class LiveTrialViewManager : MonoBehaviour
 {
@@ -14,6 +15,9 @@ public class LiveTrialViewManager : MonoBehaviour
 
     [SerializeField] private Button endTrialButton;
     public Button EndTrialButton => endTrialButton;
+
+    [SerializeField] private Button goHomeButton;
+    public Button GoHomeButton => goHomeButton;
 
     [Header("Data Panel")]
     [SerializeField] private TMP_Text experimentNameText;
@@ -46,6 +50,40 @@ public class LiveTrialViewManager : MonoBehaviour
 
         if (logButton != null)
             logButton.onClick.AddListener(OnSaveNoteClicked);
+        ResetLiveTrialViewManager();
+        
+    }
+
+    private void OnEnable()
+    {
+        ResetLiveTrialViewManager();
+
+        if (notesView != null)
+        {
+            Transform parentTransform = notesView.transform;
+            ScrollRect scrollRect = notesView.GetComponent<ScrollRect>();
+            if (scrollRect != null && scrollRect.content != null)
+            {
+                parentTransform = scrollRect.content;
+            }
+
+            foreach (Transform child in parentTransform)
+            {
+                Destroy(child.gameObject);
+            }
+        }
+
+        if (noteInput != null)
+        {
+            noteInput.text = ""; 
+        }
+
+        _currentNoteStartTime = -1.0; 
+
+        if (timerText != null && !isRunning)
+        {
+            timerText.text = "00:00";
+        }
     }
 
     private void OnNoteValueChanged(string text)
@@ -138,6 +176,34 @@ public class LiveTrialViewManager : MonoBehaviour
         isRunning = false;
         elapsedTime = 0f;
         UpdateTimerDisplay();
+
+        double time = LoggingManager.Instance.GetTrialTime();
+        TimeSpan t = TimeSpan.FromSeconds(time / 1000);
+        string timeString = string.Format("{0:D1}:{1:D2}", t.Minutes, t.Seconds);
+        AppendToLog($"{timeString} - Data has been saved to folder");
+
+        endTrialButton.gameObject.SetActive(false);
+        goHomeButton.gameObject.SetActive(true);
+    }
+
+    public void disableButtonsOnEnd()
+    {
+        beginTrialButton.interactable = false;
+        logButton.interactable = false;
+    }
+
+    public void ResetLiveTrialViewManager()
+    {
+        endTrialButton.gameObject.SetActive(true);
+        goHomeButton.gameObject.SetActive(false);
+        beginTrialButton.interactable = true;
+        logButton.interactable = true;
+
+        TrialSessionInformation trialInfo = FileManager.Instance.GetTrialSessionInformation();
+        if (experimentNameText != null && trialInfo != null)
+            experimentNameText.SetText(trialInfo.SessionName);
+        if (participantIDText != null && trialInfo != null)
+            participantIDText.SetText(trialInfo.ParticipantID);
     }
 
     void UpdateTimerDisplay()

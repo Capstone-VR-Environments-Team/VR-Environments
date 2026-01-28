@@ -48,7 +48,25 @@ public class CustomizeSessionManager : MonoBehaviour
     [SerializeField] private Button uploadTargetLocationsButton;
     public Button UploadTargetLocationsButton => uploadTargetLocationsButton;
 
+    [SerializeField] private TMP_Text uploadedFileNameText;
+    public TMP_Text UploadedFileNameText => uploadedFileNameText;
+
     [SerializeField] private Button modifyConfigurationButton;
     public Button ModifyConfigurationButton => modifyConfigurationButton;
+
+    public void ResetInputs()
+    {
+        configurationNameInput.text = "";
+        showTargetsInput.isOn = true;
+        targetsVisibleTimeInput.text = "0";
+        showHandsInput.isOn = true;
+        handsVisibleTimeInput.text = "0";
+        typeInput.value = 0;
+        xInput.text = "0";
+        yInput.text = "0";
+        zInput.text = "0";
+        targetRangeInput.text = "0";
+        uploadedFileNameText.text = "No file uploaded";
+    }
 
 }

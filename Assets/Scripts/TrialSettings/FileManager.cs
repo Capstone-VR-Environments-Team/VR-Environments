@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Text;
 using System.Web;
 using UnityEngine;
 
@@ -49,7 +50,7 @@ public  class FileManager: Singleton<FileManager>
 
     public (T data, string fileName) LoadFromFile<T>()
     {
-        string filePath = FileSelector.getFilePath(Application.persistentDataPath, "json");
+        string filePath = FileSelector.getFilePath(Application.persistentDataPath, "json,csv");
 
         if (!File.Exists(filePath))
         {
@@ -57,9 +58,22 @@ public  class FileManager: Singleton<FileManager>
             return default;
         }
 
-        string json = File.ReadAllText(filePath);
+        string fileContent = File.ReadAllText(filePath);
         string fileName = Path.GetFileName(filePath);
-        return (JsonUtility.FromJson<T>(json), fileName);
+        string extension = Path.GetExtension(filePath).ToLower();
+
+        string jsonToProcess = fileContent;
+
+        if (extension == ".csv")
+        {
+            jsonToProcess = ConvertCsvToTargetJson(fileContent);
+        }
+        else if (extension != ".json")
+        {
+            Debug.LogWarning("Unknown file type loaded. Attempting to parse as JSON...");
+        }
+
+        return (JsonUtility.FromJson<T>(jsonToProcess), fileName);
     }
 
     public void CreateSaveDirectory(string name)
@@ -75,6 +89,42 @@ public  class FileManager: Singleton<FileManager>
             Directory.CreateDirectory(_collectedDataDirectoryPath);
             Debug.Log($"Directory created at: {_collectedDataDirectoryPath}");
         }
+    }
+
+    public string ConvertCsvToTargetJson(string csvContent)
+    {
+        StringBuilder jsonBuilder = new StringBuilder();
+
+        jsonBuilder.Append("{\"targets\": [");
+
+        string[] lines = csvContent.Split(new[] { '\r', '\n' }, System.StringSplitOptions.RemoveEmptyEntries);
+
+        bool isFirstEntry = true;
+
+        foreach (string line in lines)
+        {
+            string[] values = line.Split(',');
+
+            if (values.Length >= 3)
+            {
+                if (float.TryParse(values[0], out float x) &&
+                    float.TryParse(values[1], out float y) &&
+                    float.TryParse(values[2], out float z))
+                {
+                    if (!isFirstEntry)
+                    {
+                        jsonBuilder.Append(",");
+                    }
+
+                    jsonBuilder.Append(string.Format("{{\"x\": {0}, \"y\": {1}, \"z\": {2}}}", x, y, z));
+
+                    isFirstEntry = false;
+                }
+            }
+        }
+        jsonBuilder.Append("]}");
+
+        return jsonBuilder.ToString();
     }
 
     public void ResetFileManager()

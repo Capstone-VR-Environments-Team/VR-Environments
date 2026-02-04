@@ -9,6 +9,7 @@ public  class FileManager: Singleton<FileManager>
     private string _collectedDataDirectoryPath;
 
     private TrialSessionInformation _trialSessionInformation;
+    private CollectedTimingData _collectedTimingData;
 
     // Save JSON to a file
     public void SaveSettingsFile<T>(T data, string fileName)
@@ -37,9 +38,14 @@ public  class FileManager: Singleton<FileManager>
         return _trialSessionInformation;
     }
 
-    public string SaveSessionInformation()
+    public string SaveSessionInformation(CollectedTimingData collectedTimingData)
     {
-        string json = JsonUtility.ToJson(_trialSessionInformation, true);
+        TrialSession trialSession = new TrialSession
+        {
+            TrialSessionInformation = _trialSessionInformation,
+            CollectedTimingData = collectedTimingData
+        };
+        string json = JsonUtility.ToJson(trialSession, true);
         string fileName = _trialSessionInformation.SessionName + "-" + _trialSessionInformation.ParticipantID;
         CreateSaveDirectory(fileName);
         string filePath = Path.Combine(_collectedDataDirectoryPath, fileName + ".json");

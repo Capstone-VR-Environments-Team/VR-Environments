@@ -45,6 +45,7 @@ public class FullAnalysisManager : MonoBehaviour {
 
         // Load Data
         JsonWrapper trialInfo = JsonLoader.LoadKeyPoints(jsonPath);
+        _reviewPastSessionsManager.SetSessionInfo(trialInfo);
         List<TrackingData> rawData = _csvLoader.loadFile(csvPath);
 
         if (rawData == null || rawData.Count == 0) return;

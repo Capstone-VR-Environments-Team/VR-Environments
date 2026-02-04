@@ -24,7 +24,6 @@ public class SphereManager : MonoBehaviour
     private GameObject currentSphere;
     private bool showHands;
     private bool showTargets;
-    private float targetVisibleTime;
     private float handVisibleTime;
     private float targetProximity;
     private bool started = false;
@@ -35,7 +34,6 @@ public class SphereManager : MonoBehaviour
         List<Vector3> sphereVectors = LoadTrialSettings.Instance.GetLoadedTargets();
         showHands = LoadTrialSettings.Instance.GetShowHands();
         showTargets = LoadTrialSettings.Instance.GetShowTargets();
-        targetVisibleTime = LoadTrialSettings.Instance.GetTargetVisibleTime();
         handVisibleTime = LoadTrialSettings.Instance.GetHandVisibleTime();
         targetProximity = LoadTrialSettings.Instance.GetTargetProximity();
         offsetValues = LoadTrialSettings.Instance.GetOffsetValues();
@@ -83,6 +81,14 @@ public class SphereManager : MonoBehaviour
         Debug.Log("Proximity Hit");
     }
 
+    public void HideCurrentSphere()
+    {
+        if (currentSphere && !showTargets)
+        {
+            currentSphere.GetComponent<Renderer>().enabled = false;
+        }
+    }
+
     public void OnSphereInteracted()
     {
         if (spheresCollected == 0) {
@@ -98,11 +104,6 @@ public class SphereManager : MonoBehaviour
         if (spheresCollected < this.spheres.Length && this.spheres[spheresCollected] != null) {
             currentSphere = this.spheres[spheresCollected];
             currentSphere.SetActive(true);
-            
-            if (!showTargets && targetVisibleTime > 0)
-            {
-                StartCoroutine(HideSphereAfterDelay(targetVisibleTime));
-            }
         }
     }
 
@@ -128,16 +129,6 @@ public class SphereManager : MonoBehaviour
     {
         leftHand.transform.localPosition = offsetValues;
         rightHand.transform.localPosition = offsetValues;
-    }
-    IEnumerator HideSphereAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-
-        if (currentSphere != null)
-        {
-            currentSphere.GetComponent<MeshRenderer>().enabled = false;
-            Debug.Log("Target hidden after visibility time expired");
-        }
     }
 
     IEnumerator HideHandsAfterDelay(float delay)
@@ -199,9 +190,9 @@ public class SphereManager : MonoBehaviour
         LoggingManager.Instance.LogTargetHit(currentSphere.transform.position, spheresCollected);
         Debug.Log($"Sphere collected! {spheresCollected}/{totalSpheres}");
 
-        if (currentSphere) {
-            currentSphere.SetActive(false);
-        }
+        //if (currentSphere) {
+        //    currentSphere.SetActive(false);
+        //}
 
         if (spheresCollected >= totalSpheres) {
             EndTrial();

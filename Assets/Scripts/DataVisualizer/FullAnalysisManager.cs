@@ -77,19 +77,22 @@ public class FullAnalysisManager : MonoBehaviour {
 
         // Aggregate
         var totalDists = new List<double>();
-        var totalHs = new List<double>();
-        var totalVs = new List<double>();
+        var totalXs = new List<double>();
+        var totalYs = new List<double>();
+        var totalZs = new List<double>();
         var totalTimes = new List<double>();
         var totalTypes = new List<AnalysisMode>();
 
         var searchDists = new List<double>();
-        var searchHs = new List<double>();
-        var searchVs = new List<double>();
+        var searchXs = new List<double>();
+        var searchYs = new List<double>();
+        var searchZs = new List<double>();
         var searchTimes = new List<double>();
 
         var approachDists = new List<double>();
-        var approachHs = new List<double>();
-        var approachVs = new List<double>();
+        var approachXs = new List<double>();
+        var approachYs = new List<double>();
+        var approachZs = new List<double>();
         var approachTimes = new List<double>();
 
         foreach (var seg in segments.SegmentResults) {
@@ -98,21 +101,24 @@ public class FullAnalysisManager : MonoBehaviour {
                 var totalData = seg.GeometryData.total;
                 int count = totalData.DistancesFromLine.Count;
                 totalDists.AddRange(totalData.DistancesFromLine);
-                totalHs.AddRange(totalData.PlaneAxisH);
-                totalVs.AddRange(totalData.PlaneAxisV);
+                totalXs.AddRange(totalData.DeviationsX);
+                totalYs.AddRange(totalData.DevaitionsY);
+                totalZs.AddRange(totalData.DevaitionsZ);
                 totalTimes.AddRange(totalData.Timestamps);
                 totalTypes.AddRange(Enumerable.Repeat(seg.Mode, count));
 
                 var searchData = seg.GeometryData.search;
                 searchDists.AddRange(searchData.DistancesFromLine);
-                searchHs.AddRange(searchData.PlaneAxisH);
-                searchVs.AddRange(searchData.PlaneAxisV);
+                searchXs.AddRange(searchData.DeviationsX);
+                searchYs.AddRange(searchData.DevaitionsY);
+                searchZs.AddRange(searchData.DevaitionsZ);
                 searchTimes.AddRange(searchData.Timestamps);
 
                 var approachData = seg.GeometryData.approach;
                 approachDists.AddRange(approachData.DistancesFromLine);
-                approachHs.AddRange(approachData.PlaneAxisH);
-                approachVs.AddRange(approachData.PlaneAxisV);
+                approachXs.AddRange(approachData.DeviationsX);
+                approachYs.AddRange(approachData.DevaitionsY);
+                approachZs.AddRange(approachData.DevaitionsZ);
                 approachTimes.AddRange(approachData.Timestamps);
 
             }
@@ -121,21 +127,23 @@ public class FullAnalysisManager : MonoBehaviour {
         // Stats
         return new HandResultPackage {
             distVals = totalDists,
-            hVals = totalHs,
-            vVals = totalVs,
+            xVals = totalXs,
+            yVals = totalYs,
+            zVals = totalZs,
             pointTypes = totalTypes,
-            total = analyzeSetOfData(totalDists, totalHs, totalVs, totalTimes),
-            search = analyzeSetOfData(searchDists, searchHs, searchVs, searchTimes),
-            approach = analyzeSetOfData(approachDists, approachHs, approachVs, approachTimes)
+            total = analyzeSetOfData(totalDists, totalXs, totalYs, totalZs, totalTimes),
+            search = analyzeSetOfData(searchDists, searchXs, searchYs, searchZs, searchTimes),
+            approach = analyzeSetOfData(approachDists, approachXs, approachYs, approachZs, approachTimes)
         };
     }
 
-    private DeviationData analyzeSetOfData(List<double> dists, List<double> hs, List<double> vs, List<double> times) {
+    private DeviationData analyzeSetOfData(List<double> dists, List<double> xs, List<double> ys, List<double> zs, List<double> times) {
 
         DeviationData result = new() {
             statsDist = DataAnalyzer.AnalyzeData(dists, times),
-            statsH = DataAnalyzer.AnalyzeData(hs, times),
-            statsV = DataAnalyzer.AnalyzeData(vs, times)
+            statsX = DataAnalyzer.AnalyzeData(xs, times),
+            statsY = DataAnalyzer.AnalyzeData(ys, times),
+            statsZ = DataAnalyzer.AnalyzeData(zs, times)
         };
 
         return result;

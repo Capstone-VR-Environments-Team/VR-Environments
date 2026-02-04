@@ -7,6 +7,7 @@ public struct HandResultPackage
     public DeviationData approach;
     public List<AnalysisMode> pointTypes;
     public List<double> distVals;
-    public List<double> hVals;
-    public List<double> vVals;
+    public List<double> xVals;
+    public List<double> yVals;
+    public List<double> zVals;
 }

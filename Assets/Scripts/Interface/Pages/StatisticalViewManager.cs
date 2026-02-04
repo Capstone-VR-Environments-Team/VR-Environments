@@ -25,11 +25,11 @@ public class StatisticalViewManager : MonoBehaviour
     [SerializeField] private BaseChart yAxisDeviationGraph;
     public BaseChart YAxisDeviationGraph => yAxisDeviationGraph;
 
+    [SerializeField] private BaseChart zAxisDeviationGraph;
+    public BaseChart ZAxisDeviationGraph => zAxisDeviationGraph;
+
     [SerializeField] private BaseChart deviationMagnitudeGraph;
     public BaseChart DeviationMagnitudeGraph => deviationMagnitudeGraph;
-
-    [SerializeField] private BaseChart eegSignalsGraph;
-    public BaseChart EEGSignalsGraph => eegSignalsGraph;
 
     [Header("Control Panel")]
     [SerializeField] private TMP_Dropdown pathDropdown;
@@ -152,13 +152,16 @@ public class StatisticalViewManager : MonoBehaviour
     {
         string selectedDeviation = deviationDropdown.options[index].text;
 
-        if (selectedDeviation == "Up/Down")
-        {
-            deviationStatisticsManager.SetStatistics(currentDeviationData.statsV);
+        if (selectedDeviation == "X") {
+            deviationStatisticsManager.SetStatistics(currentDeviationData.statsX);
         }
-        else if (selectedDeviation == "Left/Right")
+        else if (selectedDeviation == "Y")
         {
-            deviationStatisticsManager.SetStatistics(currentDeviationData.statsH);
+            deviationStatisticsManager.SetStatistics(currentDeviationData.statsY);
+        }
+        else if (selectedDeviation == "Z") 
+        {
+            deviationStatisticsManager.SetStatistics(currentDeviationData.statsZ);
         }
         else if (selectedDeviation == "Total")
         {
@@ -169,8 +172,9 @@ public class StatisticalViewManager : MonoBehaviour
     private void UpdateGraphs()
     {
         UpdateGraph(deviationMagnitudeGraph, currentResults.distVals, currentResults.pointTypes);
-        UpdateGraph(xAxisDeviationGraph, currentResults.hVals, currentResults.pointTypes);
-        UpdateGraph(yAxisDeviationGraph, currentResults.vVals, currentResults.pointTypes);
+        UpdateGraph(xAxisDeviationGraph, currentResults.xVals, currentResults.pointTypes);
+        UpdateGraph(yAxisDeviationGraph, currentResults.yVals, currentResults.pointTypes);
+        UpdateGraph(zAxisDeviationGraph, currentResults.zVals, currentResults.pointTypes);
     }
 
     private void UpdateGraph(BaseChart graph, List<double> values, List<AnalysisMode> pointTypes)

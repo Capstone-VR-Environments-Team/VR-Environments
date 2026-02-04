@@ -51,6 +51,7 @@ public class TargetAnalysisResults {
 
 public class DeviationData {
     public Statistics statsDist;
-    public Statistics statsH;
-    public Statistics statsV;
+    public Statistics statsX;
+    public Statistics statsY;
+    public Statistics statsZ;
 }

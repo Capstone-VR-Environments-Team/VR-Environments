@@ -16,28 +16,6 @@ public static class GeometryAnalyzer {
             return null;
         }
 
-        // Calculate Horizontal Axis
-        Vector3 referenceRight = Vector3.right;
-
-        // Project referenceRight onto the plane defined by normal 'lineDir'
-        Vector3 axisH = referenceRight - (Vector3.Dot(referenceRight, lineDir) * lineDir);
-
-        // If parallel to right then switch to forward
-        if (axisH.sqrMagnitude < 0.0001f) {
-            Vector3 fallback = Vector3.forward;
-            axisH = fallback - (Vector3.Dot(fallback, lineDir) * lineDir);
-        }
-
-        axisH.Normalize();
-
-        // Calculate Vertical Axis
-        Vector3 axisV = Vector3.Cross(lineDir, axisH).normalized;
-
-        // Flip of pointing down
-        if (Vector3.Dot(axisV, Vector3.up) < 0) {
-            axisV = -axisV;
-        }
-
         // Process all points
         Vector3 origin = input.LinePointA;
 
@@ -56,18 +34,21 @@ public static class GeometryAnalyzer {
                 // Perpendicular distance to the path
                 results.total.DistancesFromLine.Add(diff.magnitude);
                 results.approach.DistancesFromLine.Add(diff.magnitude);
-                results.approach.PlaneAxisH.Add(Vector3.Dot(diff, axisH));
-                results.approach.PlaneAxisV.Add(Vector3.Dot(diff, axisV));
+                results.approach.DeviationsX.Add(diff.x);
+                results.approach.DevaitionsY.Add(diff.y);
+                results.approach.DevaitionsZ.Add(diff.z);
                 results.approach.Timestamps.Add(input.Timestamps[i]);
             } else {
                 results.total.DistancesFromLine.Add(Vector3.Distance(point, input.LinePointB));
                 results.search.DistancesFromLine.Add(Vector3.Distance(point, input.LinePointB));
-                results.search.PlaneAxisH.Add(Vector3.Dot(diff, axisH));
-                results.search.PlaneAxisV.Add(Vector3.Dot(diff, axisV));
+                results.search.DeviationsX.Add(diff.x);
+                results.search.DevaitionsY.Add(diff.y);
+                results.search.DevaitionsZ.Add(diff.z);
                 results.search.Timestamps.Add(input.Timestamps[i]);
             }
-            results.total.PlaneAxisH.Add(Vector3.Dot(diff, axisH));
-            results.total.PlaneAxisV.Add(Vector3.Dot(diff, axisV));
+            results.total.DeviationsX.Add(diff.x);
+            results.total.DevaitionsY.Add(diff.y);
+            results.total.DevaitionsZ.Add(diff.z);
             results.total.Timestamps.Add(input.Timestamps[i]);
         }
 

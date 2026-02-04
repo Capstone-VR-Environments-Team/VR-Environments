@@ -58,7 +58,7 @@ public class SphereManager : MonoBehaviour
             
             if (i != 0) 
             {
-                GameObject proximityObject = new GameObject();
+                GameObject proximityObject = new();
                 proximityObject.transform.SetParent(spheres[i].transform);
                 proximityObject.transform.localPosition = new Vector3();
                 SphereCollider triggerCollider = proximityObject.AddComponent<SphereCollider>();
@@ -81,7 +81,7 @@ public class SphereManager : MonoBehaviour
         Debug.Log("Proximity Hit");
     }
 
-    public void HideCurrentSphere()
+    public void HideAfterExit()
     {
         if (currentSphere && !showTargets)
         {

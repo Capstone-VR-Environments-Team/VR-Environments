@@ -32,7 +32,7 @@ public class SphereContact : MonoBehaviour
         if (other.CompareTag("GameController") && hasBeenTriggered)
         {
             sphereRenderer.enabled = false;
-            sphereManager.HideCurrentSphere();
+            sphereManager.HideAfterExit();
         }
 
     }

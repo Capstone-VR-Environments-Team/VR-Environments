@@ -4,7 +4,7 @@ using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 
 [Serializable]
-PublicKey class TrialSession
+public class TrialSession
 {
     public TrialSessionInformation TrialSessionInformation;
     public CollectedTimingData CollectedTimingData;

@@ -1,8 +1,10 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Web;
 using UnityEngine;
+using static System.Net.Mime.MediaTypeNames;
 
 public  class FileManager: Singleton<FileManager>
 {
@@ -131,6 +133,57 @@ public  class FileManager: Singleton<FileManager>
         jsonBuilder.Append("]}");
 
         return jsonBuilder.ToString();
+    }
+
+    public void Load360Media()
+    {
+        string filePath = FileSelector.getFilePath(Application.persistentDataPath, "png,jpg,jpeg,mp4,mov,mkv");
+
+        if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath))
+        {
+            Debug.LogWarning("No file selected or file does not exist.");
+            return;
+        }
+
+        string extension = Path.GetExtension(filePath).ToLower();
+
+        if (extension == ".mp4" || extension == ".mov" || extension == ".mkv")
+        {
+            if (videoPlayer == null)
+            {
+                Debug.LogError("VideoPlayer reference is missing in FileManager.");
+                return;
+            }
+
+            videoPlayer.source = VideoSource.Url;
+            videoPlayer.url = filePath;
+            videoPlayer.Play();
+
+            Debug.Log($"Loaded 360 Video from: {filePath}");
+        }
+        else if (extension == ".jpg" || extension == ".jpeg" || extension == ".png")
+        {
+            if (skyboxMaterial == null)
+            {
+                Debug.LogError("Skybox Material reference is missing in FileManager.");
+                return;
+            }
+
+            if (videoPlayer != null && videoPlayer.isPlaying)
+            {
+                videoPlayer.Stop();
+            }
+            byte[] fileData = File.ReadAllBytes(filePath);
+            Texture2D tex = new Texture2D(2, 2);
+            tex.LoadImage(fileData); 
+            skyboxMaterial.mainTexture = tex;
+
+            Debug.Log($"Loaded 360 Image from: {filePath}");
+        }
+        else
+        {
+            Debug.LogError($"Unsupported media type selected: {extension}");
+        }
     }
 
     public void ResetFileManager()

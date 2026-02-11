@@ -63,7 +63,7 @@ public class SphereManager : MonoBehaviour
                 proximityObject.transform.localPosition = new Vector3();
                 SphereCollider triggerCollider = proximityObject.AddComponent<SphereCollider>();
                 triggerCollider.isTrigger = true;
-                triggerCollider.radius = c.radius + targetProximity;
+                proximityObject.transform.localScale = new Vector3(1 + targetProximity / spheres[i].transform.localScale.x, 1 + targetProximity / spheres[i].transform.localScale.x, 1 + targetProximity / spheres[i].transform.localScale.x);
                 triggerCollider.center = c.center;
                 ProximityAlertTrigger proximityAlert = proximityObject.AddComponent<ProximityAlertTrigger>();
                 proximityAlert.Initialize(i + 1);

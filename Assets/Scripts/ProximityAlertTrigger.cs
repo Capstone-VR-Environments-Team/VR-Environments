@@ -6,7 +6,6 @@ public class ProximityAlertTrigger : MonoBehaviour
 {
     private int targetId;
     private bool isHandInProximity = false;
-
     public event Action<int> OnProximityEnter;
     public void Initialize(int id)
     {
@@ -21,7 +20,7 @@ public class ProximityAlertTrigger : MonoBehaviour
             OnProximityEnter.Invoke(targetId);
         }
     }
-    
+
     public void ResetTrigger()
     {
         isHandInProximity = false;

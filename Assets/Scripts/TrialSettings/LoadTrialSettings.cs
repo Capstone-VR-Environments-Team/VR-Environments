@@ -63,14 +63,6 @@ public class LoadTrialSettings : Singleton<LoadTrialSettings>
         return true;
     }
 
-    public float GetTargetVisibleTime()
-    {
-        if (currentTrialData != null)
-        {
-            return currentTrialData.VisibilitySettings.TargetVisibleTime;
-        }
-        return 0.0f;
-    }
 
     public float GetHandVisibleTime()
     {

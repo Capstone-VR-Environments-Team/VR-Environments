@@ -122,6 +122,10 @@ public class SphereManager : MonoBehaviour
         {
             currentSphere.GetComponent<Renderer>().enabled = false;
         }
+        if (prevSphere)
+        {
+            prevSphere.GetComponent<Renderer>().enabled = false;
+        }
     }
 
     public void ShowCurrentSphere()
@@ -237,12 +241,7 @@ public class SphereManager : MonoBehaviour
         if (spheresCollected >= totalSpheres) {
             EndTrial();
         } else {
-            leftHand.GetComponent<MeshRenderer>().enabled = true;
-            rightHand.GetComponent<MeshRenderer>().enabled = true;
-            if (prevSphere)
-            {
-                prevSphere.GetComponent<Renderer>().enabled = false;
-            }
+            HideAfterExit();
             SpawnNextSphere();
         }
     }

@@ -22,6 +22,7 @@ public class SphereManager : MonoBehaviour
 
     private int spheresCollected = 0;
     private GameObject currentSphere;
+    private GameObject prevSphere;
     private bool showHands;
     private bool showTargets;
     private float handVisibleTime;
@@ -87,6 +88,18 @@ public class SphereManager : MonoBehaviour
         {
             currentSphere.GetComponent<Renderer>().enabled = false;
         }
+        if (prevSphere)
+        {
+            prevSphere.GetComponent<Renderer>().enabled = false;
+        }
+    }
+
+    public void ShowCurrentSphere()
+    {
+        if (currentSphere)
+        {
+            currentSphere.GetComponent<Renderer>().enabled = true;
+        }
     }
 
     public void OnSphereInteracted()
@@ -102,6 +115,9 @@ public class SphereManager : MonoBehaviour
     void SpawnNextSphere()
     {
         if (spheresCollected < this.spheres.Length && this.spheres[spheresCollected] != null) {
+            if (currentSphere) {
+                prevSphere = currentSphere;
+            }
             currentSphere = this.spheres[spheresCollected];
             currentSphere.SetActive(true);
         }
@@ -197,6 +213,7 @@ public class SphereManager : MonoBehaviour
         if (spheresCollected >= totalSpheres) {
             EndTrial();
         } else {
+            HideAfterExit();
             SpawnNextSphere();
         }
     }

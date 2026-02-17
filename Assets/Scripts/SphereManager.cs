@@ -241,6 +241,8 @@ public class SphereManager : MonoBehaviour
         if (spheresCollected >= totalSpheres) {
             EndTrial();
         } else {
+            leftHand.GetComponent<MeshRenderer>().enabled = true;
+            rightHand.GetComponent<MeshRenderer>().enabled = true;
             HideAfterExit();
             SpawnNextSphere();
         }

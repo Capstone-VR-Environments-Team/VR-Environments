@@ -39,7 +39,7 @@ public class SphereContact : MonoBehaviour
             sphereManager.HideAfterExit();
         }
 
-    //}
+    }
     public void ResetTrigger()
     {
         hasBeenTriggered = false;

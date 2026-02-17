@@ -108,6 +108,14 @@ public class SphereManager : MonoBehaviour
         {
             currentSphere.GetComponent<Renderer>().enabled = true;
         }
+        if (leftHand)
+        {
+            leftHand.GetComponent<MeshRenderer>().enabled = true;
+        }
+        if (rightHand)
+        {
+            rightHand.GetComponent<MeshRenderer>().enabled = true;
+        }
     }
 
     public void OnSphereInteracted()
@@ -131,22 +139,22 @@ public class SphereManager : MonoBehaviour
         }
     }
 
-    void ApplyVisibilitySettings()
+    public void ApplyVisibilitySettings()
     {
-        if (!showHands && handVisibleTime > 0)
+        //if (!showHands && handVisibleTime > 0)
+        //{
+        //    StartCoroutine(HideHandsAfterDelay(handVisibleTime));
+        //} else
+        //{
+        if (leftHand != null)
         {
-            StartCoroutine(HideHandsAfterDelay(handVisibleTime));
-        } else
-        {
-            if (leftHand != null)
-            {
-                leftHand.GetComponent<MeshRenderer>().enabled = showHands;
-            }
-            if (rightHand != null)
-            {
-                rightHand.GetComponent<MeshRenderer>().enabled = showHands;
-            }
+            leftHand.GetComponent<MeshRenderer>().enabled = showHands;
         }
+        if (rightHand != null)
+        {
+            rightHand.GetComponent<MeshRenderer>().enabled = showHands;
+        }
+        //}
     }
 
     void ApplyOffsetSettings()
@@ -204,7 +212,7 @@ public class SphereManager : MonoBehaviour
 
         experimentController.StartExperiment();
         ApplyOffsetSettings();
-        ApplyVisibilitySettings();
+        //ApplyVisibilitySettings();
         HandleSphereInteract();
         Debug.Log("Trial Started");
     }
@@ -221,6 +229,8 @@ public class SphereManager : MonoBehaviour
         if (spheresCollected >= totalSpheres) {
             EndTrial();
         } else {
+            leftHand.GetComponent<MeshRenderer>().enabled = true;
+            rightHand.GetComponent<MeshRenderer>().enabled = true;
             HideAfterExit();
             SpawnNextSphere();
         }

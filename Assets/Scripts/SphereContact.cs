@@ -31,15 +31,14 @@ public class SphereContact : MonoBehaviour
         }
     }
 
-    //private void OnTriggerExit(Collider other)
-    //{
-    //    if (other.CompareTag("GameController") && hasBeenTriggered)
-    //    {
-    //        sphereRenderer.enabled = false;
-    //        sphereManager.HideAfterExit();
-    //    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("GameController") && hasBeenTriggered)
+        {
+            sphereManager.ApplyVisibilitySettings();
+        }
 
-    //}
+    }
     public void ResetTrigger()
     {
         hasBeenTriggered = false;

@@ -14,13 +14,40 @@ public class EyeDataRecorder : MonoBehaviour {
     public bool isRecording = false;
     private Vector3 _headsetStartPosition;
 
+    void Start()
+    {
+        // Check if the feature is actually enabled in settings
+        if (IsGazeAllowed())
+        {
+            Debug.Log("Varjo: Gaze is allowed.");
+
+            // This forces the headset to look for eyes and run the 
+            // "follow the dot" sequence if needed.
+            if (!IsGazeCalibrated())
+            {
+                Debug.Log("Requesting calibration...");
+                RequestGazeCalibration(GazeCalibrationMode.Fast);
+            }
+            else
+            {
+                Debug.Log("Already Calibrated!");
+            }
+        }
+        else
+        {
+            Debug.LogError("Varjo: Gaze is NOT allowed.");
+        }
+    }
+
     void Update() {
         if (isRecording) {
             GazeData data = GetGaze();
             EyeMeasurements measurements = GetEyeMeasurements();
+            Debug.Log("Eye Status: " + data.status);
             if (data.status == GazeStatus.Valid) {
-                LoggingManager.Instance.currentTrackingData.gazeOrigin = headset.position + (headset.rotation * data.gaze.origin) - _headsetStartPosition;
-                LoggingManager.Instance.currentTrackingData.gazeDirection = data.gaze.forward;
+                isGazeValid=true;
+                LoggingManager.Instance.currentTrackingData.gazeOrigin = Camera.main.transform.TransformPoint(data.gaze.origin) - _headsetStartPosition;
+                LoggingManager.Instance.currentTrackingData.gazeDirection = Camera.main.transform.TransformDirection(data.gaze.forward);
                 LoggingManager.Instance.currentTrackingData.focusDistance = data.focusDistance;
                 LoggingManager.Instance.currentTrackingData.leftPupilDiameter = measurements.leftPupilDiameterInMM;
                 LoggingManager.Instance.currentTrackingData.rightPupilDiameter = measurements.rightPupilDiameterInMM;
@@ -31,6 +58,7 @@ public class EyeDataRecorder : MonoBehaviour {
     public void StartRecording(Vector3 headsetPosition) {
         isRecording = true;
         _headsetStartPosition = headsetPosition;
+
     }
 
     public void StopRecording() {

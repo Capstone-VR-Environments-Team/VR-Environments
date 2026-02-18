@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Web;
@@ -56,7 +57,7 @@ public  class FileManager: Singleton<FileManager>
 
     public (T data, string fileName) LoadFromFile<T>()
     {
-        string filePath = FileSelector.getFilePath(Application.persistentDataPath, "json,csv");
+        string filePath = FileSelector.getFilePath(Application.persistentDataPath, new List<string>() {"json","csv"});
 
         if (!File.Exists(filePath))
         {

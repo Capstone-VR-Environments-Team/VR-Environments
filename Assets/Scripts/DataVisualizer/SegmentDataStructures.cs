@@ -10,10 +10,9 @@ public enum AnalysisMode {
 [Serializable]
 public class JsonWrapper {
     public TrialSessionInformation TrialSessionInformation;
-    public List<KeyPoint> TargetHits;
-    public List<KeyPoint> TargetProximityHits;
-    public List<Note> Notes;
+    public CollectedTimingData CollectedTimingData;
 }
+
 
 [Serializable]
 public class Note {

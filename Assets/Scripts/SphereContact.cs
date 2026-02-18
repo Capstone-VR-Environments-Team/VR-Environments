@@ -36,6 +36,7 @@ public class SphereContact : MonoBehaviour
         if (other.CompareTag("GameController") && hasBeenTriggered)
         {
             sphereManager.ApplyVisibilitySettings();
+            sphereManager.HideAfterExit();
         }
 
     }

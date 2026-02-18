@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class ExperimentController : MonoBehaviour
 {
     public HandDataRecorder recorder; // optional: see section below
+    public EyeDataRecorder eyeRecorder;
     public TMP_Text statusText; // use Text if not using TMP
     public SphereManager sphereManager;
     public GameObject headset;
@@ -28,6 +29,7 @@ public class ExperimentController : MonoBehaviour
             LoggingManager.Instance.StopRecording();
             sphereManager.ResetTrial();
             recorder.StopRecording();
+            eyeRecorder.StopRecording();
             UpdateStatus("Stopped. Data Saved.");
             FileManager.Instance.ResetFileManager();
         }
@@ -37,6 +39,7 @@ public class ExperimentController : MonoBehaviour
         LoggingManager.Instance.StartRecording("PLACEHOLDER_NAME", headsetPosition);
         trialViewManager.StartTimer();
         recorder.StartRecording(headsetPosition);
+        eyeRecorder.StartRecording(headsetPosition);
         UpdateStatus("Recording...");
     }
 

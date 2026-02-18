@@ -22,12 +22,17 @@ public class CsvLogger : ILogger {
         }
 
         _buffer.AppendLine(string.Format(CultureInfo.InvariantCulture,
-            "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14}",
+            "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23}",
             data.timeStamp - _time,
             data.leftHandPos.x, data.leftHandPos.y, data.leftHandPos.z,
             data.leftHandRotation.x, data.leftHandRotation.y, data.leftHandRotation.z, data.leftHandRotation.w,
             data.rightHandPos.x, data.rightHandPos.y, data.rightHandPos.z,
-            data.rightHandRotation.x, data.rightHandRotation.y, data.rightHandRotation.z, data.rightHandRotation.w
+            data.rightHandRotation.x, data.rightHandRotation.y, data.rightHandRotation.z, data.rightHandRotation.w,
+            data.gazeOrigin.x, data.gazeOrigin.y, data.gazeOrigin.z,
+            data.gazeDirection.x,data.gazeDirection.y,data.gazeDirection.z,
+            data.focusDistance,
+            data.leftPupilDiameter,
+            data.rightPupilDiameter
         ));
     }
 
@@ -65,7 +70,8 @@ public class CsvLogger : ILogger {
     private void WriteHeader() {
         _buffer.AppendLine("Timestamp," +
                            "Lx,Ly,Lz,LqX,LqY,LqZ,LqW," +
-                           "Rx,Ry,Rz,RqX,RqY,RqZ,RqW");
+                           "Rx,Ry,Rz,RqX,RqY,RqZ,RqW," +
+                           "Gx,Gy,Gz,Glx,Gly,Glz,Gf,Lpd,Rpd");
     }
 
 }

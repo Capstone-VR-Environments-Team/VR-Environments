@@ -24,11 +24,11 @@ public class ExperimentController : MonoBehaviour
     public void StopExperiment()
     {
         if (recorder != null) {
+            trialViewManager.StopTimer();
             LoggingManager.Instance.StopRecording();
             sphereManager.ResetTrial();
             recorder.StopRecording();
             UpdateStatus("Stopped. Data Saved.");
-            trialViewManager.StopTimer();
             FileManager.Instance.ResetFileManager();
         }
     }

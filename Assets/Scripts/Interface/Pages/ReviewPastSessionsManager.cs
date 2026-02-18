@@ -28,10 +28,10 @@ public class ReviewPastSessionsManager : MonoBehaviour
     public Button SelectSessionButton => selectSessionButton;
 
 
-    public void SetSessionInfo(SessionInfo sessionInfo)
+    public void SetSessionInfo(JsonWrapper sessionInfo)
     {
-        nameText.SetText(sessionInfo.Name.ToString());
-        participantIDText.SetText(sessionInfo.ParticipantID.ToString());
-        notesText.SetText(sessionInfo.Notes.ToString());
+        nameText.SetText(sessionInfo.TrialSessionInformation.SessionName.ToString());
+        participantIDText.SetText(sessionInfo.TrialSessionInformation.ParticipantID.ToString());
+        notesText.SetText(sessionInfo.TrialSessionInformation.Notes.ToString());
     }
 }

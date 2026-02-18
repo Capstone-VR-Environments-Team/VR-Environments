@@ -54,9 +54,8 @@ public class LoggingManager : Singleton<LoggingManager>
     public void StopRecording()
     {
         if (logging == false) return;
-        _directory = FileManager.Instance.SaveSessionInformation();
+        _directory = FileManager.Instance.SaveSessionInformation(collectedTimingData);
         logger.SaveLog(_directory); // Save CSV
-        SaveTimingData(); // Save JSON
         logging = false;
     }
 
@@ -101,23 +100,6 @@ public class LoggingManager : Singleton<LoggingManager>
         if (!logging) return;
 
         collectedTimingData.Notes.Add(new NoteEvent(timestamp, content));
-    }
-
-    private void SaveTimingData()
-    {
-        string json = JsonUtility.ToJson(collectedTimingData, true);
-        string fileName = $"{_currentTrialName}_{DateTime.Now:yyyyMMdd_HHmmss}_Timing.json";
-        string filePath = Path.Combine(_directory, fileName);
-
-        try
-        {
-            File.WriteAllText(filePath, json);
-            Debug.Log($"Timing JSON saved to: {filePath}");
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"Failed to save Timing JSON: {e.Message}");
-        }
     }
 
 }

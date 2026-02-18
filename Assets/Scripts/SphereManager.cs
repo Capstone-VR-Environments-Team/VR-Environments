@@ -122,10 +122,6 @@ public class SphereManager : MonoBehaviour
         {
             currentSphere.GetComponent<Renderer>().enabled = false;
         }
-        if (prevSphere)
-        {
-            prevSphere.GetComponent<Renderer>().enabled = false;
-        }
     }
 
     public void ShowCurrentSphere()
@@ -243,7 +239,10 @@ public class SphereManager : MonoBehaviour
         } else {
             leftHand.GetComponent<MeshRenderer>().enabled = true;
             rightHand.GetComponent<MeshRenderer>().enabled = true;
-            HideAfterExit();
+            if (prevSphere)
+            {
+                prevSphere.GetComponent<Renderer>().enabled = false;
+            }
             SpawnNextSphere();
         }
     }

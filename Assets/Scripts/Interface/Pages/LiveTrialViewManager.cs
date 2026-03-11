@@ -40,6 +40,8 @@ public class LiveTrialViewManager : MonoBehaviour
     [SerializeField] private Button logButton;
     public Button LogButton => logButton;
 
+    [SerializeField] private XRManager xrManager;
+
     private double _currentNoteStartTime = -1.0;
     private float elapsedTime = 0f;
     private bool isRunning = false;
@@ -88,6 +90,7 @@ public class LiveTrialViewManager : MonoBehaviour
     }
 
     public void OnGoHomeClicked() {
+        xrManager.TurnVROff();
         SceneManager.LoadScene("HomeScreen");
     }
 

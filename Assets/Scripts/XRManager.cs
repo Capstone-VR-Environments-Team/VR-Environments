@@ -4,6 +4,10 @@ using UnityEngine.XR.Management; // Required for XR control
 
 public class XRManager : MonoBehaviour {
     // Call this when loading into your VR scene
+    public void Awake() {
+        TurnVROn();
+    }
+
     public void TurnVROn() {
         StartCoroutine(StartXRCoroutine());
     }

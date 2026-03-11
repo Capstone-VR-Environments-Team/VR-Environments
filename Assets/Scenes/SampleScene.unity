@@ -1430,6 +1430,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1291068650}
   - component: {fileID: 1291068649}
+  - component: {fileID: 1291068651}
   m_Layer: 0
   m_Name: XRRig
   m_TagString: Untagged
@@ -1470,6 +1471,18 @@ Transform:
   - {fileID: 1055918716}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1291068651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1291068648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74040c5fc9f752846915ae2704234b9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::XRManager
 --- !u!1 &1291317697
 GameObject:
   m_ObjectHideFlags: 0
@@ -1830,6 +1843,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4061161387895140162, guid: 246b11ef67518904f8abf338a2d8f227, type: 3}
+      propertyPath: xrManager
+      value: 
+      objectReference: {fileID: 1291068651}
     - target: {fileID: 4140887301249406101, guid: 246b11ef67518904f8abf338a2d8f227, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0

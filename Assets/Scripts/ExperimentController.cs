@@ -1,6 +1,5 @@
 using UnityEngine;
 using TMPro; // if using TextMeshPro
-using UnityEngine.UI;
 
 public class ExperimentController : MonoBehaviour
 {
@@ -29,7 +28,7 @@ public class ExperimentController : MonoBehaviour
             sphereManager.ResetTrial();
             recorder.StopRecording();
             UpdateStatus("Stopped. Data Saved.");
-            FileManager.Instance.ResetFileManager();
+            SessionManager.Instance.ResetFileManager();
         }
     }
 

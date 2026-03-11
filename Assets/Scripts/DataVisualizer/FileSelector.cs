@@ -1,12 +1,21 @@
 using SFB;
 
 class FileSelector {
+
+    internal static string[] getFilePaths(string startDirectory, string[] fileExtensions) {
+        return _getFilePaths(startDirectory, fileExtensions, true);
+    }
+
     internal static string[] getFilePaths(string startDirectory, string fileExtension) {
-        return _getFilePaths(startDirectory, fileExtension, true);
+        return _getFilePaths(startDirectory, new string[] { fileExtension }, true);
+    }
+
+    internal static string getFilePath(string startDirectory, string[] fileExtensions) {
+        return _getFilePaths(startDirectory, fileExtensions, false)[0];
     }
 
     internal static string getFilePath(string startDirectory, string fileExtension) {
-        return _getFilePaths(startDirectory, fileExtension, false)[0];
+        return _getFilePaths(startDirectory, new string[] { fileExtension }, false)[0];
     }
 
     internal static string getFolderPath(string startDirectory = "") {
@@ -14,11 +23,12 @@ class FileSelector {
         return (paths != null && paths.Length > 0) ? paths[0] : "";
     }
 
-    static string[] _getFilePaths(string startDirectory, string fileExtension, bool multiselect) {
-        string title = "Select " + fileExtension.ToUpper() + " Files";
+    static string[] _getFilePaths(string startDirectory, string[] fileExtensions, bool multiselect) {
+        string combinedExtensions = string.Join(", ", fileExtensions).ToUpper();
+        string title = "Select " + combinedExtensions.ToUpper() + " Files";
         ExtensionFilter[] extensions = new[]
         {
-                new ExtensionFilter(fileExtension.ToUpper() + "Files", fileExtension),
+                new ExtensionFilter(combinedExtensions.ToUpper() + "Files", fileExtensions),
                 new ExtensionFilter("All Files", "*"),
             };
 

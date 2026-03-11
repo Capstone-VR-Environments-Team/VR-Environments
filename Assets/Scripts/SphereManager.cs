@@ -31,12 +31,12 @@ public class SphereManager : MonoBehaviour
 
     public void BeginTrial(Vector3 headsetPosition)
     {
-        List<Vector3> sphereVectors = LoadTrialSettings.Instance.GetLoadedTargets();
-        showHands = LoadTrialSettings.Instance.GetShowHands();
-        showTargets = LoadTrialSettings.Instance.GetShowTargets();
-        handVisibleTime = LoadTrialSettings.Instance.GetHandVisibleTime();
-        targetProximity = LoadTrialSettings.Instance.GetTargetProximity();
-        offsetValues = LoadTrialSettings.Instance.GetOffsetValues();
+        List<Vector3> sphereVectors = SessionManager.Instance.GetLoadedTargets();
+        showHands = SessionManager.Instance.GetShowHands();
+        showTargets = SessionManager.Instance.GetShowTargets();
+        handVisibleTime = SessionManager.Instance.GetHandVisibleTime();
+        targetProximity = SessionManager.Instance.GetTargetProximity();
+        offsetValues = SessionManager.Instance.GetOffsetValues();
         totalSpheres = sphereVectors.Count;
         spheres = new GameObject[totalSpheres];
         for (int i = 0; i < totalSpheres; i++) {

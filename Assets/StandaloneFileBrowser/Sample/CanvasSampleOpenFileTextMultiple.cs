@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using SFB;
+using UnityEngine.Networking;
 
 [RequireComponent(typeof(Button))]
 public class CanvasSampleOpenFileTextMultiple : MonoBehaviour, IPointerDownHandler {
@@ -51,12 +52,28 @@ public class CanvasSampleOpenFileTextMultiple : MonoBehaviour, IPointerDownHandl
 #endif
 
     private IEnumerator OutputRoutine(string[] urlArr) {
-        var outputText = "";
+        string outputText = "";
+
         for (int i = 0; i < urlArr.Length; i++) {
-            var loader = new WWW(urlArr[i]);
-            yield return loader;
-            outputText += loader.text;
+            // Create a new web request for each URL in the array
+            using (UnityWebRequest uwr = UnityWebRequest.Get(urlArr[i])) {
+                // Wait for this specific file to finish downloading
+                yield return uwr.SendWebRequest();
+
+                // Check if this specific file failed
+                if (uwr.result == UnityWebRequest.Result.ConnectionError || uwr.result == UnityWebRequest.Result.ProtocolError) {
+                    Debug.LogError($"Error loading data from {urlArr[i]}: {uwr.error}");
+
+                    // Optional: You can append an error note so your UI shows which file failed
+                    outputText += $"\n[Error loading file {i}]\n";
+                } else {
+                    // If successful, append the text to your running total
+                    outputText += uwr.downloadHandler.text;
+                }
+            }
         }
+
+        // After all URLs have been processed, update the UI once
         output.text = outputText;
     }
 }

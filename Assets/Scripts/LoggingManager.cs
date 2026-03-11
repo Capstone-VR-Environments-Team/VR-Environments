@@ -54,7 +54,7 @@ public class LoggingManager : Singleton<LoggingManager>
     public void StopRecording()
     {
         if (logging == false) return;
-        _directory = FileManager.Instance.SaveSessionInformation(collectedTimingData);
+        _directory = SessionManager.Instance.SaveSessionInformation(collectedTimingData);
         logger.SaveLog(_directory); // Save CSV
         logging = false;
     }

@@ -1,65 +1,15 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
-using System.Web;
 using UnityEngine;
 
-public  class FileManager: Singleton<FileManager>
-{
-    private string _collectedDataDirectoryPath;
+public static class FileManager {
+    
+    public static (T data, string fileName) LoadFromFile<T>(string filePath) where T : IJsonable, new() {
 
-    private TrialSessionInformation _trialSessionInformation;
-    private CollectedTimingData _collectedTimingData;
-
-    // Save JSON to a file
-    public void SaveSettingsFile<T>(T data, string fileName)
-    {
-        string json = JsonUtility.ToJson(data, true);
-        string directoryPath = Path.Combine(Application.persistentDataPath, "TrialFiles");
-
-        if (!Directory.Exists(directoryPath))
-        {
-            Directory.CreateDirectory(directoryPath);
-        }
-
-        string filePath = Path.Combine(directoryPath, fileName + ".json");
-        File.WriteAllText(filePath, json);
-
-        Debug.Log($"JSON file saved to: {filePath}");
-    }
-
-    public void SetTrialSessionInformation(TrialSessionInformation info)
-    {
-        _trialSessionInformation = info;
-    }
-
-    public TrialSessionInformation GetTrialSessionInformation()
-    {
-        return _trialSessionInformation;
-    }
-
-    public string SaveSessionInformation(CollectedTimingData collectedTimingData)
-    {
-        TrialSession trialSession = new TrialSession
-        {
-            TrialSessionInformation = _trialSessionInformation,
-            CollectedTimingData = collectedTimingData
-        };
-        string json = JsonUtility.ToJson(trialSession, true);
-        string fileName = _trialSessionInformation.SessionName + "-" + _trialSessionInformation.ParticipantID;
-        CreateSaveDirectory(fileName);
-        string filePath = Path.Combine(_collectedDataDirectoryPath, fileName + ".json");
-        File.WriteAllText(filePath, json);
-
-        return _collectedDataDirectoryPath;
-    }
-
-    public (T data, string fileName) LoadFromFile<T>()
-    {
-        string filePath = FileSelector.getFilePath(Application.persistentDataPath, "json,csv");
-
-        if (!File.Exists(filePath))
-        {
+        if (!File.Exists(filePath)) {
             Debug.LogError($"File not found at: {filePath}");
             return default;
         }
@@ -70,67 +20,79 @@ public  class FileManager: Singleton<FileManager>
 
         string jsonToProcess = fileContent;
 
-        if (extension == ".csv")
-        {
-            jsonToProcess = ConvertCsvToTargetJson(fileContent);
-        }
-        else if (extension != ".json")
-        {
-            Debug.LogWarning("Unknown file type loaded. Attempting to parse as JSON...");
-        }
-
-        return (JsonUtility.FromJson<T>(jsonToProcess), fileName);
-    }
-
-    public void CreateSaveDirectory(string name)
-    {
-        string folderName = $"{name}_{DateTime.Now:yyyyMMdd_HHmmss}";
-
-        string rootPath = Path.Combine(Application.persistentDataPath, "TrialRuns");
-
-        _collectedDataDirectoryPath = Path.Combine(rootPath, folderName);
-
-        if (!Directory.Exists(_collectedDataDirectoryPath))
-        {
-            Directory.CreateDirectory(_collectedDataDirectoryPath);
-            Debug.Log($"Directory created at: {_collectedDataDirectoryPath}");
+        if (extension == ".csv") {
+            return (LoadCSVFile<T>(filePath), fileName); 
+        } else if (extension == ".json") {
+            return (LoadJsonFile<T>(filePath), fileName);
+        } else {
+            Debug.LogError($"Incorrect file type! Should be .json");
+            return default;
         }
     }
 
-    public string ConvertCsvToTargetJson(string csvContent)
-    {
-        StringBuilder jsonBuilder = new StringBuilder();
+    
 
-        jsonBuilder.Append("{\"targets\": [");
+    //public string ConvertCsvToTargetJson(string csvContent) {
+    //    StringBuilder jsonBuilder = new StringBuilder();
 
-        string[] lines = csvContent.Split(new[] { '\r', '\n' }, System.StringSplitOptions.RemoveEmptyEntries);
+    //    jsonBuilder.Append("{\"targets\": [");
 
-        bool isFirstEntry = true;
+    //    string[] lines = csvContent.Split(new[] { '\r', '\n' }, System.StringSplitOptions.RemoveEmptyEntries);
 
-        foreach (string line in lines)
-        {
-            string[] values = line.Split(',');
+    //    bool isFirstEntry = true;
 
-            if (values.Length >= 3)
-            {
-                if (float.TryParse(values[0], out float x) &&
-                    float.TryParse(values[1], out float y) &&
-                    float.TryParse(values[2], out float z))
-                {
-                    if (!isFirstEntry)
-                    {
-                        jsonBuilder.Append(",");
-                    }
+    //    foreach (string line in lines) {
+    //        string[] values = line.Split(',');
 
-                    jsonBuilder.Append(string.Format("{{\"x\": {0}, \"y\": {1}, \"z\": {2}}}", x, y, z));
+    //        if (values.Length >= 3) {
+    //            if (float.TryParse(values[0], out float x) &&
+    //                float.TryParse(values[1], out float y) &&
+    //                float.TryParse(values[2], out float z)) {
+    //                if (!isFirstEntry) {
+    //                    jsonBuilder.Append(",");
+    //                }
 
-                    isFirstEntry = false;
-                }
-            }
+    //                jsonBuilder.Append(string.Format("{{\"x\": {0}, \"y\": {1}, \"z\": {2}}}", x, y, z));
+
+    //                isFirstEntry = false;
+    //            }
+    //        }
+    //    }
+    //    jsonBuilder.Append("]}");
+
+    //    return jsonBuilder.ToString();
+    //}
+
+    public static T LoadJsonFile<T>(string filePath){
+        string fileContent = File.ReadAllText(filePath);
+        return JsonUtility.FromJson<T>(fileContent);
+    }
+
+    public static T LoadCSVFile<T>(string filePath) where T : IJsonable, new() {
+        List<List<string>> data = new List<List<string>>();
+        StreamReader reader = new StreamReader(filePath);
+        while (!reader.EndOfStream) {
+            string line = reader.ReadLine();
+            if (string.IsNullOrWhiteSpace(line)) continue;
+            string[] parts = line.Split(',');
+            data.Add(parts.ToList());
         }
-        jsonBuilder.Append("]}");
+        T results = new T();
+        results.From2dList(data);
+        return results;
+    }
 
-        return jsonBuilder.ToString();
+    public static bool SaveJsonFile<T>(T data, string filePath) {
+
+        string json = JsonUtility.ToJson(data, true);
+
+        string directoryPath = Path.GetDirectoryName(filePath);
+        if (!string.IsNullOrEmpty(directoryPath) && !Directory.Exists(directoryPath)) {
+            Directory.CreateDirectory(directoryPath);
+        }
+
+        File.WriteAllText(filePath, json);
+        return true;
     }
 
     //public void Load360Media()
@@ -184,10 +146,6 @@ public  class FileManager: Singleton<FileManager>
     //    }
     //}
 
-    public void ResetFileManager()
-    {
-        _collectedDataDirectoryPath = null;
-        _trialSessionInformation = null;
-    }
+   
 
 }

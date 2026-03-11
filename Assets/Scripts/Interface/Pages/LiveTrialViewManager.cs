@@ -3,6 +3,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Net;
+using UnityEngine.SceneManagement;
 
 public class LiveTrialViewManager : MonoBehaviour
 {
@@ -84,6 +85,10 @@ public class LiveTrialViewManager : MonoBehaviour
         {
             timerText.text = "00:00";
         }
+    }
+
+    public void OnGoHomeClicked() {
+        SceneManager.LoadScene("HomeScreen");
     }
 
     private void OnNoteValueChanged(string text)
@@ -199,7 +204,7 @@ public class LiveTrialViewManager : MonoBehaviour
         beginTrialButton.interactable = true;
         logButton.interactable = true;
 
-        TrialSessionInformation trialInfo = FileManager.Instance.GetTrialSessionInformation();
+        TrialSessionInformation trialInfo = SessionManager.Instance.GetTrialSessionInformation();
         if (experimentNameText != null && trialInfo != null)
             experimentNameText.SetText(trialInfo.SessionName);
         if (participantIDText != null && trialInfo != null)

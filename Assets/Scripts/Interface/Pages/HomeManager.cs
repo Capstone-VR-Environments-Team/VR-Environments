@@ -29,6 +29,6 @@ public class HomeManager : MonoBehaviour
     }
 
     public void ShowNewSessionPage() {
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene("StartNewSession");
     }
 }

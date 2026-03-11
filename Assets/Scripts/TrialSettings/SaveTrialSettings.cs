@@ -27,7 +27,7 @@ public class SaveTrialSettings : MonoBehaviour
 
     public void OnUploadLocationsClicked()
     {
-        string filePath = FileSelector.getFilePath(SessionManager.BaseDataPath, new string[] { ".json", ".csv" });
+        string filePath = FileSelector.getFilePath(SessionManager.BaseDataPath, new string[] { "json", "csv" });
         var (importedData, fileName) = FileManager.LoadFromFile<TargetImportData>(filePath);
         if (importedData != null && importedData.targets != null)
         {

@@ -59,7 +59,7 @@ public class StartNewSessionManager : MonoBehaviour
     }
 
     public void OnUploadSettingsClicked() {
-        string filePath = FileSelector.getFilePath(SessionManager.BaseDataPath, ".json");
+        string filePath = FileSelector.getFilePath(SessionManager.BaseDataPath, "json");
         var (loadedData, fileName) = FileManager.LoadFromFile<TrialSettingsData>(filePath);
 
         if (loadedData != null) {

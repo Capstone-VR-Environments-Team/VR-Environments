@@ -5,20 +5,22 @@ using UnityEngine;
 
 public class SessionManager : Singleton<SessionManager>
 {
-    public static string BaseDataPath = Application.persistentDataPath;
+    public static string BaseDataPath;
     TrialSessionInformation _trialSessionInformation;
     TrialSettingsData _settings;
     string _collectedDataDirectoryPath;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        BaseDataPath = Application.persistentDataPath;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (BaseDataPath == null) {
+            BaseDataPath = Application.persistentDataPath;
+        }
     }
 
     public void SetTrialSessionInformation(TrialSessionInformation info) {

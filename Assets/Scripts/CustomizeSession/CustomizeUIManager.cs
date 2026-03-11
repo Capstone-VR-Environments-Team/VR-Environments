@@ -16,6 +16,6 @@ public class CustomizeUIManager : MonoBehaviour
     }
 
     public void GoHome() {
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene("HomeScreen");
     }
 }

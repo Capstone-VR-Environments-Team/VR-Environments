@@ -476,16 +476,24 @@ PrefabInstance:
     m_TransformParent: {fileID: 2121223526}
     m_Modifications:
     - target: {fileID: 195363707502597355, guid: 8f69c61ce0fd14a42a8c4d3a55070776, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 195363707502597355, guid: 8f69c61ce0fd14a42a8c4d3a55070776, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1600360079}
+      objectReference: {fileID: 1600360080}
     - target: {fileID: 195363707502597355, guid: 8f69c61ce0fd14a42a8c4d3a55070776, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: GoHome
+      value: OnGoHomeClicked
+      objectReference: {fileID: 0}
+    - target: {fileID: 195363707502597355, guid: 8f69c61ce0fd14a42a8c4d3a55070776, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: OnGoHomeClicked
       objectReference: {fileID: 0}
     - target: {fileID: 195363707502597355, guid: 8f69c61ce0fd14a42a8c4d3a55070776, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: CustomizeUIManager, Assembly-CSharp
+      value: CustomizeSessionManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 652060105826900238, guid: 8f69c61ce0fd14a42a8c4d3a55070776, type: 3}
       propertyPath: m_Name
@@ -576,16 +584,40 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7043693964492663783, guid: 8f69c61ce0fd14a42a8c4d3a55070776, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7043693964492663783, guid: 8f69c61ce0fd14a42a8c4d3a55070776, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1600360081}
+    - target: {fileID: 7043693964492663783, guid: 8f69c61ce0fd14a42a8c4d3a55070776, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 1600360079}
+      objectReference: {fileID: 1600360080}
+    - target: {fileID: 7043693964492663783, guid: 8f69c61ce0fd14a42a8c4d3a55070776, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnSaveButtonClicked
+      objectReference: {fileID: 0}
     - target: {fileID: 7043693964492663783, guid: 8f69c61ce0fd14a42a8c4d3a55070776, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: GoHome
+      value: OnGoHomeClicked
+      objectReference: {fileID: 0}
+    - target: {fileID: 7043693964492663783, guid: 8f69c61ce0fd14a42a8c4d3a55070776, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: SaveTrialSettings, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 7043693964492663783, guid: 8f69c61ce0fd14a42a8c4d3a55070776, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: CustomizeUIManager, Assembly-CSharp
+      value: CustomizeSessionManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7043693964492663783, guid: 8f69c61ce0fd14a42a8c4d3a55070776, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 7043693964492663783, guid: 8f69c61ce0fd14a42a8c4d3a55070776, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -612,6 +644,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46abeb51f3dd62a40a403b9e0071d9b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomizeUIManager
+--- !u!114 &1600360080 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8076426776739014551, guid: 8f69c61ce0fd14a42a8c4d3a55070776, type: 3}
+  m_PrefabInstance: {fileID: 1600360077}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1600360078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4be2969130e1ad4f99b718257a363cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CustomizeSessionManager
+--- !u!114 &1600360081 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1672272941984658189, guid: 8f69c61ce0fd14a42a8c4d3a55070776, type: 3}
+  m_PrefabInstance: {fileID: 1600360077}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1600360078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba7def23bec03654e92e4b671557316e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SaveTrialSettings
 --- !u!1 &2121223522
 GameObject:
   m_ObjectHideFlags: 0

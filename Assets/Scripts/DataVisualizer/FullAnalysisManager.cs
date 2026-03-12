@@ -9,17 +9,11 @@ using XUGL;
 public class FullAnalysisManager : MonoBehaviour {
 
     // Internal Reference
-    private CSVFileLoader _csvLoader;
     private string _currentFolderPath = "";
 
     [SerializeField] ReviewPastSessionsManager _reviewPastSessionsManager;
     [SerializeField] StatisticalViewManager _statisticalViewManager;
     [SerializeField] InteractiveViewManager _interactiveViewManager;
-
-
-    void Awake() {
-        _csvLoader = new CSVFileLoader();
-    }
 
     void Start() {
         _reviewPastSessionsManager.SelectSessionButton.onClick.AddListener(OnBrowseAndAnalyze);
@@ -46,7 +40,7 @@ public class FullAnalysisManager : MonoBehaviour {
         // Load Data
         JsonWrapper trialInfo = JsonLoader.LoadKeyPoints(jsonPath);
         _reviewPastSessionsManager.SetSessionInfo(trialInfo);
-        List<TrackingData> rawData = _csvLoader.loadFile(csvPath);
+        List<TrackingData> rawData = FileManager.LoadCSVFile<RawData>(csvPath).trackingData;
 
         if (rawData == null || rawData.Count == 0) return;
 

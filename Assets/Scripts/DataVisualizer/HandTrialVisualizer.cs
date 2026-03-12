@@ -3,6 +3,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using XUGL;
 
 public class HandTrailVisualizer : MonoBehaviour {
     [Header("Visualization Settings")]
@@ -17,7 +18,6 @@ public class HandTrailVisualizer : MonoBehaviour {
     private readonly List<GameObject> activeTrails = new();
     private readonly Dictionary<string, GameObject> trailLookup = new();
     private readonly List<Toggle> trailToggles = new();
-    private IFileLoader fileLoader = null;
 
     private readonly Color[] colorPalette = {
         Color.red, Color.green, Color.blue, Color.yellow,
@@ -25,7 +25,6 @@ public class HandTrailVisualizer : MonoBehaviour {
     };
 
     private void Start() {
-        fileLoader = new CSVFileLoader();
 
         // Add in the different filter options
         toggleAllButton.onClick.AddListener(() => ToggleGroup("All"));
@@ -48,7 +47,7 @@ public class HandTrailVisualizer : MonoBehaviour {
         
         // Load all the selected files and create their selected trails
         foreach (string file in filePaths) {
-            List<TrackingData> data = fileLoader.loadFile(file);
+            List<TrackingData> data = FileManager.LoadCSVFile<RawData>(file).trackingData;
             CreateTrails(data, Path.GetFileNameWithoutExtension(file));
         }
     }

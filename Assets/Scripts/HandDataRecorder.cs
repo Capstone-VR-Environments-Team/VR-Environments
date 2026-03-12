@@ -7,6 +7,16 @@ public class HandDataRecorder : MonoBehaviour
     public bool isRecording = false; 
     private Vector3 _headsetStartPosition;
 
+    private void OnEnable() {
+        EventBus.StartExperiment += StartRecording;
+        EventBus.StopExperiment += StopRecording;
+    }
+
+    private void OnDisable() {
+        EventBus.StartExperiment -= StartRecording;
+        EventBus.StopExperiment -= StopRecording;
+    }
+
     void Update()
     {
         if (isRecording) {
@@ -15,10 +25,8 @@ public class HandDataRecorder : MonoBehaviour
             Vector3 rightPos = rightHand.position - _headsetStartPosition;
             Quaternion rightRot = rightHand.rotation;
 
-            LoggingManager.Instance.currentTrackingData.leftHandPos = leftPos;
-            LoggingManager.Instance.currentTrackingData.rightHandPos = rightPos;
-            LoggingManager.Instance.currentTrackingData.leftHandRotation = leftRot;
-            LoggingManager.Instance.currentTrackingData.rightHandRotation = rightRot;
+            EventBus.OnLeftHandTracked?.Invoke(leftPos, leftRot);
+            EventBus.OnRightHandTracked?.Invoke(rightPos, rightRot);
         }
     }
 

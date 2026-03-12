@@ -29,6 +29,16 @@ public class SphereManager : MonoBehaviour
     private bool started = false;
     private Vector3 offsetValues;
 
+    private void OnEnable() {
+        EventBus.PrimeExperiment += BeginTrial;
+        EventBus.StopExperiment += ResetTrial;
+    }
+
+    private void OnDisable() {
+        EventBus.PrimeExperiment -= BeginTrial;
+        EventBus.StopExperiment -= ResetTrial;
+    }
+
     public void BeginTrial(Vector3 headsetPosition)
     {
         List<Vector3> sphereVectors = SessionManager.Instance.GetLoadedTargets();
@@ -77,7 +87,7 @@ public class SphereManager : MonoBehaviour
 
     private void OnProximityEnter(int targetId)
     {
-        LoggingManager.Instance.LogProximityHit(currentSphere.transform.position);
+        EventBus.OnProximityHit?.Invoke(currentSphere.transform.position);
         Debug.Log("Proximity Hit");
     }
 
@@ -187,7 +197,7 @@ public class SphereManager : MonoBehaviour
 
     void HandleSphereInteract() {
         spheresCollected++;
-        LoggingManager.Instance.LogTargetHit(currentSphere.transform.position, spheresCollected);
+        EventBus.OnTargetHit?.Invoke(currentSphere.transform.position, spheresCollected);
         Debug.Log($"Sphere collected! {spheresCollected}/{totalSpheres}");
 
         //if (currentSphere) {

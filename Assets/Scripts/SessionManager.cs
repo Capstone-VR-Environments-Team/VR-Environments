@@ -8,6 +8,7 @@ public class SessionManager : Singleton<SessionManager>
     public static string BaseDataPath;
     TrialSessionInformation _trialSessionInformation;
     TrialSettingsData _settings;
+    private long _startTime;
     string _collectedDataDirectoryPath;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -15,12 +16,27 @@ public class SessionManager : Singleton<SessionManager>
         BaseDataPath = Application.persistentDataPath;
     }
 
+
     // Update is called once per frame
     void Update()
     {
         if (BaseDataPath == null) {
             BaseDataPath = Application.persistentDataPath;
         }
+    }
+
+    private void OnEnable() {
+        EventBus.StartExperiment += StartTrial;
+        EventBus.StopExperiment += ResetFileManager;
+    }
+
+    private void OnDisable() {
+        EventBus.StartExperiment -= StartTrial;
+        EventBus.StopExperiment -= ResetFileManager;
+    }
+
+    public void StartTrial(Vector3 headsetPosition) {
+        _startTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
     }
 
     public void SetTrialSessionInformation(TrialSessionInformation info) {
@@ -105,7 +121,6 @@ public class SessionManager : Singleton<SessionManager>
         return true;
     }
 
-
     public float GetHandVisibleTime() {
         if (_settings != null) {
             return _settings.VisibilitySettings.HandVisibleTime;
@@ -149,5 +164,14 @@ public class SessionManager : Singleton<SessionManager>
             return (_settings.OffsetSettings.TargetProximity / 100.0f); // Convert to cm
         }
         return 0.0f;
+    }
+
+    public string GetTrialName() {
+        return _trialSessionInformation.SessionName;
+    }
+
+    public double GetTrialTime() {
+        long currentTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        return (currentTime - _startTime);
     }
 }

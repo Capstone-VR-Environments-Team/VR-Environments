@@ -5,6 +5,7 @@ using UnityEngine.XR.Management; // Required for XR control
 public class XRManager : MonoBehaviour {
     // Call this when loading into your VR scene
     public void Awake() {
+        TurnVROff();
         TurnVROn();
     }
 
@@ -32,5 +33,18 @@ public class XRManager : MonoBehaviour {
             XRGeneralSettings.Instance.Manager.StartSubsystems();
             Debug.Log("VR successfully active.");
         }
+    }
+
+    // Called when the application closes (Standalone build) or when exiting Play Mode (Editor)
+    private void OnApplicationQuit()
+    {
+        TurnVROff();
+    }
+
+    // Fallback: Called when the GameObject this script is attached to is destroyed.
+    // This provides a safety net if the scene unloads before the application quits.
+    private void OnDestroy()
+    {
+        TurnVROff();
     }
 }

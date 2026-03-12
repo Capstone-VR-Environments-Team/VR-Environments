@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public enum AnalysisMode {
     LineToTarget,
@@ -13,21 +10,16 @@ public enum AnalysisMode {
 [Serializable]
 public class JsonWrapper {
     public TrialSessionInformation TrialSessionInformation;
-    public List<KeyPoint> TargetHits;
-    public List<KeyPoint> TargetProximityHits;
-    public List<Note> Notes;
+    //public List<HitEvent> TargetHits;
+    //public List<HitEvent> TargetProximityHits;
+    //public List<Note> Notes;
+    public CollectedTimingData CollectedTimingData;
 }
 
 [Serializable]
 public class Note {
     public double time;
     public string content;
-}
-
-[Serializable]
-public class KeyPoint {
-    public double time;
-    public Vector3 location;
 }
 
 [Serializable]

@@ -3,9 +3,9 @@ using UnityEngine;
 
 public static class EventBus {
     // High-frequency continuous data
-    public static Action<Vector3, Vector3> OnEyeTracked;
     public static Action<Vector3, Quaternion> OnLeftHandTracked;
     public static Action<Vector3, Quaternion> OnRightHandTracked;
+    public static Action<Vector3, Vector3, float, float, float> OnEyesTracked;
 
     // Discrete game events
     public static Action<Vector3, int> OnTargetHit;

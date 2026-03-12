@@ -5,7 +5,7 @@ using UnityEngine;
 
 public static class JsonLoader {
 
-    public static JsonWrapper LoadKeyPoints(string filePath) {
+    public static JsonWrapper LoadHitEvents(string filePath) {
         var data = new JsonWrapper();
 
         if (!File.Exists(filePath)) {

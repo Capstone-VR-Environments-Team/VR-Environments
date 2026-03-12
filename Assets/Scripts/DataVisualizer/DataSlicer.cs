@@ -4,8 +4,8 @@ using UnityEngine;
 
 public static class DataSlicer {
     public static SlicingResult AnalyzeSegments(
-        List<KeyPoint> keyPoints,
-        List<KeyPoint> proximityPoints,
+        List<HitEvent> keyPoints,
+        List<HitEvent> proximityPoints,
         List<Vector3> rawDataPoints,
         List<double> rawDataTimes) {
         var results = new SlicingResult();
@@ -19,7 +19,7 @@ public static class DataSlicer {
 
         var sortedProx = proximityPoints != null
             ? proximityPoints.OrderBy(p => p.time).ToList()
-            : new List<KeyPoint>();
+            : new List<HitEvent>();
 
         // Cursor persists outside the loop for O(N) performance
         int cursor = 0;

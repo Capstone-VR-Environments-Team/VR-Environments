@@ -38,7 +38,7 @@ public class FullAnalysisManager : MonoBehaviour {
         }
 
         // Load Data
-        JsonWrapper trialInfo = JsonLoader.LoadKeyPoints(jsonPath);
+        JsonWrapper trialInfo = JsonLoader.LoadHitEvents(jsonPath);
         _reviewPastSessionsManager.SetSessionInfo(trialInfo);
         List<TrackingData> rawData = FileManager.LoadCSVFile<RawData>(csvPath).trackingData;
 
@@ -52,21 +52,21 @@ public class FullAnalysisManager : MonoBehaviour {
         Debug.Log($"Times = {allTimes.Count}, lefts = {leftPos.Count}");
 
         // Run Analysis
-        var leftResults = ProcessHand(trialInfo.TargetHits, trialInfo.TargetProximityHits, leftPos, allTimes);
-        var rightResults = ProcessHand(trialInfo.TargetHits, trialInfo.TargetProximityHits, rightPos, allTimes);
+        var leftResults = ProcessHand(trialInfo.CollectedTimingData.TargetHits, trialInfo.CollectedTimingData.TargetProximityHits, leftPos, allTimes);
+        var rightResults = ProcessHand(trialInfo.CollectedTimingData.TargetHits, trialInfo.CollectedTimingData.TargetProximityHits, rightPos, allTimes);
 
         Debug.Log($"Times = {allTimes.Count}, lefts2 = {leftResults.distVals.Count}");
 
-        TargetAnalysisResults targetData = TargetAnalyzer.AnalyzeData(trialInfo.TargetHits, trialInfo.TargetProximityHits);
+        TargetAnalysisResults targetData = TargetAnalyzer.AnalyzeData(trialInfo.CollectedTimingData.TargetHits, trialInfo.CollectedTimingData.TargetProximityHits);
 
         // Display Combined Stats
         _statisticalViewManager.SetResults(leftResults, rightResults, targetData, allTimes);
         _interactiveViewManager.SetStatistics(leftResults.total.statsDist, rightResults.total.statsDist);
-        _interactiveViewManager.SetPaths(rawData, trialInfo.TargetHits);
+        _interactiveViewManager.SetPaths(rawData, trialInfo.CollectedTimingData.TargetHits);
 
     }
 
-    private HandResultPackage ProcessHand(List<KeyPoint> hits, List<KeyPoint> prox, List<Vector3> positions, List<double> times) {
+    private HandResultPackage ProcessHand(List<HitEvent> hits, List<HitEvent> prox, List<Vector3> positions, List<double> times) {
         // Slice
         SlicingResult segments = DataSlicer.AnalyzeSegments(hits, prox, positions, times);
 

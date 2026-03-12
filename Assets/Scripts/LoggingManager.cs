@@ -28,7 +28,7 @@ public class LoggingManager : MonoBehaviour
         EventBus.OnTargetHit += LogTargetHit;
         EventBus.OnProximityHit += LogProximityHit;
         EventBus.OnNoteEnter += LogNote;
-
+        EventBus.OnEyesTracked += UpdateEyes;
     }
 
     private void OnDisable() {
@@ -39,6 +39,8 @@ public class LoggingManager : MonoBehaviour
         EventBus.OnTargetHit -= LogTargetHit;
         EventBus.OnProximityHit -= LogProximityHit;
         EventBus.OnNoteEnter -= LogNote;
+        EventBus.OnEyesTracked -= UpdateEyes;
+
 
     }
 
@@ -55,6 +57,14 @@ public class LoggingManager : MonoBehaviour
                 _logTimer -= LogInterval;
             }
         }
+    }
+
+    public void UpdateEyes(Vector3 gazeOrigin, Vector3 gazeDir, float focusDist, float leftEyeDiameter, float rightEyeDiameter) {
+        currentTrackingData.gazeOrigin = gazeOrigin;
+        currentTrackingData.gazeDirection = gazeDir;
+        currentTrackingData.focusDistance = focusDist;
+        currentTrackingData.leftPupilDiameter = leftEyeDiameter;
+        currentTrackingData.rightPupilDiameter = rightEyeDiameter;
     }
 
     public void UpdateLeftHand(Vector3 leftPos, Quaternion leftRot) {

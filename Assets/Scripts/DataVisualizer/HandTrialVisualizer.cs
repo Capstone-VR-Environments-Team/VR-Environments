@@ -3,7 +3,6 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using XUGL;
 
 public class HandTrailVisualizer : MonoBehaviour {
     [Header("Visualization Settings")]

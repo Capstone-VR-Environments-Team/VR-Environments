@@ -1,5 +1,4 @@
 using UnityEngine;
-using Varjo.XR;
 using static Varjo.XR.VarjoEyeTracking;
 
 public class EyeDataRecorder : MonoBehaviour {

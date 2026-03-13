@@ -1,10 +1,7 @@
-using NUnit.Framework;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
-using XUGL;
 
 public class FullAnalysisManager : MonoBehaviour {
 
@@ -38,7 +35,7 @@ public class FullAnalysisManager : MonoBehaviour {
         }
 
         // Load Data
-        JsonWrapper trialInfo = JsonLoader.LoadHitEvents(jsonPath);
+        var (trialInfo, fileName) = FileManager.LoadFromFile<JsonWrapper>(jsonPath);
         _reviewPastSessionsManager.SetSessionInfo(trialInfo);
         List<TrackingData> rawData = FileManager.LoadCSVFile<RawData>(csvPath).trackingData;
 

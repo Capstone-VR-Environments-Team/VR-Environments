@@ -2,7 +2,6 @@ using TMPro;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Net;
 using UnityEngine.SceneManagement;
 
 public class LiveTrialViewManager : MonoBehaviour

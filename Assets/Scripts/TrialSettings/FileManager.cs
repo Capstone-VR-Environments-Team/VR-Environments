@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 
 public static class FileManager {
@@ -29,39 +27,6 @@ public static class FileManager {
             return default;
         }
     }
-
-    
-
-    //public string ConvertCsvToTargetJson(string csvContent) {
-    //    StringBuilder jsonBuilder = new StringBuilder();
-
-    //    jsonBuilder.Append("{\"targets\": [");
-
-    //    string[] lines = csvContent.Split(new[] { '\r', '\n' }, System.StringSplitOptions.RemoveEmptyEntries);
-
-    //    bool isFirstEntry = true;
-
-    //    foreach (string line in lines) {
-    //        string[] values = line.Split(',');
-
-    //        if (values.Length >= 3) {
-    //            if (float.TryParse(values[0], out float x) &&
-    //                float.TryParse(values[1], out float y) &&
-    //                float.TryParse(values[2], out float z)) {
-    //                if (!isFirstEntry) {
-    //                    jsonBuilder.Append(",");
-    //                }
-
-    //                jsonBuilder.Append(string.Format("{{\"x\": {0}, \"y\": {1}, \"z\": {2}}}", x, y, z));
-
-    //                isFirstEntry = false;
-    //            }
-    //        }
-    //    }
-    //    jsonBuilder.Append("]}");
-
-    //    return jsonBuilder.ToString();
-    //}
 
     public static T LoadJsonFile<T>(string filePath){
         string fileContent = File.ReadAllText(filePath);

@@ -8,11 +8,8 @@ public enum AnalysisMode {
 }
 
 [Serializable]
-public class JsonWrapper {
+public class JsonWrapper : IJsonable {
     public TrialSessionInformation TrialSessionInformation;
-    //public List<HitEvent> TargetHits;
-    //public List<HitEvent> TargetProximityHits;
-    //public List<Note> Notes;
     public CollectedTimingData CollectedTimingData;
 }
 

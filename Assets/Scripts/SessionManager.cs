@@ -27,12 +27,10 @@ public class SessionManager : Singleton<SessionManager>
 
     private void OnEnable() {
         EventBus.StartExperiment += StartTrial;
-        EventBus.StopExperiment += ResetFileManager;
     }
 
     private void OnDisable() {
         EventBus.StartExperiment -= StartTrial;
-        EventBus.StopExperiment -= ResetFileManager;
     }
 
     public void StartTrial(Vector3 headsetPosition) {
@@ -78,12 +76,6 @@ public class SessionManager : Singleton<SessionManager>
         string filePath = Path.Combine(BaseDataPath, "TrialFiles", fileName + ".json");
         FileManager.SaveJsonFile(data, filePath);
         Debug.Log($"JSON file saved to: {filePath}");
-    }
-
-    public void ResetFileManager() {
-        _collectedDataDirectoryPath = null;
-        _trialSessionInformation = null;
-        _settings = null;
     }
 
     public static float GetRandomOffset(float standardDeviation) {

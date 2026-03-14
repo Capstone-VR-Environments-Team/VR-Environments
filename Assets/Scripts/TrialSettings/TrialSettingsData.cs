@@ -24,6 +24,7 @@ public class TrialSettingsData : IJsonable
     public string ConfigurationName;
     public VisibilitySettings VisibilitySettings;
     public OffsetSettings OffsetSettings;
+    public BackgroundSettings BackgroundSettings;
     public List<Vector3> TargetLocations;
 }
 
@@ -42,6 +43,16 @@ public class OffsetSettings
     public string OffsetType;
     public Vector3 OffsetValues;
     public float TargetProximity;
+}
+
+public class BackgroundSettings
+{
+    public string BackgroundType;
+    public string ImageBackground;
+    public string VideoBackground;
+    public string Direction;
+    public float Frequency;
+    public int NumberOfObjects;
 }
 
 [Serializable]

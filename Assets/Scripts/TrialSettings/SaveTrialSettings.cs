@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using TMPro;
+using System.Runtime.CompilerServices;
 
 public class SaveTrialSettings : MonoBehaviour
 {
@@ -22,6 +23,12 @@ public class SaveTrialSettings : MonoBehaviour
     public TMP_InputField offsetYInput;
     public TMP_InputField offsetZInput;
     public TMP_InputField targetRangeInput;
+
+    [Header("Background Settings")]
+    public TMP_Dropdown backgroundTypeDropdown;
+    public TMP_Dropdown directionTypeDropdown;
+    public TMP_InputField frequencyInput;
+    public TMP_InputField numberOfObjectsInput;
 
     private List<Vector3> _tempTargetLocations = new List<Vector3>();
 
@@ -51,6 +58,17 @@ public class SaveTrialSettings : MonoBehaviour
         return defaultValue;
     }
 
+    public void onImageUpload()
+    {
+        //do something eventually
+    }
+
+    public void onVideoUpload()
+    {
+        //do something eventually
+    }
+
+
     public void OnSaveButtonClicked()
     {
         TrialSettingsData trial = new TrialSettingsData
@@ -72,6 +90,15 @@ public class SaveTrialSettings : MonoBehaviour
                     SafeParse(offsetZInput.text, 0)
                 ),
                 TargetProximity = SafeParse(targetRangeInput.text, 0)
+            },
+            BackgroundSettings = new BackgroundSettings
+            {
+                BackgroundType = backgroundTypeDropdown.options[backgroundTypeDropdown.value].text,
+                ImageBackground = null,
+                VideoBackground = null,
+                Direction = directionTypeDropdown.options[directionTypeDropdown.value].text,
+                Frequency = SafeParse(frequencyInput.text, 0),
+                NumberOfObjects = (int)SafeParse(numberOfObjectsInput.text, 0)
             },
             TargetLocations = _tempTargetLocations
         };

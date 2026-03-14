@@ -27,7 +27,8 @@ public class SaveTrialSettings : MonoBehaviour
 
     public void OnUploadLocationsClicked()
     {
-        var (importedData, fileName) = FileManager.Instance.LoadFromFile<TargetImportData>();
+        string filePath = FileSelector.getFilePath(SessionManager.BaseDataPath, new string[] { "json", "csv" });
+        var (importedData, fileName) = FileManager.LoadFromFile<TargetImportData>(filePath);
         if (importedData != null && importedData.targets != null)
         {
             Debug.Log("filename: " + fileName);
@@ -74,7 +75,7 @@ public class SaveTrialSettings : MonoBehaviour
             },
             TargetLocations = _tempTargetLocations
         };
-        FileManager.Instance.SaveSettingsFile(trial, trial.ConfigurationName);
+        SessionManager.Instance.SaveSettingsFile(trial, trial.ConfigurationName);
     }
 }
 

@@ -1,12 +1,9 @@
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using UnityEngine;
 
 public static class TargetAnalyzer
 {
-    public static TargetAnalysisResults AnalyzeData(List<KeyPoint> targetData, List<KeyPoint> proxHitData)
+    public static TargetAnalysisResults AnalyzeData(List<HitEvent> targetData, List<HitEvent> proxHitData)
     {
         if (targetData == null || targetData.Count == 0)
         {

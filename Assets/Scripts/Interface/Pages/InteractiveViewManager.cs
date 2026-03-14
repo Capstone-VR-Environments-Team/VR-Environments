@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -68,7 +67,7 @@ public class InteractiveViewManager : MonoBehaviour
         UpdateStatistics();
     }
 
-    public void SetPaths(List<TrackingData> rawData, List<KeyPoint> targetData) {
+    public void SetPaths(List<TrackingData> rawData, List<HitEvent> targetData) {
         List<Vector3> leftPoints = new();
         List<Vector3> rightPoints = new();
         List<Vector3> targetPoints = new();
@@ -82,7 +81,7 @@ public class InteractiveViewManager : MonoBehaviour
             rightPoints.Add(data.rightHandPos);
         }
 
-        foreach (KeyPoint point in targetData) {
+        foreach (HitEvent point in targetData) {
             targetPoints.Add(point.location);
             GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             sphere.transform.SetParent(_targets.transform);

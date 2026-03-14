@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using SFB;
+using UnityEngine.Networking;
 
 [RequireComponent(typeof(Button))]
 public class CanvasSampleOpenFileImage : MonoBehaviour, IPointerDownHandler {
@@ -45,9 +46,25 @@ public class CanvasSampleOpenFileImage : MonoBehaviour, IPointerDownHandler {
     }
 #endif
 
-    private IEnumerator OutputRoutine(string url) {
-        var loader = new WWW(url);
-        yield return loader;
-        output.texture = loader.texture;
+    private IEnumerator OutputRoutine(string path) {
+        // Local files require the file:/// prefix
+        string url = "file:///" + path;
+
+        // Using statement ensures the web request is properly disposed of to prevent memory leaks
+        using (UnityWebRequest uwr = UnityWebRequestTexture.GetTexture(url)) {
+            // Wait for the file to load
+            yield return uwr.SendWebRequest();
+
+            // Check for errors
+            if (uwr.result == UnityWebRequest.Result.ConnectionError || uwr.result == UnityWebRequest.Result.ProtocolError) {
+                Debug.LogError($"Error loading image: {uwr.error}");
+            } else {
+                // Extract the texture from the downloaded data
+                Texture2D texture = DownloadHandlerTexture.GetContent(uwr);
+
+                // Assign it to your UI RawImage (check the exact variable name in your script, it's usually 'output' or 'image')
+                output.texture = texture;
+            }
+        }
     }
 }

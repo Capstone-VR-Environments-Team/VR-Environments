@@ -51,7 +51,7 @@ public class BackgroundSettings
     public string ImageBackground;
     public string VideoBackground;
     public string Direction;
-    public float Frequency;
+    public float Speed;
     public int NumberOfObjects;
 }
 

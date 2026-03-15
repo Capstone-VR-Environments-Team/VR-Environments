@@ -27,7 +27,7 @@ public class SaveTrialSettings : MonoBehaviour
     [Header("Background Settings")]
     public TMP_Dropdown backgroundTypeDropdown;
     public TMP_Dropdown directionTypeDropdown;
-    public TMP_InputField frequencyInput;
+    public TMP_InputField speedInput;
     public TMP_InputField numberOfObjectsInput;
 
     private List<Vector3> _tempTargetLocations = new List<Vector3>();
@@ -97,7 +97,7 @@ public class SaveTrialSettings : MonoBehaviour
                 ImageBackground = null,
                 VideoBackground = null,
                 Direction = directionTypeDropdown.options[directionTypeDropdown.value].text,
-                Frequency = SafeParse(frequencyInput.text, 0),
+                Speed = SafeParse(speedInput.text, 0),
                 NumberOfObjects = (int)SafeParse(numberOfObjectsInput.text, 0)
             },
             TargetLocations = _tempTargetLocations

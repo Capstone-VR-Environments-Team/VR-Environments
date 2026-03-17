@@ -1,8 +1,10 @@
+using System.Collections.Generic;
+using System.IO;
+using System.Runtime.CompilerServices;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections.Generic;
-using TMPro;
-using System.Runtime.CompilerServices;
+using UnityEngine.Video;
 
 public class SaveTrialSettings : MonoBehaviour
 {
@@ -29,8 +31,10 @@ public class SaveTrialSettings : MonoBehaviour
     public TMP_Dropdown directionTypeDropdown;
     public TMP_InputField speedInput;
     public TMP_InputField numberOfObjectsInput;
+    public Material skyboxMaterial;
 
     private List<Vector3> _tempTargetLocations = new List<Vector3>();
+    private VideoPlayer videoPlayer;
 
     public void OnUploadLocationsClicked()
     {
@@ -60,12 +64,39 @@ public class SaveTrialSettings : MonoBehaviour
 
     public void onImageUpload()
     {
-        //do something eventually
+        string filePath = FileSelector.getFilePath(SessionManager.BaseDataPath, new string[] { "jpg", "png" });
+        if (!File.Exists(filePath))
+        {
+            Debug.LogError("Image file not found at: " + filePath);
+            return;
+        }
+
+        byte[] fileData = File.ReadAllBytes(filePath);
+        Texture2D newTexture = new Texture2D(2, 2);
+
+        if (newTexture.LoadImage(fileData))
+        {
+            skyboxMaterial.SetTexture("_MainTex", newTexture);
+            RenderSettings.skybox = skyboxMaterial;
+        }
     }
 
     public void onVideoUpload()
     {
-        //do something eventually
+        string filePath = FileSelector.getFilePath(SessionManager.BaseDataPath, new string[] { "mp4" });
+        if (!File.Exists(filePath))
+        {
+            Debug.LogError("Video file not found at: " + filePath);
+            return;
+        }
+
+        videoPlayer.source = VideoSource.Url;
+        videoPlayer.url = filePath;
+        videoPlayer.renderMode = VideoRenderMode.APIOnly;
+        videoPlayer.isLooping = true;
+        videoPlayer.Play();
+
+        RenderSettings.skybox = skyboxMaterial;
     }
 
 

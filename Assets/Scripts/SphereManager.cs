@@ -25,10 +25,16 @@ public class SphereManager : MonoBehaviour
     private GameObject prevSphere;
     private bool showHands;
     private bool showTargets;
+    private bool flickeringHands;
+    private bool flickeringTargets;
+    private float flickerInterval = 0.5f;
     private float handVisibleTime;
     private float targetProximity;
     private bool started = false;
     private Vector3 offsetValues;
+
+    private Coroutine handsFlickerRoutine;
+    private Coroutine targetsFlickerRoutine;
 
     private void OnEnable() {
         EventBus.PrimeExperiment += BeginTrial;
@@ -48,6 +54,9 @@ public class SphereManager : MonoBehaviour
         handVisibleTime = SessionManager.Instance.GetHandVisibleTime();
         targetProximity = SessionManager.Instance.GetTargetProximity();
         offsetValues = SessionManager.Instance.GetOffsetValues();
+        //flickerInterval = SessionManager.Instance.GetFlickerInterval();
+        //flickeringHands = SessionManager.Instance.GetFlickeringHands();
+        //flickeringTargets = SessionManager.Instance.GetFlickeringTargets();
         totalSpheres = sphereVectors.Count;
         spheres = new GameObject[totalSpheres];
         for (int i = 0; i < totalSpheres; i++) {
@@ -187,6 +196,9 @@ public class SphereManager : MonoBehaviour
 
     public void ResetTrial()
     {
+        if (handsFlickerRoutine != null) StopCoroutine(handsFlickerRoutine);
+        if (targetsFlickerRoutine != null) StopCoroutine(targetsFlickerRoutine);
+
         spheresCollected = 0;
         if (spheres != null){
             foreach(GameObject s in spheres){
@@ -210,7 +222,14 @@ public class SphereManager : MonoBehaviour
 
         experimentController.StartExperiment();
         ApplyOffsetSettings();
-        //ApplyVisibilitySettings();
+        if (flickeringHands && showHands)
+        {
+            handsFlickerRoutine = StartCoroutine(FlickerHands());
+        }
+        if (flickeringTargets && showTargets)
+        {
+            targetsFlickerRoutine = StartCoroutine(FlickerTargets());
+        }
         HandleSphereInteract();
         Debug.Log("Trial Started");
     }
@@ -236,5 +255,44 @@ public class SphereManager : MonoBehaviour
             SpawnNextSphere();
         }
     }
+    private IEnumerator FlickerHands()
+    {
+        while (started)
+        {
+            yield return new WaitForSeconds(flickerInterval);
 
+            // Only toggle if they are supposed to be visible in the first place
+            if (showHands)
+            {
+                if (leftHand)
+                {
+                    MeshRenderer lr = leftHand.GetComponent<MeshRenderer>();
+                    lr.enabled = !lr.enabled;
+                }
+                if (rightHand)
+                {
+                    MeshRenderer rr = rightHand.GetComponent<MeshRenderer>();
+                    rr.enabled = !rr.enabled;
+                }
+            }
+        }
+    }
+
+    private IEnumerator FlickerTargets()
+    {
+        while (started)
+        {
+            yield return new WaitForSeconds(flickerInterval);
+
+            // Only toggle if targets are supposed to be visible AND we have a current sphere
+            if (showTargets && currentSphere)
+            {
+                Renderer tr = currentSphere.GetComponent<Renderer>();
+                if (tr)
+                {
+                    tr.enabled = !tr.enabled;
+                }
+            }
+        }
+    }
 }

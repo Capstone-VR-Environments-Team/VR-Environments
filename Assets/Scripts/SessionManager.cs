@@ -133,7 +133,12 @@ public class SessionManager : Singleton<SessionManager>
         return -1;
     }
 
-
+    public float GetFlickerInterval() {
+        if (_settings != null) {
+            //return _settings.VisibilitySettings.FlickerInterval;
+        }
+        return 0.0f;
+    }
 
     public Vector3 GetOffsetValues() {
         if (_settings != null) {

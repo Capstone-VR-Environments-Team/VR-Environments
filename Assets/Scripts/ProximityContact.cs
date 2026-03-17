@@ -15,7 +15,7 @@ public class ProximityContact : MonoBehaviour
             // centered on the target.
             if (transform.parent != null)
             {
-                LoggingManager.Instance.LogProximityHit(transform.parent.position);
+                EventBus.OnProximityHit?.Invoke(transform.parent.position);
             }
         }
     }

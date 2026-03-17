@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class StartNewSessionManager : MonoBehaviour
@@ -31,7 +32,6 @@ public class StartNewSessionManager : MonoBehaviour
 
     public void OnBeginTrialButtonClicked()
     {
-        _trialSettingsData = LoadTrialSettings.Instance.GetTrialSettings();
         TrialSessionInformation trialSession = new TrialSessionInformation
         {
             SessionName = sessionNameInput.text,
@@ -39,7 +39,10 @@ public class StartNewSessionManager : MonoBehaviour
             Notes = notesInput.text,
             TrialSettings = _trialSettingsData
         };
-        FileManager.Instance.SetTrialSessionInformation(trialSession);
+        SessionManager.Instance.SetTrialSessionInformation(trialSession);
+        clearInputs();
+        SceneManager.LoadScene("SampleScene");
+
     }
 
     public void clearInputs()
@@ -48,5 +51,26 @@ public class StartNewSessionManager : MonoBehaviour
         participantIDInput.text = "";
         notesInput.text = "";
         configurationFileNameText.SetText("No File Uploaded");
-    }   
+    }
+
+    public void ReturnToHome() {
+        clearInputs();
+        SceneManager.LoadScene("HomeScreen");
+    }
+
+    public void OnUploadSettingsClicked() {
+        string filePath = FileSelector.getFilePath(SessionManager.BaseDataPath, "json");
+        var (loadedData, fileName) = FileManager.LoadFromFile<TrialSettingsData>(filePath);
+
+        if (loadedData != null) {
+            _trialSettingsData = loadedData;
+            ConfigurationFileNameText.SetText(fileName);
+            Debug.Log($"Loaded Configuration: {_trialSettingsData.ConfigurationName}");
+            Debug.Log($"Target Count: {_trialSettingsData.TargetLocations.Count}");
+
+        } else {
+            ConfigurationFileNameText.SetText("File Upload Failed");
+            Debug.LogError("Failed to load settings file.");
+        }
+    }
 }

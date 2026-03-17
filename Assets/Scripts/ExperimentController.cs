@@ -1,42 +1,28 @@
 using UnityEngine;
 using TMPro; // if using TextMeshPro
-using UnityEngine.UI;
 
 public class ExperimentController : MonoBehaviour
 {
-    public HandDataRecorder recorder; // optional: see section below
     public TMP_Text statusText; // use Text if not using TMP
-    public SphereManager sphereManager;
     public GameObject headset;
-    public LiveTrialViewManager trialViewManager;
 
     private Vector3 headsetPosition;
 
     public void PrimeExperiment()
     {
         headsetPosition = headset.transform.position;
-        if (recorder != null) {
-            sphereManager.BeginTrial(headsetPosition);
-            UpdateStatus("Prepping Trial");
-        }
+        EventBus.PrimeExperiment?.Invoke(headsetPosition);
+        UpdateStatus("Prepping Trial");
     }
 
     public void StopExperiment()
     {
-        if (recorder != null) {
-            LoggingManager.Instance.StopRecording();
-            sphereManager.ResetTrial();
-            recorder.StopRecording();
-            UpdateStatus("Stopped. Data Saved.");
-            trialViewManager.StopTimer();
-            FileManager.Instance.ResetFileManager();
-        }
+        EventBus.StopExperiment?.Invoke();
+        UpdateStatus("Stopped. Data Saved.");
     }
 
     public void StartExperiment() {
-        LoggingManager.Instance.StartRecording("PLACEHOLDER_NAME", headsetPosition);
-        trialViewManager.StartTimer();
-        recorder.StartRecording(headsetPosition);
+        EventBus.StartExperiment?.Invoke(headsetPosition);
         UpdateStatus("Recording...");
     }
 

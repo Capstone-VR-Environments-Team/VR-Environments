@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class CustomizeSessionManager : MonoBehaviour
@@ -67,6 +68,11 @@ public class CustomizeSessionManager : MonoBehaviour
         zInput.text = "0";
         targetRangeInput.text = "0";
         uploadedFileNameText.text = "No file uploaded";
+    }
+
+    public void OnGoHomeClicked() {
+        ResetInputs();
+        SceneManager.LoadScene("HomeScreen");
     }
 
 }

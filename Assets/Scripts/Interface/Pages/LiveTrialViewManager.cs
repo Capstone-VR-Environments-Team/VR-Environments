@@ -2,7 +2,7 @@ using TMPro;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Net;
+using UnityEngine.SceneManagement;
 
 public class LiveTrialViewManager : MonoBehaviour
 {
@@ -39,6 +39,8 @@ public class LiveTrialViewManager : MonoBehaviour
     [SerializeField] private Button logButton;
     public Button LogButton => logButton;
 
+    [SerializeField] private XRManager xrManager;
+
     private double _currentNoteStartTime = -1.0;
     private float elapsedTime = 0f;
     private bool isRunning = false;
@@ -56,6 +58,9 @@ public class LiveTrialViewManager : MonoBehaviour
 
     private void OnEnable()
     {
+        EventBus.StartExperiment += StartTimer;
+        EventBus.StopExperiment += StopTimer;
+
         ResetLiveTrialViewManager();
 
         if (notesView != null)
@@ -86,11 +91,22 @@ public class LiveTrialViewManager : MonoBehaviour
         }
     }
 
+    public void OnDisable() {
+        EventBus.StartExperiment -= StartTimer;
+        EventBus.StopExperiment -= StopTimer;
+    }
+
+    public void OnGoHomeClicked() {
+        xrManager.TurnVROff();
+        Destroy(SessionManager.Instance);
+        SceneManager.LoadScene("HomeScreen");
+    }
+
     private void OnNoteValueChanged(string text)
     {
         if (text.Length > 0 && _currentNoteStartTime < 0)
         {
-            _currentNoteStartTime = LoggingManager.Instance.GetTrialTime();
+            _currentNoteStartTime = SessionManager.Instance.GetTrialTime();
         }
         else if (text.Length == 0)
         {
@@ -102,7 +118,7 @@ public class LiveTrialViewManager : MonoBehaviour
     {
         if (noteInput != null && !string.IsNullOrEmpty(noteInput.text) && _currentNoteStartTime >= 0)
         {
-            LoggingManager.Instance.LogNote(noteInput.text, _currentNoteStartTime);
+            EventBus.OnNoteEnter?.Invoke(noteInput.text, _currentNoteStartTime);
         
             TimeSpan t = TimeSpan.FromSeconds(_currentNoteStartTime / 1000);
             string timeString = string.Format("{0:D1}:{1:D2}", t.Minutes, t.Seconds);
@@ -151,7 +167,7 @@ public class LiveTrialViewManager : MonoBehaviour
         }
     }
 
-    public void StartTimer()
+    public void StartTimer(Vector3 headsetPosition)
     {
         isRunning = true;
 
@@ -177,7 +193,7 @@ public class LiveTrialViewManager : MonoBehaviour
         elapsedTime = 0f;
         UpdateTimerDisplay();
 
-        double time = LoggingManager.Instance.GetTrialTime();
+        double time = SessionManager.Instance.GetTrialTime();
         TimeSpan t = TimeSpan.FromSeconds(time / 1000);
         string timeString = string.Format("{0:D1}:{1:D2}", t.Minutes, t.Seconds);
         AppendToLog($"{timeString} - Data has been saved to folder");
@@ -199,7 +215,7 @@ public class LiveTrialViewManager : MonoBehaviour
         beginTrialButton.interactable = true;
         logButton.interactable = true;
 
-        TrialSessionInformation trialInfo = FileManager.Instance.GetTrialSessionInformation();
+        TrialSessionInformation trialInfo = SessionManager.Instance.GetTrialSessionInformation();
         if (experimentNameText != null && trialInfo != null)
             experimentNameText.SetText(trialInfo.SessionName);
         if (participantIDText != null && trialInfo != null)

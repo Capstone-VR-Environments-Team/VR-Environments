@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using SFB;
+using UnityEngine.Networking;
 
 [RequireComponent(typeof(Button))]
 public class CanvasSampleOpenFileText : MonoBehaviour, IPointerDownHandler {
@@ -46,8 +47,18 @@ public class CanvasSampleOpenFileText : MonoBehaviour, IPointerDownHandler {
 #endif
 
     private IEnumerator OutputRoutine(string url) {
-        var loader = new WWW(url);
-        yield return loader;
-        output.text = loader.text;
+        // UnityWebRequest.Get is the modern equivalent for fetching plain text or raw data
+        using (UnityWebRequest uwr = UnityWebRequest.Get(url)) {
+            // Wait for the download/read to complete
+            yield return uwr.SendWebRequest();
+
+            // Catch any pathing or connection errors
+            if (uwr.result == UnityWebRequest.Result.ConnectionError || uwr.result == UnityWebRequest.Result.ProtocolError) {
+                Debug.LogError($"Error loading text data: {uwr.error}");
+            } else {
+                // Extract the string from the download handler and assign it to your UI/text variable
+                output.text = uwr.downloadHandler.text;
+            }
+        }
     }
 }

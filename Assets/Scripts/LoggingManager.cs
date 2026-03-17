@@ -1,8 +1,7 @@
 using System;
-using System.IO;
 using UnityEngine;
 
-public class LoggingManager : Singleton<LoggingManager>
+public class LoggingManager : MonoBehaviour
 {
     ILogger logger;
     [SerializeField] bool logging = false;
@@ -10,8 +9,6 @@ public class LoggingManager : Singleton<LoggingManager>
     public TrackingData currentTrackingData = new TrackingData();
 
     public CollectedTimingData collectedTimingData = new CollectedTimingData();
-    private long _startTime;
-    private string _currentTrialName;
     private string _directory;
     private Vector3 _headsetPosition;
     private float _logTimer = 0f;
@@ -21,6 +18,30 @@ public class LoggingManager : Singleton<LoggingManager>
     void Start()
     {
         logger = new CsvLogger();
+    }
+
+    private void OnEnable() {
+        EventBus.OnLeftHandTracked += UpdateLeftHand;
+        EventBus.OnRightHandTracked += UpdateRightHand;
+        EventBus.StartExperiment += StartRecording;
+        EventBus.StopExperiment += StopRecording;
+        EventBus.OnTargetHit += LogTargetHit;
+        EventBus.OnProximityHit += LogProximityHit;
+        EventBus.OnNoteEnter += LogNote;
+        EventBus.OnEyesTracked += UpdateEyes;
+    }
+
+    private void OnDisable() {
+        EventBus.OnLeftHandTracked -= UpdateLeftHand;
+        EventBus.OnRightHandTracked -= UpdateRightHand;
+        EventBus.StartExperiment -= StartRecording;
+        EventBus.StopExperiment -= StopRecording;
+        EventBus.OnTargetHit -= LogTargetHit;
+        EventBus.OnProximityHit -= LogProximityHit;
+        EventBus.OnNoteEnter -= LogNote;
+        EventBus.OnEyesTracked -= UpdateEyes;
+
+
     }
 
     // Update is called once per frame
@@ -38,15 +59,31 @@ public class LoggingManager : Singleton<LoggingManager>
         }
     }
 
-    public void StartRecording(string name, Vector3 headsetPosition) {
-        _currentTrialName = name;
-        _startTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+    public void UpdateEyes(Vector3 gazeOrigin, Vector3 gazeDir, float focusDist, float leftEyeDiameter, float rightEyeDiameter) {
+        currentTrackingData.gazeOrigin = gazeOrigin;
+        currentTrackingData.gazeDirection = gazeDir;
+        currentTrackingData.focusDistance = focusDist;
+        currentTrackingData.leftPupilDiameter = leftEyeDiameter;
+        currentTrackingData.rightPupilDiameter = rightEyeDiameter;
+    }
+
+    public void UpdateLeftHand(Vector3 leftPos, Quaternion leftRot) {
+        currentTrackingData.leftHandPos = leftPos;
+        currentTrackingData.leftHandRotation = leftRot;
+    }
+
+    public void UpdateRightHand(Vector3 rightPos, Quaternion rightRot) {
+        currentTrackingData.rightHandPos = rightPos;
+        currentTrackingData.rightHandRotation = rightRot;
+    }
+
+    public void StartRecording(Vector3 headsetPosition) {
         _headsetPosition = headsetPosition;
         // Reset data for new trial
         collectedTimingData = new CollectedTimingData();
 
 
-        logger.InitLog(name);
+        logger.InitLog(SessionManager.Instance.GetTrialName());
         _logTimer = 0f;
         logging = true;
     }
@@ -54,26 +91,16 @@ public class LoggingManager : Singleton<LoggingManager>
     public void StopRecording()
     {
         if (logging == false) return;
-        _directory = FileManager.Instance.SaveSessionInformation();
+        _directory = SessionManager.Instance.SaveSessionInformation(collectedTimingData);
         logger.SaveLog(_directory); // Save CSV
-        SaveTimingData(); // Save JSON
         logging = false;
-    }
-
-
-
-    public double GetTrialTime()
-    {
-        if (!logging) return 0.0;
-        long currentTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-        return (currentTime - _startTime);
     }
 
     public void LogTargetHit(Vector3 targetLocation, int targetId)
     {
         if (!logging) return;
 
-        double time = GetTrialTime();
+        double time = SessionManager.Instance.GetTrialTime();
 
         collectedTimingData.TargetHits.Add(new HitEvent(time, targetLocation - _headsetPosition));
 
@@ -93,7 +120,8 @@ public class LoggingManager : Singleton<LoggingManager>
     public void LogProximityHit(Vector3 targetLocation)
     {
         if (!logging) return;
-        collectedTimingData.TargetProximityHits.Add(new HitEvent(GetTrialTime(), targetLocation - _headsetPosition));
+
+        collectedTimingData.TargetProximityHits.Add(new HitEvent(SessionManager.Instance.GetTrialTime(), targetLocation - _headsetPosition));
     }
 
     public void LogNote(string content, double timestamp)
@@ -101,23 +129,6 @@ public class LoggingManager : Singleton<LoggingManager>
         if (!logging) return;
 
         collectedTimingData.Notes.Add(new NoteEvent(timestamp, content));
-    }
-
-    private void SaveTimingData()
-    {
-        string json = JsonUtility.ToJson(collectedTimingData, true);
-        string fileName = $"{_currentTrialName}_{DateTime.Now:yyyyMMdd_HHmmss}_Timing.json";
-        string filePath = Path.Combine(_directory, fileName);
-
-        try
-        {
-            File.WriteAllText(filePath, json);
-            Debug.Log($"Timing JSON saved to: {filePath}");
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"Failed to save Timing JSON: {e.Message}");
-        }
     }
 
 }

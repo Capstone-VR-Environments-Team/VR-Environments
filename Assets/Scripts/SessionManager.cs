@@ -5,8 +5,7 @@ using UnityEngine;
 
 public class SessionManager : Singleton<SessionManager>
 {
-    private static string _path;
-    public static string BaseDataPath { get { _path ??= Application.persistentDataPath; return _path; } set => _path = value; }
+    public static string BaseDataPath;
     TrialSessionInformation _trialSessionInformation;
     TrialSettingsData _settings;
     private long _startTime;
@@ -14,12 +13,16 @@ public class SessionManager : Singleton<SessionManager>
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        BaseDataPath = Application.persistentDataPath;
     }
 
 
     // Update is called once per frame
     void Update()
     {
+        if (BaseDataPath == null) {
+            BaseDataPath = Application.persistentDataPath;
+        }
     }
 
     private void OnEnable() {
@@ -61,8 +64,7 @@ public class SessionManager : Singleton<SessionManager>
 
         string rootPath = Path.Combine(Application.persistentDataPath, "TrialRuns");
 
-        string folderPath = FileSelector.getFolderPath(rootPath);
-        _collectedDataDirectoryPath = Path.Combine(folderPath, folderName);
+        _collectedDataDirectoryPath = Path.Combine(rootPath, folderName);
 
         if (!Directory.Exists(_collectedDataDirectoryPath)) {
             Directory.CreateDirectory(_collectedDataDirectoryPath);
@@ -71,7 +73,7 @@ public class SessionManager : Singleton<SessionManager>
     }
 
     public void SaveSettingsFile<T>(T data, string fileName) {
-        string filePath = Path.Combine(Application.persistentDataPath, "TrialFiles", fileName + ".json");
+        string filePath = Path.Combine(BaseDataPath, "TrialFiles", fileName + ".json");
         FileManager.SaveJsonFile(data, filePath);
         Debug.Log($"JSON file saved to: {filePath}");
     }

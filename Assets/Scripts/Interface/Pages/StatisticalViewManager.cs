@@ -23,6 +23,7 @@ public class StatisticalViewManager : MonoBehaviour
     [Header("Control Panel")]
     [SerializeField] private TMP_Dropdown pathDropdown;
     [SerializeField] private TMP_Dropdown componentDropdown;
+    [SerializeField] private Button exportButton;
     [SerializeField] private Button endAnalysisButton;
 
     private List<double> allTimes;
@@ -284,6 +285,11 @@ public class StatisticalViewManager : MonoBehaviour
         Overall,
         Approach,
         Search
+    }
+
+    public void AddExportOnClick(UnityEngine.Events.UnityAction action)
+    {
+        exportButton.onClick.AddListener(action);
     }
 
     public void AddEndAnalysisOnClick(UnityEngine.Events.UnityAction action)

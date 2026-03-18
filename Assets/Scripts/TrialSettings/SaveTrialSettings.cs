@@ -12,10 +12,11 @@ public class SaveTrialSettings : MonoBehaviour
 
     [Header("Visibility Settings")]
 
-    public Toggle showTargetsToggle;
-    public TMP_InputField targetVisibleTimeInput;
-    public Toggle showHandsToggle;
-    public TMP_InputField handVisibleTimeInput;
+    public TMP_Dropdown handsVisibility;
+    public TMP_Dropdown targetsVisibility;
+    public TMP_InputField handFlickerFrequency;
+    public TMP_InputField targetFlickerFrequency;
+
 
     [Header("Offset Settings")]
     public TMP_Dropdown offsetTypeDropdown;
@@ -76,10 +77,10 @@ public class SaveTrialSettings : MonoBehaviour
             ConfigurationName = configurationNameInput.text,
             VisibilitySettings = new VisibilitySettings
             {
-                ShowTargets = showTargetsToggle.isOn,
-                TargetVisibleTime = SafeParse(targetVisibleTimeInput.text, 0),
-                ShowHands = showHandsToggle.isOn,
-                HandVisibleTime = SafeParse(handVisibleTimeInput.text, 0)
+                HandsVisibilityType = handsVisibility.options[handsVisibility.value].text,
+                TargetVisibilityType = targetsVisibility.options[targetsVisibility.value].text,
+                HandFlickerFrequency = SafeParse(handFlickerFrequency.text, 0),
+                TargetFlickerFrequency = SafeParse(targetFlickerFrequency.text, 0)
             },
             OffsetSettings = new OffsetSettings
             {

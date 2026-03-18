@@ -49,9 +49,7 @@ public class SphereManager : MonoBehaviour
     public void BeginTrial(Vector3 headsetPosition)
     {
         List<Vector3> sphereVectors = SessionManager.Instance.GetLoadedTargets();
-        showHands = SessionManager.Instance.GetShowHands();
-        showTargets = SessionManager.Instance.GetShowTargets();
-        handVisibleTime = SessionManager.Instance.GetHandVisibleTime();
+        
         targetProximity = SessionManager.Instance.GetTargetProximity();
         offsetValues = SessionManager.Instance.GetOffsetValues();
         //flickerInterval = SessionManager.Instance.GetFlickerInterval();

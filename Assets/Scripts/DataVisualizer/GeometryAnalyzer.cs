@@ -30,25 +30,25 @@ public static class GeometryAnalyzer {
 
             Vector3 diff = point - closestPointOnLine;
 
-            if (input.Mode == AnalysisMode.LineToTarget) {
+            if (input.Mode == AnalysisMode.LINETOTARGET) {
                 // Perpendicular distance to the path
                 results.total.DistancesFromLine.Add(diff.magnitude);
                 results.approach.DistancesFromLine.Add(diff.magnitude);
                 results.approach.DeviationsX.Add(diff.x);
-                results.approach.DevaitionsY.Add(diff.y);
-                results.approach.DevaitionsZ.Add(diff.z);
+                results.approach.DeviationsY.Add(diff.y);
+                results.approach.DeviationsZ.Add(diff.z);
                 results.approach.Timestamps.Add(input.Timestamps[i]);
             } else {
                 results.total.DistancesFromLine.Add(Vector3.Distance(point, input.LinePointB));
                 results.search.DistancesFromLine.Add(Vector3.Distance(point, input.LinePointB));
                 results.search.DeviationsX.Add(diff.x);
-                results.search.DevaitionsY.Add(diff.y);
-                results.search.DevaitionsZ.Add(diff.z);
+                results.search.DeviationsY.Add(diff.y);
+                results.search.DeviationsZ.Add(diff.z);
                 results.search.Timestamps.Add(input.Timestamps[i]);
             }
             results.total.DeviationsX.Add(diff.x);
-            results.total.DevaitionsY.Add(diff.y);
-            results.total.DevaitionsZ.Add(diff.z);
+            results.total.DeviationsY.Add(diff.y);
+            results.total.DeviationsZ.Add(diff.z);
             results.total.Timestamps.Add(input.Timestamps[i]);
         }
 

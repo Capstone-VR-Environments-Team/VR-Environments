@@ -9,6 +9,19 @@ public static class DataAnalyzer {
             return new Statistics();
         }
 
+        int sampleCount = values.Count;
+        if (times != null && times.Count > 0) {
+            sampleCount = Math.Min(values.Count, times.Count);
+        }
+
+        if (sampleCount <= 0) {
+            return new Statistics();
+        }
+
+        if (sampleCount != values.Count) {
+            values = values.Take(sampleCount).ToList();
+        }
+
         var results = new Statistics();
         var sorted = values.OrderBy(n => n).ToList();
 
@@ -19,9 +32,21 @@ public static class DataAnalyzer {
         results.Median =  sorted.Count % 2 == 0
             ? (sorted[sorted.Count / 2 - 1] + sorted[sorted.Count / 2]) / 2.0
             : sorted[sorted.Count / 2];
-        results.TotalDuration = times.Last() - times.First();
-        results.TimeOfMax = times[values.IndexOf(results.Max)];
-        results.TimeOfMin = times[values.IndexOf(results.Min)];
+
+        if (times == null || times.Count == 0) {
+            results.TotalDuration = 0;
+            results.TimeOfMax = 0;
+            results.TimeOfMin = 0;
+            return results;
+        }
+
+        results.TotalDuration = sampleCount > 1 ? times[sampleCount - 1] - times[0] : 0;
+
+        int maxIndex = values.IndexOf(results.Max);
+        int minIndex = values.IndexOf(results.Min);
+
+        results.TimeOfMax = maxIndex >= 0 && maxIndex < sampleCount ? times[maxIndex] : 0;
+        results.TimeOfMin = minIndex >= 0 && minIndex < sampleCount ? times[minIndex] : 0;
 
         return results;
     }

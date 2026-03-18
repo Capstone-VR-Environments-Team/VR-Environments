@@ -99,27 +99,6 @@ public class SessionManager : Singleton<SessionManager>
         return new List<Vector3>();
     }
 
-    public bool GetShowHands() {
-        if (_settings != null) {
-            return _settings.VisibilitySettings.ShowHands;
-        }
-        return true;
-    }
-
-    public bool GetShowTargets() {
-        if (_settings != null) {
-            return _settings.VisibilitySettings.ShowTargets;
-        }
-        return true;
-    }
-
-    public float GetHandVisibleTime() {
-        if (_settings != null) {
-            return _settings.VisibilitySettings.HandVisibleTime;
-        }
-        return 0.0f;
-    }
-
     public int GetOffsetType() {
         if (_settings != null) {
             if (_settings.OffsetSettings.OffsetType == "NONE") {

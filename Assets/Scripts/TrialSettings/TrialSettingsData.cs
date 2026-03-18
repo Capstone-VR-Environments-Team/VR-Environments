@@ -31,10 +31,13 @@ public class TrialSettingsData : IJsonable
 [Serializable]
 public class VisibilitySettings
 {
-    public bool ShowTargets;
-    public float TargetVisibleTime;
-    public bool ShowHands;
-    public float HandVisibleTime;
+    public string HandsVisibilityType;
+    public string TargetVisibilityType;
+    public float HandFlickerFrequency;
+    public float TargetFlickerFrequency;
+    public string LeftHandColor;
+    public string RightHandColor;
+    public string TargetColor;
 }
 
 [Serializable]
@@ -43,6 +46,7 @@ public class OffsetSettings
     public string OffsetType;
     public Vector3 OffsetValues;
     public float TargetProximity;
+    public bool ShowHandsInProximity;
 }
 
 public class BackgroundSettings
@@ -53,6 +57,8 @@ public class BackgroundSettings
     public string Direction;
     public float Speed;
     public int NumberOfObjects;
+    public string ObjectColor;
+    public float ObjectSize;
 }
 
 [Serializable]

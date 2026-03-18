@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class InteractiveViewManager : MonoBehaviour
@@ -11,26 +12,14 @@ public class InteractiveViewManager : MonoBehaviour
 
     [Header("Control Panel")]
     [SerializeField] private Button endReviewButton;
-    public Button EndReviewButton => endReviewButton;
-
     [SerializeField] private Toggle showLeftPathsToggle;
-    public Toggle ShowLeftPathsToggle => showLeftPathsToggle;
-
     [SerializeField] private Toggle showRightPathsToggle;
-    public Toggle ShowRightPathsToggle => showRightPathsToggle;
-
     [SerializeField] private Toggle showOptimalPathsToggle;
-    public Toggle ShowOptimalPathsToggle => showOptimalPathsToggle;
-
     [SerializeField] private Toggle showTargetsToggle;
-    public Toggle ShowTargetsToggle => showTargetsToggle;
 
     [Header("Statistics")]
     [SerializeField] private TMP_Dropdown pathDropdown;
-    public TMP_Dropdown PathDropdown => pathDropdown;
-
     [SerializeField] private StatisticsManager statisticsManager;
-    public StatisticsManager StatisticsManager => statisticsManager;
 
     private GameObject _leftLine;
     private GameObject _rightLine;
@@ -51,6 +40,33 @@ public class InteractiveViewManager : MonoBehaviour
         showOptimalPathsToggle.onValueChanged.AddListener(ToggleOptimal);
         showTargetsToggle.onValueChanged.AddListener(ToggleTargets);
         endReviewButton.onClick.AddListener(LeaveScreen);
+        LoadFromStore();
+    }
+
+    private void OnEnable()
+    {
+        EventBus.DataChanged += LoadFromStore;
+        LoadFromStore();
+    }
+
+    private void OnDisable()
+    {
+            EventBus.DataChanged -= LoadFromStore;
+    }
+
+    private void LoadFromStore()
+    {
+        AnalysisResultsStore store = AnalysisResultsStore.Instance;
+        if (!store.HasAnalysisData || store.ProcessedData == null || store.TrialInfo == null)
+        {
+            return;
+        }
+
+        SetStatistics(
+            store.ProcessedData.AnalyzedData.GetStatistics(Hand.LEFT, MovementZone.OVERALL, DeviationType.TOTAL),
+            store.ProcessedData.AnalyzedData.GetStatistics(Hand.RIGHT, MovementZone.OVERALL, DeviationType.TOTAL));
+
+        SetPaths(store.RawData, store.TrialInfo.CollectedTimingData.TargetHits);
     }
 
     Statistics leftStatistics;
@@ -67,7 +83,13 @@ public class InteractiveViewManager : MonoBehaviour
         UpdateStatistics();
     }
 
+    public void AddEndReviewOnClick(UnityEngine.Events.UnityAction action) {
+        endReviewButton.onClick.AddListener(action);
+    }
+
     public void SetPaths(List<TrackingData> rawData, List<HitEvent> targetData) {
+        ClearPathObjects();
+
         List<Vector3> leftPoints = new();
         List<Vector3> rightPoints = new();
         List<Vector3> targetPoints = new();
@@ -95,7 +117,7 @@ public class InteractiveViewManager : MonoBehaviour
         if (rightPoints.Count > 1)
             _rightLine = CreateLine("RightHand", rightPoints, Color.blue);
 
-        if (rightPoints.Count > 1)
+        if (targetPoints.Count > 1)
             _targetLine = CreateLine("Targets", targetPoints, Color.green);
 
         Debug.Log($"Added lines with {leftPoints.Count} left, {rightPoints.Count} right, and {targetPoints.Count} points");
@@ -130,6 +152,40 @@ public class InteractiveViewManager : MonoBehaviour
     private void OnDestroy()
     {
         pathDropdown.onValueChanged.RemoveAllListeners();
+        showLeftPathsToggle.onValueChanged.RemoveAllListeners();
+        showRightPathsToggle.onValueChanged.RemoveAllListeners();
+        showOptimalPathsToggle.onValueChanged.RemoveAllListeners();
+        showTargetsToggle.onValueChanged.RemoveAllListeners();
+        endReviewButton.onClick.RemoveAllListeners();
+
+        ClearPathObjects();
+    }
+
+    private void ClearPathObjects()
+    {
+        if (_leftLine)
+        {
+            Destroy(_leftLine);
+            _leftLine = null;
+        }
+
+        if (_rightLine)
+        {
+            Destroy(_rightLine);
+            _rightLine = null;
+        }
+
+        if (_targetLine)
+        {
+            Destroy(_targetLine);
+            _targetLine = null;
+        }
+
+        if (_targets)
+        {
+            Destroy(_targets);
+            _targets = null;
+        }
     }
 
     private void ToggleLeft(bool isOn) {
@@ -151,27 +207,7 @@ public class InteractiveViewManager : MonoBehaviour
     }
 
     private void LeaveScreen() {
-        if (_leftLine)
-            _leftLine.SetActive(false);
-        if (_rightLine)
-            _rightLine.SetActive(false);
-        if (_targetLine)
-            _targetLine.SetActive(false);
-        if (_targets)
-            _targets.SetActive(false);
-        _controller.TurnOff();
-    }
-
-    public void EnterScreen() {
-        if (_leftLine)
-            _leftLine.SetActive(true);
-        if (_rightLine)
-            _rightLine.SetActive(true);
-        if (_targetLine)
-            _targetLine.SetActive(true);
-        if (_targets)
-            _targets.SetActive(true);
-        _controller.TurnOn();
+        SceneManager.LoadScene("ReviewPastSession");
     }
 
     /** 
@@ -188,7 +224,7 @@ public class InteractiveViewManager : MonoBehaviour
         lr.startColor = color;
         lr.endColor = color;
         lr.useWorldSpace = true;
-        lineObj.SetActive(false);
+        lineObj.SetActive(true);
         return lineObj;
     }
 }

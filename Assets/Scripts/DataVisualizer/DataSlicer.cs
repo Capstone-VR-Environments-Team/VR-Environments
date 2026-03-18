@@ -39,12 +39,12 @@ public static class DataSlicer {
                 if (approachData != null) {
                     approachData.LinePointA = startKey.location;
                     approachData.LinePointB = endKey.location; // Direction is still towards final target
-                    approachData.Mode = AnalysisMode.LineToTarget;
+                    approachData.Mode = AnalysisMode.LINETOTARGET;
                     
                     results.SegmentResults.Add(new SegmentAnalysisResult {
                         SegmentIndex = i, 
                         GeometryData = GeometryAnalyzer.AnalyzeGeometry(approachData),
-                        Mode = AnalysisMode.LineToTarget
+                        Mode = AnalysisMode.LINETOTARGET
                     });
                 }
 
@@ -53,12 +53,12 @@ public static class DataSlicer {
                 if (homingData != null) {
                     homingData.LinePointA = startKey.location; // Keep same A for consistent Axis calculation
                     homingData.LinePointB = endKey.location;
-                    homingData.Mode = AnalysisMode.PointToTarget;
+                    homingData.Mode = AnalysisMode.POINTTOTARGET;
 
                     results.SegmentResults.Add(new SegmentAnalysisResult {
                         SegmentIndex = i,
                         GeometryData = GeometryAnalyzer.AnalyzeGeometry(homingData),
-                        Mode = AnalysisMode.PointToTarget
+                        Mode = AnalysisMode.POINTTOTARGET
                     });
                 }
 
@@ -69,12 +69,12 @@ public static class DataSlicer {
                 if (chunk != null) {
                     chunk.LinePointA = startKey.location;
                     chunk.LinePointB = endKey.location;
-                    chunk.Mode = AnalysisMode.LineToTarget;
+                    chunk.Mode = AnalysisMode.LINETOTARGET;
 
                     results.SegmentResults.Add(new SegmentAnalysisResult {
                         SegmentIndex = i,
                         GeometryData = GeometryAnalyzer.AnalyzeGeometry(chunk),
-                        Mode = AnalysisMode.LineToTarget
+                        Mode = AnalysisMode.LINETOTARGET
                     });
                 }
             }

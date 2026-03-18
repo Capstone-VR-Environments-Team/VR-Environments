@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using XCharts.Runtime;
 
@@ -25,43 +26,27 @@ public class StatisticalViewManager : MonoBehaviour
     [SerializeField] private Button endAnalysisButton;
 
     private List<double> allTimes;
-    HandResultPackage leftResults;
-    HandResultPackage rightResults;
-
-    Dictionary<PathType, Dictionary<ComponentType, DeviationData>> resultsMap;
+    private AnalyzedData analyzedData;
     TargetAnalysisResults targetData;
-    HandResultPackage currentResults;
-    DeviationData currentDeviationData;
+    private IReadOnlyList<AnalysisMode> currentPointTypes = System.Array.Empty<AnalysisMode>();
+    private IReadOnlyList<double> currentDistValues = System.Array.Empty<double>();
+    private IReadOnlyList<double> currentXValues = System.Array.Empty<double>();
+    private IReadOnlyList<double> currentYValues = System.Array.Empty<double>();
+    private IReadOnlyList<double> currentZValues = System.Array.Empty<double>();
+    private readonly Dictionary<Hand, IReadOnlyList<AnalysisMode>> pointTypesByHand = new Dictionary<Hand, IReadOnlyList<AnalysisMode>>();
 
     PathType currentPath = PathType.RightHand;
     ComponentType currentComponent = ComponentType.Overall;
 
-    public void SetResults(HandResultPackage leftResults, HandResultPackage rightResults,
+    public void SetResults(AnalyzedData analyzedData, IReadOnlyList<AnalysisMode> leftPointTypes, IReadOnlyList<AnalysisMode> rightPointTypes,
         TargetAnalysisResults targetData, List<double> allTimes)
     {
         this.allTimes = allTimes;
         this.targetData = targetData;
-        this.leftResults = leftResults;
-        this.rightResults = rightResults;
-        resultsMap = new Dictionary<PathType, Dictionary<ComponentType, DeviationData>>()
-        {
-            {
-                PathType.LeftHand, new Dictionary<ComponentType, DeviationData>()
-                {
-                    { ComponentType.Overall, leftResults.total },
-                    { ComponentType.Approach, leftResults.approach },
-                    { ComponentType.Search, leftResults.search }
-                }
-            },
-            {
-                PathType.RightHand, new Dictionary<ComponentType, DeviationData>()
-                {
-                    { ComponentType.Overall, rightResults.total },
-                    { ComponentType.Approach, rightResults.approach },
-                    { ComponentType.Search, rightResults.search }
-                }
-            }
-        };
+        this.analyzedData = analyzedData;
+
+        pointTypesByHand[Hand.LEFT] = leftPointTypes ?? System.Array.Empty<AnalysisMode>();
+        pointTypesByHand[Hand.RIGHT] = rightPointTypes ?? System.Array.Empty<AnalysisMode>();
 
         UpdatePath();
         UpdateComponent();
@@ -73,6 +58,39 @@ public class StatisticalViewManager : MonoBehaviour
         deviationDropdown.onValueChanged.AddListener(UpdateDeviationStatistics);
         pathDropdown.onValueChanged.AddListener(UpdatePath);
         componentDropdown.onValueChanged.AddListener(UpdateComponent);
+        endAnalysisButton.onClick.AddListener(OnCancel);
+        LoadFromStore();
+    }
+
+    private void OnEnable()
+    {
+        EventBus.DataChanged += LoadFromStore;
+        LoadFromStore();
+    }
+
+    private void OnDisable()
+    {
+        EventBus.DataChanged -= LoadFromStore;
+    }
+
+    private void OnCancel() {
+        SceneManager.LoadScene("ReviewPastSession");
+    }
+
+    private void LoadFromStore()
+    {
+        AnalysisResultsStore store = AnalysisResultsStore.Instance;
+        if (!store.HasAnalysisData || store.ProcessedData == null)
+        {
+            return;
+        }
+
+        SetResults(
+            store.ProcessedData.AnalyzedData,
+            store.ProcessedData.LeftPointTypes,
+            store.ProcessedData.RightPointTypes,
+            store.ProcessedData.TargetAnalysisResults,
+            store.ProcessedData.AllTimes);
     }
 
     private void UpdatePath()
@@ -86,12 +104,10 @@ public class StatisticalViewManager : MonoBehaviour
 
         if (path == "Left Hand")
         {
-            currentResults = leftResults;
             currentPath = PathType.LeftHand;
         }
         else if (path == "Right Hand")
         {
-            currentResults = rightResults;
             currentPath = PathType.RightHand;
         }
 
@@ -133,41 +149,30 @@ public class StatisticalViewManager : MonoBehaviour
 
     private void UpdateDeviationStatistics(int index)
     {
-        string selectedDeviation = deviationDropdown.options[index].text;
+        Hand selectedHand = GetSelectedHand();
+        MovementZone selectedZone = GetSelectedZone();
+        DeviationType selectedDeviation = GetSelectedDeviationType(index);
 
-        if (selectedDeviation == "X") {
-            deviationStatisticsManager.SetStatistics(currentDeviationData.statsX);
-        }
-        else if (selectedDeviation == "Y")
-        {
-            deviationStatisticsManager.SetStatistics(currentDeviationData.statsY);
-        }
-        else if (selectedDeviation == "Z") 
-        {
-            deviationStatisticsManager.SetStatistics(currentDeviationData.statsZ);
-        }
-        else if (selectedDeviation == "Total")
-        {
-            deviationStatisticsManager.SetStatistics(currentDeviationData.statsDist);
-        }
+        Statistics selectedStats = analyzedData?.GetStatistics(selectedHand, selectedZone, selectedDeviation) ?? new Statistics();
+        deviationStatisticsManager.SetStatistics(selectedStats);
     }
 
     private void UpdateGraphs()
     {
-        UpdateGraph(deviationMagnitudeGraph, currentResults.distVals, currentResults.pointTypes);
-        UpdateGraph(xAxisDeviationGraph, currentResults.xVals, currentResults.pointTypes);
-        UpdateGraph(yAxisDeviationGraph, currentResults.yVals, currentResults.pointTypes);
-        UpdateGraph(zAxisDeviationGraph, currentResults.zVals, currentResults.pointTypes);
+        UpdateGraph(deviationMagnitudeGraph, currentDistValues, currentPointTypes);
+        UpdateGraph(xAxisDeviationGraph, currentXValues, currentPointTypes);
+        UpdateGraph(yAxisDeviationGraph, currentYValues, currentPointTypes);
+        UpdateGraph(zAxisDeviationGraph, currentZValues, currentPointTypes);
     }
 
-    private void UpdateGraph(BaseChart graph, List<double> values, List<AnalysisMode> pointTypes)
+    private void UpdateGraph(BaseChart graph, IReadOnlyList<double> values, IReadOnlyList<AnalysisMode> pointTypes)
     {
         graph.ClearData();
         graph.RemoveAllSerie();
 
-        int count = Mathf.Min(values.Count, allTimes.Count);
+        int count = Mathf.Min(values.Count, Mathf.Min(allTimes.Count, pointTypes.Count));
         if (count == 0) { return; }
-        AnalysisMode previousType = AnalysisMode.LineToTarget;
+        AnalysisMode previousType = AnalysisMode.LINETOTARGET;
 
         Color approachColor = new Color{ r = 106.0f / 255.0f, g = 153.0f / 255.0f, b = 77.0f / 255.0f, a = 1 }; 
         Color homingColor = Color.purple;
@@ -189,7 +194,7 @@ public class StatisticalViewManager : MonoBehaviour
                 newSerie.lineStyle.width = 2.0f;
 
                 // Set Color based on Mode
-                if (currentType == AnalysisMode.PointToTarget)
+                if (currentType == AnalysisMode.POINTTOTARGET)
                 {
                     newSerie.lineStyle.color = homingColor;
                     newSerie.itemStyle.color = homingColor;
@@ -217,10 +222,47 @@ public class StatisticalViewManager : MonoBehaviour
 
     private void RefreshData()
     {
-        currentDeviationData = resultsMap[currentPath][currentComponent];
+        Hand selectedHand = GetSelectedHand();
+
+        currentDistValues = analyzedData?.GetPoints(selectedHand, MovementZone.OVERALL, DeviationType.TOTAL) ?? System.Array.Empty<double>();
+        currentXValues = analyzedData?.GetPoints(selectedHand, MovementZone.OVERALL, DeviationType.X_DEV) ?? System.Array.Empty<double>();
+        currentYValues = analyzedData?.GetPoints(selectedHand, MovementZone.OVERALL, DeviationType.Y_DEV) ?? System.Array.Empty<double>();
+        currentZValues = analyzedData?.GetPoints(selectedHand, MovementZone.OVERALL, DeviationType.Z_DEV) ?? System.Array.Empty<double>();
+
+        if (!pointTypesByHand.TryGetValue(selectedHand, out currentPointTypes))
+        {
+            currentPointTypes = System.Array.Empty<AnalysisMode>();
+        }
 
         UpdateDeviationStatistics();
         UpdateGraphs();
+    }
+
+    private Hand GetSelectedHand()
+    {
+        return currentPath == PathType.LeftHand ? Hand.LEFT : Hand.RIGHT;
+    }
+
+    private MovementZone GetSelectedZone()
+    {
+        return currentComponent switch
+        {
+            ComponentType.Approach => MovementZone.APPROACH,
+            ComponentType.Search => MovementZone.SEARCH,
+            _ => MovementZone.OVERALL
+        };
+    }
+
+    private DeviationType GetSelectedDeviationType(int index)
+    {
+        string selectedDeviation = deviationDropdown.options[index].text;
+        return selectedDeviation switch
+        {
+            "X" => DeviationType.X_DEV,
+            "Y" => DeviationType.Y_DEV,
+            "Z" => DeviationType.Z_DEV,
+            _ => DeviationType.TOTAL
+        };
     }
 
     private void OnDestroy()
@@ -228,6 +270,7 @@ public class StatisticalViewManager : MonoBehaviour
         deviationDropdown.onValueChanged.RemoveAllListeners();
         pathDropdown.onValueChanged.RemoveAllListeners();
         componentDropdown.onValueChanged.RemoveAllListeners();
+        endAnalysisButton.onClick.RemoveAllListeners();
     }
 
     private enum PathType

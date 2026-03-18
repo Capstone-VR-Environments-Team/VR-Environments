@@ -3,8 +3,105 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum AnalysisMode {
-    LineToTarget,
-    PointToTarget
+    LINETOTARGET,
+    POINTTOTARGET
+}
+
+public enum Hand {
+    LEFT,
+    RIGHT
+}
+
+public enum MovementZone {
+    OVERALL,
+    SEARCH,
+    APPROACH
+}
+
+public enum DeviationType {
+    TOTAL,
+    X_DEV,
+    Y_DEV,
+    Z_DEV
+}
+
+public readonly struct AnalysisKey : IEquatable<AnalysisKey> {
+    public Hand Hand { get; }
+    public MovementZone MovementZone { get; }
+    public DeviationType DeviationType { get; }
+
+    public AnalysisKey(Hand hand, MovementZone movementZone, DeviationType deviationType) {
+        Hand = hand;
+        MovementZone = movementZone;
+        DeviationType = deviationType;
+    }
+
+    public bool Equals(AnalysisKey other) {
+        return Hand == other.Hand
+            && MovementZone == other.MovementZone
+            && DeviationType == other.DeviationType;
+    }
+
+    public override bool Equals(object obj) {
+        return obj is AnalysisKey other && Equals(other);
+    }
+
+    public override int GetHashCode() {
+        unchecked {
+            int hash = 17;
+            hash = (hash * 31) + (int)Hand;
+            hash = (hash * 31) + (int)MovementZone;
+            hash = (hash * 31) + (int)DeviationType;
+            return hash;
+        }
+    }
+}
+
+public readonly struct SingleDataSet {
+    private static readonly IReadOnlyList<double> EmptyValues = Array.Empty<double>();
+
+    public Statistics Statistics { get; }
+    public IReadOnlyList<double> Points { get; }
+    public IReadOnlyList<double> Times { get; }
+
+    public static SingleDataSet Empty => new SingleDataSet(new Statistics(), EmptyValues, EmptyValues);
+
+    public SingleDataSet(Statistics statistics, IReadOnlyList<double> points, IReadOnlyList<double> times) {
+        Statistics = statistics ?? new Statistics();
+        Points = points ?? EmptyValues;
+        Times = times ?? EmptyValues;
+    }
+}
+
+public sealed class AnalyzedData {
+    private static readonly IReadOnlyList<double> EmptyValues = Array.Empty<double>();
+    private readonly Dictionary<AnalysisKey, SingleDataSet> _data = new Dictionary<AnalysisKey, SingleDataSet>();
+
+    public IEnumerable<AnalysisKey> Keys => _data.Keys;
+
+    public void SetData(Hand hand, MovementZone movementZone, DeviationType deviationType, SingleDataSet singleDataSet) {
+        AnalysisKey key = new AnalysisKey(hand, movementZone, deviationType);
+        _data[key] = singleDataSet;
+    }
+
+    public bool TryGetData(Hand hand, MovementZone movementZone, DeviationType deviationType, out SingleDataSet singleDataSet) {
+        AnalysisKey key = new AnalysisKey(hand, movementZone, deviationType);
+        return _data.TryGetValue(key, out singleDataSet);
+    }
+
+    public SingleDataSet GetDataOrEmpty(Hand hand, MovementZone movementZone, DeviationType deviationType) {
+        return TryGetData(hand, movementZone, deviationType, out SingleDataSet data)
+            ? data
+            : SingleDataSet.Empty;
+    }
+
+    public IReadOnlyList<double> GetPoints(Hand hand, MovementZone movementZone, DeviationType deviationType) {
+        return GetDataOrEmpty(hand, movementZone, deviationType).Points ?? EmptyValues;
+    }
+
+    public Statistics GetStatistics(Hand hand, MovementZone movementZone, DeviationType deviationType) {
+        return GetDataOrEmpty(hand, movementZone, deviationType).Statistics ?? new Statistics();
+    }
 }
 
 [Serializable]

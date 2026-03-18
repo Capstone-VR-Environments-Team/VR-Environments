@@ -8,37 +8,19 @@ public class LiveTrialViewManager : MonoBehaviour
 {
     [Header("Control Panel")]
     [SerializeField] private Button beginTrialButton;
-    public Button BeginTrialButton => beginTrialButton;
-
     [SerializeField] private TMP_Text timerText;
-    public TMP_Text TimerText => timerText;
-
     [SerializeField] private Button endTrialButton;
-    public Button EndTrialButton => endTrialButton;
-
     [SerializeField] private Button goHomeButton;
-    public Button GoHomeButton => goHomeButton;
 
     [Header("Data Panel")]
     [SerializeField] private TMP_Text experimentNameText;
-    public TMP_Text ExperimentNameText => experimentNameText;
-
     [SerializeField] private TMP_Text participantIDText;
-    public TMP_Text ParticipantIDText => participantIDText;
 
     [Header("Notes Log Settings")]
     [SerializeField] private GameObject notesView; 
-    public GameObject NotesView => notesView;
-
     [SerializeField] private GameObject noteEntryPrefab;
-    public GameObject NoteEntryPrefab => noteEntryPrefab;
-
     [SerializeField] private TMP_InputField noteInput;
-    public TMP_InputField NoteInput => noteInput;
-
     [SerializeField] private Button logButton;
-    public Button LogButton => logButton;
-
     [SerializeField] private XRManager xrManager;
 
     private double _currentNoteStartTime = -1.0;
@@ -47,13 +29,22 @@ public class LiveTrialViewManager : MonoBehaviour
 
     private void Start()
     {
-        if (noteInput != null)
-            noteInput.onValueChanged.AddListener(OnNoteValueChanged);
+        noteInput.onValueChanged.AddListener(OnNoteValueChanged);
+        logButton.onClick.AddListener(OnSaveNoteClicked);
+        goHomeButton.onClick.AddListener(OnGoHomeClicked);
+        endTrialButton.onClick.AddListener(disableButtonsOnEnd);
 
-        if (logButton != null)
-            logButton.onClick.AddListener(OnSaveNoteClicked);
         ResetLiveTrialViewManager();
-        
+    }
+
+    public void AddBeginTrialOnClick(UnityEngine.Events.UnityAction action)
+    {
+        beginTrialButton.onClick.AddListener(action);
+    }
+
+    public void AddEndTrialOnClick(UnityEngine.Events.UnityAction action)
+    {
+        endTrialButton.onClick.AddListener(action);
     }
 
     private void OnEnable()

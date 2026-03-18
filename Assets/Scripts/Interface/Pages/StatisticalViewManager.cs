@@ -8,38 +8,21 @@ public class StatisticalViewManager : MonoBehaviour
 {
     [Header("Deviation Statistics")]
     [SerializeField] private TMP_Dropdown deviationDropdown;
-    public TMP_Dropdown DeviationDropdown => deviationDropdown;
-
     [SerializeField] private StatisticsManager deviationStatisticsManager;
-    public StatisticsManager DeviationStatisticsManager => deviationStatisticsManager;
 
     [Header("Target Statistics")]
-
     [SerializeField] private StatisticsManager targetStatisticsManager;
-    public StatisticsManager TargetStatisticsManager => targetStatisticsManager;
 
     [Header("Graphs")]
     [SerializeField] private BaseChart xAxisDeviationGraph;
-    public BaseChart XAxisDeviationGraph => xAxisDeviationGraph;
-
     [SerializeField] private BaseChart yAxisDeviationGraph;
-    public BaseChart YAxisDeviationGraph => yAxisDeviationGraph;
-
     [SerializeField] private BaseChart zAxisDeviationGraph;
-    public BaseChart ZAxisDeviationGraph => zAxisDeviationGraph;
-
     [SerializeField] private BaseChart deviationMagnitudeGraph;
-    public BaseChart DeviationMagnitudeGraph => deviationMagnitudeGraph;
 
     [Header("Control Panel")]
     [SerializeField] private TMP_Dropdown pathDropdown;
-    public TMP_Dropdown PathDropdown => pathDropdown;
-
     [SerializeField] private TMP_Dropdown componentDropdown;
-    public TMP_Dropdown ComponentDropdown => componentDropdown;
-
     [SerializeField] private Button endAnalysisButton;
-    public Button EndAnalysisButton => endAnalysisButton;
 
     private List<double> allTimes;
     HandResultPackage leftResults;
@@ -258,5 +241,10 @@ public class StatisticalViewManager : MonoBehaviour
         Overall,
         Approach,
         Search
+    }
+
+    public void AddEndAnalysisOnClick(UnityEngine.Events.UnityAction action)
+    {
+        endAnalysisButton.onClick.AddListener(action);
     }
 }

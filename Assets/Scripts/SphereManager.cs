@@ -25,9 +25,9 @@ public class SphereManager : MonoBehaviour
     private GameObject prevSphere;
     private bool showHands;
     private bool showTargets;
-    private bool flickeringHands;
-    private bool flickeringTargets;
-    private float flickerInterval = 0.5f;
+    private bool flickeringHands = true;
+    private bool flickeringTargets = true;
+    private float flickerInterval = 0.1f;
     private float handVisibleTime;
     private float targetProximity;
     private bool started = false;
@@ -261,7 +261,6 @@ public class SphereManager : MonoBehaviour
         {
             yield return new WaitForSeconds(flickerInterval);
 
-            // Only toggle if they are supposed to be visible in the first place
             if (showHands)
             {
                 if (leftHand)
@@ -284,7 +283,6 @@ public class SphereManager : MonoBehaviour
         {
             yield return new WaitForSeconds(flickerInterval);
 
-            // Only toggle if targets are supposed to be visible AND we have a current sphere
             if (showTargets && currentSphere)
             {
                 Renderer tr = currentSphere.GetComponent<Renderer>();

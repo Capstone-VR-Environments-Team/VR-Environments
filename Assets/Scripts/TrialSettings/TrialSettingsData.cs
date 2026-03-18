@@ -31,10 +31,10 @@ public class TrialSettingsData : IJsonable
 [Serializable]
 public class VisibilitySettings
 {
-    public bool ShowTargets;
-    public float TargetVisibleTime;
-    public bool ShowHands;
-    public float HandVisibleTime;
+    public string HandsVisibilityType;
+    public string TargetVisibilityType;
+    public float HandFlickerFrequency;
+    public float TargetFlickerFrequency;
 }
 
 [Serializable]

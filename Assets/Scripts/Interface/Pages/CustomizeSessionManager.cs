@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,17 +11,29 @@ public class CustomizeSessionManager : MonoBehaviour
     [SerializeField] private TMP_InputField configurationNameInput;
 
     [Header("Visibility Settings")]
-    [SerializeField] private Toggle showTargetsInput;
-    [SerializeField] private TMP_InputField targetsVisibleTimeInput;
-    [SerializeField] private Toggle showHandsInput;
-    [SerializeField] private TMP_InputField handsVisibleTimeInput;
+    [SerializeField] private TMP_Dropdown handVisibility;
+    [SerializeField] private TMP_Dropdown targetVisibility;
+    [SerializeField] private TMP_InputField handFlickerFrequency;
+    [SerializeField] private TMP_InputField targetFlickerFrequency;
 
     [Header("Offset Settings")]
-    [SerializeField] private TMP_Dropdown typeInput;
-    [SerializeField] private TMP_InputField xInput;
-    [SerializeField] private TMP_InputField yInput;
-    [SerializeField] private TMP_InputField zInput;
+    [SerializeField] private TMP_Dropdown offsetTypeDropdown;
+    [SerializeField] private TMP_InputField offsetXInput;
+    [SerializeField] private TMP_InputField offsetYInput;
+    [SerializeField] private TMP_InputField offsetZInput;
     [SerializeField] private TMP_InputField targetRangeInput;
+
+    [Header("Background Settings")]
+    [SerializeField] private TMP_Dropdown backgroundTypeDropdown;
+    [SerializeField] private Button uploadImage;
+    [SerializeField] private TMP_Text uploadedImageFileNameText;
+    [SerializeField] private TMP_Text uploadedVideoFileNameText;
+    [SerializeField] private Button uploadVideo;
+    [SerializeField] private TMP_Dropdown directionTypeDropdown;
+    [SerializeField] private TMP_InputField speedInput;
+    [SerializeField] private TMP_InputField numberOfObjectsInput;
+    [SerializeField] private TMP_InputField objectSizeInput;
+    [SerializeField] private TMP_InputField objectColorInput;
 
     [Header("Buttons")]
     [SerializeField] private Button saveConfigurationButton;
@@ -28,18 +42,104 @@ public class CustomizeSessionManager : MonoBehaviour
     [SerializeField] private TMP_Text uploadedFileNameText;
     [SerializeField] private Button modifyConfigurationButton;
 
+    private List<Vector3> _tempTargetLocations = new List<Vector3>();
+
+    public void OnUploadLocationsClicked()
+    {
+        string filePath = FileSelector.getFilePath(SessionManager.BaseDataPath, new string[] { "json", "csv" });
+        var (importedData, fileName) = FileManager.LoadFromFile<TargetImportData>(filePath);
+        if (importedData != null && importedData.targets != null)
+        {
+            Debug.Log("filename: " + fileName);
+            uploadedFileNameText.SetText(fileName);
+            _tempTargetLocations = importedData.targets;
+        }
+        else
+        {
+            uploadedFileNameText.SetText("File Upload Failed");
+            Debug.LogError("Failed to load target locations from file.");
+        }
+    }
+
+    public float SafeParse(string input, float defaultValue)
+    {
+        if (float.TryParse(input, out float result))
+        {
+            return result;
+        }
+        return defaultValue;
+    }
+
+    public void onImageUpload()
+    {
+        //do something eventually
+    }
+
+    public void onVideoUpload()
+    {
+        //do something eventually
+    }
+
+
+    public void OnSaveButtonClicked()
+    {
+        TrialSettingsData trial = new TrialSettingsData
+        {
+            ConfigurationName = configurationNameInput.text,
+            VisibilitySettings = new VisibilitySettings
+            {
+                HandsVisibilityType = handVisibility.options[handVisibility.value].text,
+                TargetVisibilityType = targetVisibility.options[targetVisibility.value].text,
+                HandFlickerFrequency = SafeParse(handFlickerFrequency.text, 0),
+                TargetFlickerFrequency = SafeParse(targetFlickerFrequency.text, 0)
+            },
+            OffsetSettings = new OffsetSettings
+            {
+                OffsetType = offsetTypeDropdown.options[offsetTypeDropdown.value].text,
+                OffsetValues = new Vector3(
+                    SafeParse(offsetXInput.text, 0),
+                    SafeParse(offsetYInput.text, 0),
+                    SafeParse(offsetZInput.text, 0)
+                ),
+                TargetProximity = SafeParse(targetRangeInput.text, 0)
+            },
+            BackgroundSettings = new BackgroundSettings
+            {
+                BackgroundType = backgroundTypeDropdown.options[backgroundTypeDropdown.value].text,
+                ImageBackground = null,
+                VideoBackground = null,
+                Direction = directionTypeDropdown.options[directionTypeDropdown.value].text,
+                Speed = SafeParse(speedInput.text, 0),
+                NumberOfObjects = (int)SafeParse(numberOfObjectsInput.text, 0)
+            },
+            TargetLocations = _tempTargetLocations
+        };
+        SessionManager.Instance.SaveSettingsFile(trial, trial.ConfigurationName);
+    }
+
     public void ResetInputs()
     {
         configurationNameInput.text = "";
-        showTargetsInput.isOn = true;
-        targetsVisibleTimeInput.text = "0";
-        showHandsInput.isOn = true;
-        handsVisibleTimeInput.text = "0";
-        typeInput.value = 0;
-        xInput.text = "0";
-        yInput.text = "0";
-        zInput.text = "0";
+        handVisibility.value = 0;
+        targetVisibility.value = 0;
+        handFlickerFrequency.text = "0";
+        targetFlickerFrequency.text = "0";
+
+        offsetTypeDropdown.value = 0;
+        offsetXInput.text = "0";
+        offsetYInput.text = "0";
+        offsetZInput.text = "0";
         targetRangeInput.text = "0";
+
+        backgroundTypeDropdown.value = 0;
+        directionTypeDropdown.value = 0;
+        speedInput.text = "0";
+        numberOfObjectsInput.text = "0";
+        objectSizeInput.text = "0";
+        objectColorInput.text = "#FFFFFF";
+
+        uploadedImageFileNameText.text = "No file uploaded";
+        uploadedVideoFileNameText.text = "No file uploaded";
         uploadedFileNameText.text = "No file uploaded";
     }
 

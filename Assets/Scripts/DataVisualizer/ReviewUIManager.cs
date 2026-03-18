@@ -9,15 +9,15 @@ public class ReviewUIManager : MonoBehaviour {
     void Start() {
         ShowReviewPage();
         ReviewPastSessionsManager reviewPastSessionsManager = reviewPage.GetComponent<ReviewPastSessionsManager>();
-        reviewPastSessionsManager.InteractiveViewButton.onClick.AddListener(ShowInteractiveViewPage);
-        reviewPastSessionsManager.StatisticalViewButton.onClick.AddListener(ShowStatisticalViewPage);
-        reviewPastSessionsManager.CancelButton.onClick.AddListener(GoHome);
+        reviewPastSessionsManager.AddCancelOnCLick(GoHome);
+        reviewPastSessionsManager.AddInteractiveViewOnClick(ShowInteractiveViewPage);
+        reviewPastSessionsManager.AddStatisticalViewOnClick(ShowStatisticalViewPage);
 
         InteractiveViewManager interactiveViewManager = interactiveViewPage.GetComponent<InteractiveViewManager>();
-        interactiveViewManager.EndReviewButton.onClick.AddListener(ShowReviewPage);
+        interactiveViewManager.AddEndReviewOnClick(ShowReviewPage);
 
         StatisticalViewManager statisticalViewManager = statisticalViewPage.GetComponent<StatisticalViewManager>();
-        statisticalViewManager.EndAnalysisButton.onClick.AddListener(ShowReviewPage);
+        statisticalViewManager.AddEndAnalysisOnClick(ShowReviewPage);
     }
 
     public void ShowReviewPage() {

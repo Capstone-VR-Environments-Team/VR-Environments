@@ -8,85 +8,39 @@ using UnityEngine.UI;
 public class CustomizeSessionManager : MonoBehaviour
 {
     [Header("Configuration Name")]
-
     [SerializeField] private TMP_InputField configurationNameInput;
-    public TMP_InputField ConfigurationNameInput => configurationNameInput;
 
     [Header("Visibility Settings")]
     [SerializeField] private TMP_Dropdown handVisibility;
-    public TMP_Dropdown HandVisibility => handVisibility;
-
     [SerializeField] private TMP_Dropdown targetVisibility;
-    public TMP_Dropdown TargetVisibility => targetVisibility;
-
     [SerializeField] private TMP_InputField handFlickerFrequency;
-    public TMP_InputField HandFlickerFrequency => handFlickerFrequency;
-
     [SerializeField] private TMP_InputField targetFlickerFrequency;
-    public TMP_InputField TargetFlickerFrequency => targetFlickerFrequency;
 
     [Header("Offset Settings")]
     [SerializeField] private TMP_Dropdown offsetTypeDropdown;
-    public TMP_Dropdown OffsetTypeDropdown => offsetTypeDropdown;
-
     [SerializeField] private TMP_InputField offsetXInput;
-    public TMP_InputField OffsetXInput => offsetXInput;
-
     [SerializeField] private TMP_InputField offsetYInput;
-    public TMP_InputField OffsetYInput => offsetYInput;
-
     [SerializeField] private TMP_InputField offsetZInput;
-    public TMP_InputField OffsetZInput => offsetZInput;
-
     [SerializeField] private TMP_InputField targetRangeInput;
-    public TMP_InputField TargetRangeInput => targetRangeInput;
 
     [Header("Background Settings")]
     [SerializeField] private TMP_Dropdown backgroundTypeDropdown;
-    public TMP_Dropdown BackgroundTypeDropdown => backgroundTypeDropdown;
-
     [SerializeField] private Button uploadImage;
-    public Button UploadImage => uploadImage;
-
     [SerializeField] private TMP_Text uploadedImageFileNameText;
-    public TMP_Text UploadedImageFileNameText => uploadedImageFileNameText;
-
     [SerializeField] private TMP_Text uploadedVideoFileNameText;
-    public TMP_Text UploadedVideoFileNameText => uploadedVideoFileNameText;
-
     [SerializeField] private Button uploadVideo;
-    public Button UploadVideo => uploadVideo;
-
     [SerializeField] private TMP_Dropdown directionTypeDropdown;
-    public TMP_Dropdown DirectionTypeDropdown => directionTypeDropdown;
-
     [SerializeField] private TMP_InputField speedInput;
-    public TMP_InputField SpeedInput => speedInput;
-
     [SerializeField] private TMP_InputField numberOfObjectsInput;
-    public TMP_InputField NumberOfObjectsInput => numberOfObjectsInput;
-
     [SerializeField] private TMP_InputField objectSizeInput;
-    public TMP_InputField ObjectSizeInput => objectSizeInput;
-
     [SerializeField] private TMP_InputField objectColorInput;
-    public TMP_InputField ObjectColorInput => objectColorInput;
 
     [Header("Buttons")]
     [SerializeField] private Button saveConfigurationButton;
-    public Button SaveConfigurationButton => saveConfigurationButton;
-
     [SerializeField] private Button cancelButton;
-    public Button CancelButton => cancelButton;
-
     [SerializeField] private Button uploadTargetLocationsButton;
-    public Button UploadTargetLocationsButton => uploadTargetLocationsButton;
-
     [SerializeField] private TMP_Text uploadedFileNameText;
-    public TMP_Text UploadedFileNameText => uploadedFileNameText;
-
     [SerializeField] private Button modifyConfigurationButton;
-    public Button ModifyConfigurationButton => modifyConfigurationButton;
 
     private List<Vector3> _tempTargetLocations = new List<Vector3>();
 

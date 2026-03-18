@@ -361,7 +361,7 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: OnBeginTrialButtonClicked
       objectReference: {fileID: 0}
-    - target: {fileID: 5055714067288234704, guid: 2893c8bad5e66cc4697976f744cbbaf1, type: 3}
+    - target: {fileID: 5055714067288234704, guid: 2893c8bad5e66cc46ClearInputsbaf1, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
       value: ShowLiveViewPage
       objectReference: {fileID: 0}
@@ -1379,7 +1379,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6643619773094139634, guid: 2322f6daea77d1644a6e468e285bac31, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
+   ClearInputs
       objectReference: {fileID: 0}
     - target: {fileID: 6643619773094139634, guid: 2322f6daea77d1644a6e468e285bac31, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode

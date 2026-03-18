@@ -11,26 +11,14 @@ public class InteractiveViewManager : MonoBehaviour
 
     [Header("Control Panel")]
     [SerializeField] private Button endReviewButton;
-    public Button EndReviewButton => endReviewButton;
-
     [SerializeField] private Toggle showLeftPathsToggle;
-    public Toggle ShowLeftPathsToggle => showLeftPathsToggle;
-
     [SerializeField] private Toggle showRightPathsToggle;
-    public Toggle ShowRightPathsToggle => showRightPathsToggle;
-
     [SerializeField] private Toggle showOptimalPathsToggle;
-    public Toggle ShowOptimalPathsToggle => showOptimalPathsToggle;
-
     [SerializeField] private Toggle showTargetsToggle;
-    public Toggle ShowTargetsToggle => showTargetsToggle;
 
     [Header("Statistics")]
     [SerializeField] private TMP_Dropdown pathDropdown;
-    public TMP_Dropdown PathDropdown => pathDropdown;
-
     [SerializeField] private StatisticsManager statisticsManager;
-    public StatisticsManager StatisticsManager => statisticsManager;
 
     private GameObject _leftLine;
     private GameObject _rightLine;
@@ -65,6 +53,10 @@ public class InteractiveViewManager : MonoBehaviour
 
         UpdatePath();
         UpdateStatistics();
+    }
+
+    public void AddEndReviewOnClick(UnityEngine.Events.UnityAction action) {
+        endReviewButton.onClick.AddListener(action);
     }
 
     public void SetPaths(List<TrackingData> rawData, List<HitEvent> targetData) {

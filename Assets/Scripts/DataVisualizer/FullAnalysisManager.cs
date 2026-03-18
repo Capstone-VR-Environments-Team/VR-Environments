@@ -13,7 +13,7 @@ public class FullAnalysisManager : MonoBehaviour {
     [SerializeField] InteractiveViewManager _interactiveViewManager;
 
     void Start() {
-        _reviewPastSessionsManager.SelectSessionButton.onClick.AddListener(OnBrowseAndAnalyze);
+        _reviewPastSessionsManager.AddSelectSessionOnClick(OnBrowseAndAnalyze);
     }
 
     public void OnBrowseAndAnalyze() {
@@ -94,23 +94,23 @@ public class FullAnalysisManager : MonoBehaviour {
                 int count = totalData.DistancesFromLine.Count;
                 totalDists.AddRange(totalData.DistancesFromLine);
                 totalXs.AddRange(totalData.DeviationsX);
-                totalYs.AddRange(totalData.DevaitionsY);
-                totalZs.AddRange(totalData.DevaitionsZ);
+                totalYs.AddRange(totalData.DeviationsY);
+                totalZs.AddRange(totalData.DeviationsZ);
                 totalTimes.AddRange(totalData.Timestamps);
                 totalTypes.AddRange(Enumerable.Repeat(seg.Mode, count));
 
                 var searchData = seg.GeometryData.search;
                 searchDists.AddRange(searchData.DistancesFromLine);
                 searchXs.AddRange(searchData.DeviationsX);
-                searchYs.AddRange(searchData.DevaitionsY);
-                searchZs.AddRange(searchData.DevaitionsZ);
+                searchYs.AddRange(searchData.DeviationsY);
+                searchZs.AddRange(searchData.DeviationsZ);
                 searchTimes.AddRange(searchData.Timestamps);
 
                 var approachData = seg.GeometryData.approach;
                 approachDists.AddRange(approachData.DistancesFromLine);
                 approachXs.AddRange(approachData.DeviationsX);
-                approachYs.AddRange(approachData.DevaitionsY);
-                approachZs.AddRange(approachData.DevaitionsZ);
+                approachYs.AddRange(approachData.DeviationsY);
+                approachZs.AddRange(approachData.DeviationsZ);
                 approachTimes.AddRange(approachData.Timestamps);
 
             }

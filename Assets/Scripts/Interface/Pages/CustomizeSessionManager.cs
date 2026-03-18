@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 public class CustomizeSessionManager : MonoBehaviour
 {
@@ -63,6 +65,9 @@ public class CustomizeSessionManager : MonoBehaviour
     [SerializeField] private TMP_InputField speedInput;
     public TMP_InputField SpeedInput => speedInput;
 
+    [SerializeField] private Material skyboxMaterial;
+    public Material SkyboxMaterial => skyboxMaterial;
+
     [SerializeField] private TMP_InputField numberOfObjectsInput;
     public TMP_InputField NumberOfObjectsInput => numberOfObjectsInput;
 
@@ -89,6 +94,8 @@ public class CustomizeSessionManager : MonoBehaviour
     public Button ModifyConfigurationButton => modifyConfigurationButton;
 
     private List<Vector3> _tempTargetLocations = new List<Vector3>();
+    private VideoPlayer videoPlayer;
+
 
     public void OnUploadLocationsClicked()
     {
@@ -118,12 +125,39 @@ public class CustomizeSessionManager : MonoBehaviour
 
     public void onImageUpload()
     {
-        //do something eventually
+        string filePath = FileSelector.getFilePath(SessionManager.BaseDataPath, new string[] { "jpg", "png" });
+        if (!File.Exists(filePath))
+        {
+            Debug.LogError("Image file not found at: " + filePath);
+            return;
+        }
+
+        byte[] fileData = File.ReadAllBytes(filePath);
+        Texture2D newTexture = new Texture2D(2, 2);
+
+        if (newTexture.LoadImage(fileData))
+        {
+            skyboxMaterial.SetTexture("_MainTex", newTexture);
+            RenderSettings.skybox = skyboxMaterial;
+        }
     }
 
     public void onVideoUpload()
     {
-        //do something eventually
+        string filePath = FileSelector.getFilePath(SessionManager.BaseDataPath, new string[] { "mp4" });
+        if (!File.Exists(filePath))
+        {
+            Debug.LogError("Video file not found at: " + filePath);
+            return;
+        }
+
+        videoPlayer.source = VideoSource.Url;
+        videoPlayer.url = filePath;
+        videoPlayer.renderMode = VideoRenderMode.APIOnly;
+        videoPlayer.isLooping = true;
+        videoPlayer.Play();
+
+        RenderSettings.skybox = skyboxMaterial;
     }
 
 

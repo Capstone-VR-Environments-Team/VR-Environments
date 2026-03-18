@@ -5132,6 +5132,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1353472132}
     - target: {fileID: 5986841092408968175, guid: 9fa079a9bea0fb64daa0eb725ab2d626, type: 3}
+      propertyPath: skyboxMaterial
+      value: 
+      objectReference: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+    - target: {fileID: 5986841092408968175, guid: 9fa079a9bea0fb64daa0eb725ab2d626, type: 3}
       propertyPath: objectSizeInput
       value: 
       objectReference: {fileID: 1908928721}

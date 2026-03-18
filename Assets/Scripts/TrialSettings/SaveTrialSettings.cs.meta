@@ -1,2 +1,27 @@
 fileFormatVersion: 2
 guid: ba7def23bec03654e92e4b671557316e
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - configurationNameInput: {instanceID: 0}
+  - fileUploaded: {instanceID: 0}
+  - showTargetsToggle: {instanceID: 0}
+  - targetVisibleTimeInput: {instanceID: 0}
+  - showHandsToggle: {instanceID: 0}
+  - handVisibleTimeInput: {instanceID: 0}
+  - offsetTypeDropdown: {instanceID: 0}
+  - offsetXInput: {instanceID: 0}
+  - offsetYInput: {instanceID: 0}
+  - offsetZInput: {instanceID: 0}
+  - targetRangeInput: {instanceID: 0}
+  - backgroundTypeDropdown: {instanceID: 0}
+  - directionTypeDropdown: {instanceID: 0}
+  - speedInput: {instanceID: 0}
+  - numberOfObjectsInput: {instanceID: 0}
+  - skyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

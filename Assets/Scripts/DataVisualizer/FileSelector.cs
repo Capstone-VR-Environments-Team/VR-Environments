@@ -23,6 +23,11 @@ class FileSelector {
         return (paths != null && paths.Length > 0) ? paths[0] : "";
     }
 
+    internal static string getSaveFilePath(string startDirectory, string defaultName, string fileExtension = "csv") {
+        string path = StandaloneFileBrowser.SaveFilePanel("Choose Export Base Name", startDirectory, defaultName, fileExtension);
+        return path ?? "";
+    }
+
     static string[] _getFilePaths(string startDirectory, string[] fileExtensions, bool multiselect) {
         string combinedExtensions = string.Join(", ", fileExtensions).ToUpper();
         string title = "Select " + combinedExtensions.ToUpper() + " Files";

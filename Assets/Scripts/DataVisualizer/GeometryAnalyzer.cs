@@ -30,7 +30,7 @@ public static class GeometryAnalyzer {
 
             Vector3 diff = point - closestPointOnLine;
 
-            if (input.Mode == AnalysisMode.LineToTarget) {
+            if (input.Mode == AnalysisMode.LINETOTARGET) {
                 // Perpendicular distance to the path
                 results.total.DistancesFromLine.Add(diff.magnitude);
                 results.approach.DistancesFromLine.Add(diff.magnitude);

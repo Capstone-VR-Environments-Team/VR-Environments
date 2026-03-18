@@ -25,6 +25,15 @@ public class CustomizeSessionManager : MonoBehaviour
     [SerializeField] private TMP_InputField targetFlickerFrequency;
     public TMP_InputField TargetFlickerFrequency => targetFlickerFrequency;
 
+    [SerializeField] private TMP_InputField leftHandColor;
+    public TMP_InputField LeftHandColor => leftHandColor;
+
+    [SerializeField] private TMP_InputField rightHandColor;
+    public TMP_InputField RightHandColor => rightHandColor;
+
+    [SerializeField] private TMP_InputField targetColor;
+    public TMP_InputField TargetColor => targetColor;
+
     [Header("Offset Settings")]
     [SerializeField] private TMP_Dropdown offsetTypeDropdown;
     public TMP_Dropdown OffsetTypeDropdown => offsetTypeDropdown;
@@ -40,6 +49,9 @@ public class CustomizeSessionManager : MonoBehaviour
 
     [SerializeField] private TMP_InputField targetRangeInput;
     public TMP_InputField TargetRangeInput => targetRangeInput;
+
+    [SerializeField] private Toggle showHandInProximityToggle;
+    public Toggle ShowHandInProximityToggle => showHandInProximityToggle;
 
     [Header("Background Settings")]
     [SerializeField] private TMP_Dropdown backgroundTypeDropdown;
@@ -137,7 +149,10 @@ public class CustomizeSessionManager : MonoBehaviour
                 HandsVisibilityType = handVisibility.options[handVisibility.value].text,
                 TargetVisibilityType = targetVisibility.options[targetVisibility.value].text,
                 HandFlickerFrequency = SafeParse(handFlickerFrequency.text, 0),
-                TargetFlickerFrequency = SafeParse(targetFlickerFrequency.text, 0)
+                TargetFlickerFrequency = SafeParse(targetFlickerFrequency.text, 0),
+                LeftHandColor = string.IsNullOrEmpty(leftHandColor.text) ? "#0000FF" : leftHandColor.text,
+                RightHandColor = string.IsNullOrEmpty(rightHandColor.text) ? "#FF0000" : rightHandColor.text,
+                TargetColor = string.IsNullOrEmpty(targetColor.text) ? "#C0C0C0" : targetColor.text
             },
             OffsetSettings = new OffsetSettings
             {
@@ -147,7 +162,8 @@ public class CustomizeSessionManager : MonoBehaviour
                     SafeParse(offsetYInput.text, 0),
                     SafeParse(offsetZInput.text, 0)
                 ),
-                TargetProximity = SafeParse(targetRangeInput.text, 0)
+                TargetProximity = SafeParse(targetRangeInput.text, 0),
+                ShowHandsInProximity = showHandInProximityToggle.isOn
             },
             BackgroundSettings = new BackgroundSettings
             {
@@ -156,7 +172,9 @@ public class CustomizeSessionManager : MonoBehaviour
                 VideoBackground = null,
                 Direction = directionTypeDropdown.options[directionTypeDropdown.value].text,
                 Speed = SafeParse(speedInput.text, 0),
-                NumberOfObjects = (int)SafeParse(numberOfObjectsInput.text, 0)
+                NumberOfObjects = (int)SafeParse(numberOfObjectsInput.text, 0),
+                ObjectColor = string.IsNullOrEmpty(objectColorInput.text) ? "#000000" : objectColorInput.text,
+                ObjectSize = SafeParse(objectSizeInput.text, 0)
             },
             TargetLocations = _tempTargetLocations
         };
@@ -170,19 +188,23 @@ public class CustomizeSessionManager : MonoBehaviour
         targetVisibility.value = 0;
         handFlickerFrequency.text = "0";
         targetFlickerFrequency.text = "0";
+        leftHandColor.text = "#0000FF";
+        rightHandColor.text = "#FF0000";
+        targetColor.text = "#C0C0C0";
 
         offsetTypeDropdown.value = 0;
         offsetXInput.text = "0";
         offsetYInput.text = "0";
         offsetZInput.text = "0";
         targetRangeInput.text = "0";
+        showHandInProximityToggle.isOn = false;
 
         backgroundTypeDropdown.value = 0;
         directionTypeDropdown.value = 0;
         speedInput.text = "0";
         numberOfObjectsInput.text = "0";
         objectSizeInput.text = "0";
-        objectColorInput.text = "#FFFFFF";
+        objectColorInput.text = "#000000";
 
         uploadedImageFileNameText.text = "No file uploaded";
         uploadedVideoFileNameText.text = "No file uploaded";

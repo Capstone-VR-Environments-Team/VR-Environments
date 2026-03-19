@@ -24,7 +24,6 @@ public class ReviewPastSessionsManager : MonoBehaviour
         {
             SetSessionInfo();
         }
-        UpdateScreen(AnalysisResultsStore.Instance.HasSessionInfo);
     }
 
     public void SetSessionInfo()

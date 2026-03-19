@@ -5,10 +5,8 @@ using UnityEngine.UI;
 
 public class ReviewPastSessionsManager : MonoBehaviour
 {
-    [Header("Session Data")]
-    [SerializeField] private TMP_Text nameLabel;
-    [SerializeField] private TMP_Text participantIDLabel;
-    [SerializeField] private TMP_Text notesLabel;
+    [Header("Session Data")] 
+    [SerializeField] private GameObject infoPanel;
     [SerializeField] private TMP_Text nameText;
     [SerializeField] private TMP_Text participantIDText;
     [SerializeField] private TMP_Text notesText;
@@ -19,11 +17,8 @@ public class ReviewPastSessionsManager : MonoBehaviour
     [SerializeField] private Button interactiveViewButton;
     [SerializeField] private Button selectSessionButton;
 
-    private List<TMP_Text> texts;
-
     void Start ()
     {
-        texts = new List<TMP_Text>() { nameLabel, participantIDLabel, notesLabel, nameText, participantIDText, notesText };
         UpdateScreen(false);
     }
 
@@ -37,10 +32,7 @@ public class ReviewPastSessionsManager : MonoBehaviour
 
     private void UpdateScreen(bool mode)
     {
-        foreach (TMP_Text text in texts)
-        {
-            text.gameObject.SetActive(mode);
-        }
+        infoPanel.SetActive(mode);
         statisticalViewButton.interactable = mode;
         interactiveViewButton.interactable = mode;
     }

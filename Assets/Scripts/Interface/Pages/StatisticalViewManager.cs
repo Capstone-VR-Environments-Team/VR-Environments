@@ -23,6 +23,7 @@ public class StatisticalViewManager : MonoBehaviour
     [Header("Control Panel")]
     [SerializeField] private TMP_Dropdown pathDropdown;
     [SerializeField] private TMP_Dropdown componentDropdown;
+    [SerializeField] private Button exportButton;
     [SerializeField] private Button endAnalysisButton;
 
     private List<double> allTimes;
@@ -55,6 +56,7 @@ public class StatisticalViewManager : MonoBehaviour
 
     private void Start()
     {
+        exportButton.onClick.AddListener(AnalysisResultsStore.Instance.ExportAnalysisResults);
         deviationDropdown.onValueChanged.AddListener(UpdateDeviationStatistics);
         pathDropdown.onValueChanged.AddListener(UpdatePath);
         componentDropdown.onValueChanged.AddListener(UpdateComponent);

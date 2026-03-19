@@ -34,8 +34,8 @@ public class FullAnalysisManager : MonoBehaviour {
 
         // Load Data
         var (trialInfo, fileName) = FileManager.LoadFromFile<JsonWrapper>(jsonPath);
-        _reviewPastSessionsManager.SetSessionInfo(trialInfo);
-        AnalysisResultsStore.Instance.SetSessionInfo(trialInfo, folderPath);
+        AnalysisResultsStore.Instance.SetSessionInfo(trialInfo, folderPath, fileName);
+        _reviewPastSessionsManager.SetSessionInfo();
         List<TrackingData> rawData = FileManager.LoadCSVFile<RawData>(csvPath).trackingData;
 
         if (rawData == null || rawData.Count == 0) return;

@@ -1,10 +1,13 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ReviewPastSessionsManager : MonoBehaviour
 {
-    [Header("Session Data")]
+    [Header("Session Data")] 
+    [SerializeField] private TMP_Text filePathText;
+    [SerializeField] private GameObject infoPanel;
     [SerializeField] private TMP_Text nameText;
     [SerializeField] private TMP_Text participantIDText;
     [SerializeField] private TMP_Text notesText;
@@ -15,11 +18,31 @@ public class ReviewPastSessionsManager : MonoBehaviour
     [SerializeField] private Button interactiveViewButton;
     [SerializeField] private Button selectSessionButton;
 
-    public void SetSessionInfo(JsonWrapper sessionInfo)
+    void Start ()
     {
-        nameText.SetText(sessionInfo.TrialSessionInformation.SessionName);
-        participantIDText.SetText(sessionInfo.TrialSessionInformation.ParticipantID);
-        notesText.SetText(sessionInfo.TrialSessionInformation.Notes);
+        if (AnalysisResultsStore.Instance.HasSessionInfo)
+        {
+            SetSessionInfo();
+        }
+    }
+
+    public void SetSessionInfo()
+    {
+        filePathText.SetText(AnalysisResultsStore.Instance.CurrentFilePath);
+
+        TrialSessionInformation sessionInfo = AnalysisResultsStore.Instance.TrialInfo.TrialSessionInformation;
+        nameText.SetText(sessionInfo.SessionName);
+        participantIDText.SetText(sessionInfo.ParticipantID);
+        notesText.SetText(sessionInfo.Notes);
+
+        UpdateScreen(AnalysisResultsStore.Instance.HasSessionInfo);
+    }
+
+    private void UpdateScreen(bool mode)
+    {
+        infoPanel.SetActive(mode);
+        statisticalViewButton.interactable = mode;
+        interactiveViewButton.interactable = mode;
     }
 
     public void AddCancelOnCLick(UnityEngine.Events.UnityAction action)

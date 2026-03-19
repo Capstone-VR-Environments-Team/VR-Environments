@@ -1734,6 +1734,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 43258495}
     m_Modifications:
+    - target: {fileID: 19482404741591805, guid: 246b11ef67518904f8abf338a2d8f227, type: 3}
+      propertyPath: m_ChildControlWidth
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 19482404741591805, guid: 246b11ef67518904f8abf338a2d8f227, type: 3}
+      propertyPath: m_ChildControlHeight
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 188817421632950930, guid: 246b11ef67518904f8abf338a2d8f227, type: 3}
       propertyPath: m_fontSize
       value: 40
@@ -1928,11 +1936,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2214428478300149101, guid: 246b11ef67518904f8abf338a2d8f227, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 563.38
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2214428478300149101, guid: 246b11ef67518904f8abf338a2d8f227, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 64.7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2214428478300149101, guid: 246b11ef67518904f8abf338a2d8f227, type: 3}
       propertyPath: m_AnchoredPosition.x

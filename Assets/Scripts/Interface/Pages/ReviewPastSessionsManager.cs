@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class ReviewPastSessionsManager : MonoBehaviour
 {
     [Header("Session Data")] 
+    [SerializeField] private TMP_Text filePathText;
     [SerializeField] private GameObject infoPanel;
     [SerializeField] private TMP_Text nameText;
     [SerializeField] private TMP_Text participantIDText;
@@ -19,15 +20,22 @@ public class ReviewPastSessionsManager : MonoBehaviour
 
     void Start ()
     {
-        UpdateScreen(false);
+        if (AnalysisResultsStore.Instance.HasSessionInfo)
+        {
+            SetSessionInfo();
+        }
     }
 
-    public void SetSessionInfo(JsonWrapper sessionInfo)
+    public void SetSessionInfo()
     {
-        nameText.SetText(sessionInfo.TrialSessionInformation.SessionName);
-        participantIDText.SetText(sessionInfo.TrialSessionInformation.ParticipantID);
-        notesText.SetText(sessionInfo.TrialSessionInformation.Notes);
-        UpdateScreen(true);
+        filePathText.SetText(AnalysisResultsStore.Instance.CurrentFilePath);
+
+        TrialSessionInformation sessionInfo = AnalysisResultsStore.Instance.TrialInfo.TrialSessionInformation;
+        nameText.SetText(sessionInfo.SessionName);
+        participantIDText.SetText(sessionInfo.ParticipantID);
+        notesText.SetText(sessionInfo.Notes);
+
+        UpdateScreen(AnalysisResultsStore.Instance.HasSessionInfo);
     }
 
     private void UpdateScreen(bool mode)

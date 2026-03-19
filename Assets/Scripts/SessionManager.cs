@@ -73,7 +73,7 @@ public class SessionManager : Singleton<SessionManager>
     }
 
     public void SaveSettingsFile<T>(T data, string fileName) {
-        string filePath = Path.Combine(BaseDataPath, "TrialFiles", fileName + ".json");
+        string filePath = Path.Combine(Application.persistentDataPath, "TrialFiles", fileName + ".json");
         FileManager.SaveJsonFile(data, filePath);
         Debug.Log($"JSON file saved to: {filePath}");
     }

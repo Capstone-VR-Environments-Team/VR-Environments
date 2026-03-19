@@ -49,6 +49,7 @@ public class OffsetSettings
     public bool ShowHandsInProximity;
 }
 
+[Serializable]
 public class BackgroundSettings
 {
     public string BackgroundType;

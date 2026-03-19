@@ -55,6 +55,8 @@ public class CustomizeSessionManager : MonoBehaviour
     [SerializeField] private Button modifyConfigurationButton;
 
     private List<Vector3> _tempTargetLocations = new List<Vector3>();
+    private String imageBackgroundFilePath = "";
+    private String videoBackgroundFilePath = "";
 
     public void OnUploadLocationsClicked()
     {
@@ -84,12 +86,20 @@ public class CustomizeSessionManager : MonoBehaviour
 
     public void onImageUpload()
     {
-        //do something eventually
+        string filePath = FileSelector.getFilePath(SessionManager.BaseDataPath, new string[] { "jpg", "png" });
+        if (!string.IsNullOrEmpty(filePath))
+        {
+            imageBackgroundFilePath = filePath;
+        }
     }
 
     public void onVideoUpload()
     {
-        //do something eventually
+        string filePath = FileSelector.getFilePath(SessionManager.BaseDataPath, new string[] { "mp4" });
+        if (!string.IsNullOrEmpty(filePath))
+        {
+            videoBackgroundFilePath = filePath;
+        }
     }
 
 
@@ -122,8 +132,8 @@ public class CustomizeSessionManager : MonoBehaviour
             BackgroundSettings = new BackgroundSettings
             {
                 BackgroundType = backgroundTypeDropdown.options[backgroundTypeDropdown.value].text,
-                ImageBackground = null,
-                VideoBackground = null,
+                ImageBackground = imageBackgroundFilePath,
+                VideoBackground = videoBackgroundFilePath,
                 Direction = directionTypeDropdown.options[directionTypeDropdown.value].text,
                 Speed = SafeParse(speedInput.text, 0),
                 NumberOfObjects = (int)SafeParse(numberOfObjectsInput.text, 0),

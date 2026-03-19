@@ -9,7 +9,7 @@ public class AnalysisResultsStore : Singleton<AnalysisResultsStore> {
 
 
     public string CurrentFolderPath { get; private set; } = string.Empty;
-    public string CurrentFilePath { get; private set; } = string.Empty;
+    public string CurrentFileName { get; private set; } = string.Empty;
     public JsonWrapper TrialInfo { get; private set; }
     public List<TrackingData> RawData { get; private set; }
     public ProcessedAnalysisData ProcessedData { get; private set; }
@@ -20,7 +20,7 @@ public class AnalysisResultsStore : Singleton<AnalysisResultsStore> {
     public void SetSessionInfo(JsonWrapper trialInfo, string folderPath, string fileName) {
         TrialInfo = trialInfo;
         CurrentFolderPath = folderPath ?? string.Empty;
-        CurrentFilePath = fileName ?? string.Empty;
+        CurrentFileName = fileName ?? string.Empty;
         NotifyDataChanged();
     }
 
@@ -50,25 +50,25 @@ public class AnalysisResultsStore : Singleton<AnalysisResultsStore> {
 
         string startDirectory = Directory.Exists(CurrentFolderPath) ? CurrentFolderPath : Application.persistentDataPath;
         string selectedPath = FileSelector.getFolderPath(startDirectory);
-
+        
         if (string.IsNullOrWhiteSpace(selectedPath)) {
             Debug.Log("Export canceled by user.");
             return;
         }
 
-        string exportDirectory = Path.GetDirectoryName(selectedPath);
-        string selectedBaseName = Path.GetFileNameWithoutExtension(selectedPath);
-        if (string.IsNullOrWhiteSpace(exportDirectory) || string.IsNullOrWhiteSpace(selectedBaseName)) {
+        string selectedBaseName = Path.GetFileNameWithoutExtension(CurrentFileName);
+        selectedPath = Path.Combine(selectedPath, selectedBaseName + "-exported-analysis");
+        if (string.IsNullOrWhiteSpace(selectedPath) || string.IsNullOrWhiteSpace(selectedBaseName)) {
             Debug.LogError("Export canceled: invalid save location or file name.");
             return;
         }
 
-        string leftPath = Path.Combine(exportDirectory, $"{selectedBaseName}-LeftHand.csv");
-        string rightPath = Path.Combine(exportDirectory, $"{selectedBaseName}-RightHand.csv");
-        string statsPath = Path.Combine(exportDirectory, $"{selectedBaseName}-Statistics.csv");
+        string leftPath = Path.Combine(selectedPath, $"{selectedBaseName}-LeftHand.csv");
+        string rightPath = Path.Combine(selectedPath, $"{selectedBaseName}-RightHand.csv");
+        string statsPath = Path.Combine(selectedPath, $"{selectedBaseName}-Statistics.csv");
 
         try {
-            Directory.CreateDirectory(exportDirectory);
+            Directory.CreateDirectory(selectedPath);
             WriteHandCsv(Hand.LEFT, leftPath);
             WriteHandCsv(Hand.RIGHT, rightPath);
             WriteStatisticsCsv(statsPath);

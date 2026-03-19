@@ -21,6 +21,16 @@ public class StartNewSessionManager : MonoBehaviour
         uploadConfigurationButton.onClick.AddListener(OnUploadSettingsClicked);
         beginSessionButton.onClick.AddListener(OnBeginTrialButtonClicked);
         cancelButton.onClick.AddListener(ReturnToHome);
+
+        sessionNameInput.onValueChanged.AddListener(delegate { UpdateBeginButton(); });
+        participantIDInput.onValueChanged.AddListener(delegate { UpdateBeginButton(); });
+    }
+
+    public void UpdateBeginButton()
+    {
+        beginSessionButton.interactable = !string.IsNullOrEmpty(sessionNameInput.text)
+                                          && !string.IsNullOrEmpty(participantIDInput.text)
+                                          && _trialSettingsData != null;
     }
 
     public void OnBeginTrialButtonClicked()
@@ -65,5 +75,7 @@ public class StartNewSessionManager : MonoBehaviour
             configurationFileNameText.SetText("File Upload Failed");
             Debug.LogError("Failed to load settings file.");
         }
+
+        UpdateBeginButton();
     }
 }

@@ -24,6 +24,7 @@ public class ReviewPastSessionsManager : MonoBehaviour
         {
             SetSessionInfo();
         }
+        UpdateScreen(AnalysisResultsStore.Instance.HasSessionInfo);
     }
 
     public void SetSessionInfo()
@@ -43,6 +44,8 @@ public class ReviewPastSessionsManager : MonoBehaviour
         infoPanel.SetActive(mode);
         statisticalViewButton.interactable = mode;
         interactiveViewButton.interactable = mode;
+
+        Debug.Log("Interactable: " + mode);
     }
 
     public void AddCancelOnCLick(UnityEngine.Events.UnityAction action)

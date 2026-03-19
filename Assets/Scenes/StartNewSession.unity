@@ -675,7 +675,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1824200297937454765, guid: 9959dbd2973cf1e4e83f2ef60be908ca, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -105.04
+      value: -105.03998
       objectReference: {fileID: 0}
     - target: {fileID: 1824200297937454765, guid: 9959dbd2973cf1e4e83f2ef60be908ca, type: 3}
       propertyPath: m_ConstrainProportionsScale
@@ -877,7 +877,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3685346978551816569, guid: 9959dbd2973cf1e4e83f2ef60be908ca, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -105.04
+      value: -105.03998
       objectReference: {fileID: 0}
     - target: {fileID: 3685346978551816569, guid: 9959dbd2973cf1e4e83f2ef60be908ca, type: 3}
       propertyPath: m_ConstrainProportionsScale
@@ -998,6 +998,10 @@ PrefabInstance:
     - target: {fileID: 6694971509588249533, guid: 9959dbd2973cf1e4e83f2ef60be908ca, type: 3}
       propertyPath: m_fontSizeBase
       value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 6842368562837385363, guid: 9959dbd2973cf1e4e83f2ef60be908ca, type: 3}
+      propertyPath: m_Interactable
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6842368562837385363, guid: 9959dbd2973cf1e4e83f2ef60be908ca, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size

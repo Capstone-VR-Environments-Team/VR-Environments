@@ -43,6 +43,8 @@ public class ReviewPastSessionsManager : MonoBehaviour
         infoPanel.SetActive(mode);
         statisticalViewButton.interactable = mode;
         interactiveViewButton.interactable = mode;
+
+        Debug.Log("Interactable: " + mode);
     }
 
     public void AddCancelOnCLick(UnityEngine.Events.UnityAction action)

@@ -56,6 +56,7 @@ public class StatisticalViewManager : MonoBehaviour
 
     private void Start()
     {
+        exportButton.onClick.AddListener(AnalysisResultsStore.Instance.ExportAnalysisResults);
         deviationDropdown.onValueChanged.AddListener(UpdateDeviationStatistics);
         pathDropdown.onValueChanged.AddListener(UpdatePath);
         componentDropdown.onValueChanged.AddListener(UpdateComponent);
@@ -285,11 +286,6 @@ public class StatisticalViewManager : MonoBehaviour
         Overall,
         Approach,
         Search
-    }
-
-    public void AddExportOnClick(UnityEngine.Events.UnityAction action)
-    {
-        exportButton.onClick.AddListener(action);
     }
 
     public void AddEndAnalysisOnClick(UnityEngine.Events.UnityAction action)

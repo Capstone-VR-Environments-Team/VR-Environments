@@ -50,7 +50,6 @@ public static class FileManager {
     public static bool SaveJsonFile<T>(T data, string filePath) {
 
         string json = JsonUtility.ToJson(data, true);
-
         string directoryPath = Path.GetDirectoryName(filePath);
         if (!string.IsNullOrEmpty(directoryPath) && !Directory.Exists(directoryPath)) {
             Directory.CreateDirectory(directoryPath);

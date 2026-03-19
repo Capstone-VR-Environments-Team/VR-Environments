@@ -28,7 +28,7 @@ public class ReviewPastSessionsManager : MonoBehaviour
 
     public void SetSessionInfo()
     {
-        filePathText.SetText(AnalysisResultsStore.Instance.CurrentFilePath);
+        filePathText.SetText(AnalysisResultsStore.Instance.CurrentFileName);
 
         TrialSessionInformation sessionInfo = AnalysisResultsStore.Instance.TrialInfo.TrialSessionInformation;
         nameText.SetText(sessionInfo.SessionName);

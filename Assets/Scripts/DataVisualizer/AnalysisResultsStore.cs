@@ -9,6 +9,7 @@ public class AnalysisResultsStore : Singleton<AnalysisResultsStore> {
 
 
     public string CurrentFolderPath { get; private set; } = string.Empty;
+    public string CurrentFilePath { get; private set; } = string.Empty;
     public JsonWrapper TrialInfo { get; private set; }
     public List<TrackingData> RawData { get; private set; }
     public ProcessedAnalysisData ProcessedData { get; private set; }
@@ -16,9 +17,10 @@ public class AnalysisResultsStore : Singleton<AnalysisResultsStore> {
     public bool HasSessionInfo => TrialInfo != null;
     public bool HasAnalysisData => ProcessedData != null && RawData != null;
 
-    public void SetSessionInfo(JsonWrapper trialInfo, string folderPath) {
+    public void SetSessionInfo(JsonWrapper trialInfo, string folderPath, string fileName) {
         TrialInfo = trialInfo;
         CurrentFolderPath = folderPath ?? string.Empty;
+        CurrentFilePath = fileName ?? string.Empty;
         NotifyDataChanged();
     }
 

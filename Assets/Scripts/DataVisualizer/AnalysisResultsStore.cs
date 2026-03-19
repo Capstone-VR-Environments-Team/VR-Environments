@@ -48,9 +48,8 @@ public class AnalysisResultsStore : Singleton<AnalysisResultsStore> {
             return;
         }
 
-        string defaultBaseName = BuildDefaultBaseName();
         string startDirectory = Directory.Exists(CurrentFolderPath) ? CurrentFolderPath : Application.persistentDataPath;
-        string selectedPath = FileSelector.getSaveFilePath(startDirectory, defaultBaseName, "csv");
+        string selectedPath = FileSelector.getFolderPath(startDirectory);
 
         if (string.IsNullOrWhiteSpace(selectedPath)) {
             Debug.Log("Export canceled by user.");
@@ -126,22 +125,6 @@ public class AnalysisResultsStore : Singleton<AnalysisResultsStore> {
         }
 
         return true;
-    }
-
-    private string BuildDefaultBaseName() {
-        string sessionName = TrialInfo?.TrialSessionInformation?.SessionName;
-        string participantId = TrialInfo?.TrialSessionInformation?.ParticipantID;
-        string timestamp = GetTrialTimestampString();
-
-        if (string.IsNullOrWhiteSpace(sessionName)) {
-            sessionName = "Session";
-        }
-
-        if (string.IsNullOrWhiteSpace(participantId)) {
-            participantId = "Participant";
-        }
-
-        return SanitizeFileName($"{sessionName}-{participantId}-{timestamp}");
     }
 
     private string GetTrialTimestampString() {

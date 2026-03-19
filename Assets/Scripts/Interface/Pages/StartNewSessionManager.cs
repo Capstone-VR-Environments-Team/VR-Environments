@@ -48,6 +48,7 @@ public class StartNewSessionManager : MonoBehaviour
 
     public void ReturnToHome() {
         ClearInputs();
+        Destroy(SessionManager.Instance);
         SceneManager.LoadScene("HomeScreen");
     }
 

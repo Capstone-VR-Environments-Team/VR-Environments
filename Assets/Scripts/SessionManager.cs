@@ -61,7 +61,8 @@ public class SessionManager : Singleton<SessionManager>
 
         string rootPath = Path.Combine(Application.persistentDataPath, "TrialRuns");
 
-        _collectedDataDirectoryPath = Path.Combine(rootPath, folderName);
+        string folderPath = FileSelector.getFolderPath(rootPath);
+        _collectedDataDirectoryPath = Path.Combine(folderPath, folderName);
 
         if (!Directory.Exists(_collectedDataDirectoryPath)) {
             Directory.CreateDirectory(_collectedDataDirectoryPath);
@@ -70,7 +71,8 @@ public class SessionManager : Singleton<SessionManager>
     }
 
     public void SaveSettingsFile<T>(T data, string fileName) {
-        string filePath = Path.Combine(BaseDataPath, "TrialFiles", fileName + ".json");
+        string directoryPath = Path.Combine(BaseDataPath, "TrialFiles");
+        string filePath = FileSelector.getSaveFilePath(directoryPath, fileName, "json");
         FileManager.SaveJsonFile(data, filePath);
         Debug.Log($"JSON file saved to: {filePath}");
     }

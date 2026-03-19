@@ -12,7 +12,7 @@ public class ExperimentController : MonoBehaviour
 
     private void Start()
     {
-        liveTrialViewManager.AddBeginTrialOnClick(StartExperiment);
+        liveTrialViewManager.AddBeginTrialOnClick(PrimeExperiment);
         liveTrialViewManager.AddEndTrialOnClick(StopExperiment);
     }
 

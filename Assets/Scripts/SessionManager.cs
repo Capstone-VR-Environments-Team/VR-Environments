@@ -156,4 +156,20 @@ public class SessionManager : Singleton<SessionManager>
         long currentTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         return (currentTime - _startTime);
     }
+
+    public Vector3 getMovingBackgroundDirection() {
+        int dirVal = (int)Enum.Parse<Direction>(_settings.BackgroundSettings.Direction);
+        Vector3 direction = Vector3.zero;
+
+        direction[dirVal / 2] = dirVal % 2 == 0 ? 1f : -1f;
+        return direction;
+    }
+
+    public float getMovingBackgroundSpeed() {
+        return _settings.BackgroundSettings.Speed;
+    }
+
+    public int getMovingBackgroundQuantity() {
+        return _settings.BackgroundSettings.NumberOfObjects;
+    }
 }

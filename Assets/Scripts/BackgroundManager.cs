@@ -7,7 +7,6 @@ public class BackgroundManager : MonoBehaviour
     [Header("References")]
     public Material skyboxMaterial;
     public Material defaultMaterial;
-
     private VideoPlayer videoPlayer;
 
     private void Start()
@@ -19,14 +18,11 @@ public class BackgroundManager : MonoBehaviour
     {
         Debug.Log("Background Updating");
         string backgroundType = SessionManager.Instance.GetBackgroundType();
-        if (backgroundType == "Image")
-        {
+        if (backgroundType == "Image") {
             UpdateBackgroundFromImage(SessionManager.Instance.GetBackgroundImagePath());
-        } else if (backgroundType == "Video")
-        {
+        } else if (backgroundType == "Video") {
             UpdateBackgroundFromVideo(SessionManager.Instance.GetBackgroundVideoPath());
-        } else
-        {
+        } else {
             RenderSettings.skybox = defaultMaterial;
         }
     }

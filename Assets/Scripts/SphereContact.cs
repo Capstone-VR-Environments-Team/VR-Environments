@@ -15,14 +15,19 @@ public class SphereContact : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("GameController") && !hasBeenTriggered)
+        if (other.CompareTag("GameController"))
         {
-            hasBeenTriggered = true;
-            Debug.Log($"Sphere {targetId} found!");
-
-            sphereRenderer.enabled = true;
-            sphereRenderer.material.color = Color.green;
-            sphereManager.OnSphereInteracted();
+            if (!hasBeenTriggered)
+            {
+                hasBeenTriggered = true;
+                Debug.Log($"Sphere {targetId} found!");
+                sphereRenderer.enabled = true;
+                sphereRenderer.material.color = Color.green;
+                sphereManager.OnSphereInteracted();
+            } else
+            {
+                sphereManager.ShowCurrentSphere();
+            }
         }
     }
 
@@ -30,7 +35,7 @@ public class SphereContact : MonoBehaviour
     {
         if (other.CompareTag("GameController") && hasBeenTriggered)
         {
-            sphereRenderer.enabled = false;
+            sphereManager.ApplyVisibilitySettings();
             sphereManager.HideAfterExit();
         }
 

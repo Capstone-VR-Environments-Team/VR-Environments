@@ -73,7 +73,7 @@ public class SessionManager : Singleton<SessionManager>
     }
 
     public void SaveSettingsFile<T>(T data, string fileName) {
-        string filePath = Path.Combine(BaseDataPath, "TrialFiles", fileName + ".json");
+        string filePath = Path.Combine(Application.persistentDataPath, "TrialFiles", fileName + ".json");
         FileManager.SaveJsonFile(data, filePath);
         Debug.Log($"JSON file saved to: {filePath}");
     }
@@ -125,6 +125,7 @@ public class SessionManager : Singleton<SessionManager>
     public String GetBackgroundVideoPath()
     {
         return _settings.BackgroundSettings.VideoBackground;
+    }
     public float GetHandFlickerFrequency() {
         if (_settings != null) {
             return _settings.VisibilitySettings.HandFlickerFrequency;

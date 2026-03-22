@@ -282,6 +282,6 @@ public class SphereManager : MonoBehaviour
     {
         leftHand.GetComponent<MeshRenderer>().material.color = ColorUtility.TryParseHtmlString(leftHandColor, out Color lhColor) ? lhColor : Color.blue;
         rightHand.GetComponent<MeshRenderer>().material.color = ColorUtility.TryParseHtmlString(rightHandColor, out Color rhColor) ? rhColor : Color.red;
-        spherePrefab.GetComponent<Renderer>().material.color = ColorUtility.TryParseHtmlString(targetColor, out Color tColor) ? tColor : Color.gray;
+        //spherePrefab.GetComponent<Renderer>().material.color = ColorUtility.TryParseHtmlString(targetColor, out Color tColor) ? tColor : Color.gray;
     }
 }

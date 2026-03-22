@@ -99,11 +99,11 @@ public class SessionManager : Singleton<SessionManager>
 
     public int GetOffsetType() {
         if (_settings != null) {
-            if (_settings.OffsetSettings.OffsetType == "NONE") {
+            if (_settings.OffsetSettings.OffsetType == "None") {
                 return 0;
-            } else if (_settings.OffsetSettings.OffsetType == "STATIC") {
+            } else if (_settings.OffsetSettings.OffsetType == "Fixed") {
                 return 1;
-            } else if (_settings.OffsetSettings.OffsetType == "RANDOM") {
+            } else if (_settings.OffsetSettings.OffsetType == "Randomized") {
                 return 2;
             }
         }
@@ -125,18 +125,31 @@ public class SessionManager : Singleton<SessionManager>
         return _settings.BackgroundSettings.VideoBackground;
     }
 
+    public float GetTargetFlickerFrequency() {
+        if (_settings != null) {
+            return _settings.VisibilitySettings.TargetFlickerFrequency;
+        }
+        return 0.0f;
+    }
+
     public Vector3 GetOffsetValues() {
         if (_settings != null) {
             int offsetType = GetOffsetType();
-            if (offsetType == 0) {
+            if (offsetType == 0)
+            {
                 return Vector3.zero;
-            } else if (offsetType == 2) {
+            }
+            else if (offsetType == 2)
+            {
                 float xOffset = GetRandomOffset(_settings.OffsetSettings.OffsetValues.x);
                 float yOffset = GetRandomOffset(_settings.OffsetSettings.OffsetValues.y);
                 float zOffset = GetRandomOffset(_settings.OffsetSettings.OffsetValues.z);
                 return new Vector3(xOffset, yOffset, zOffset);
             }
-            return _settings.OffsetSettings.OffsetValues;
+            else if (offsetType == 1)
+            {
+                return _settings.OffsetSettings.OffsetValues;
+            }
         }
         return Vector3.zero;
     }
@@ -155,6 +168,91 @@ public class SessionManager : Singleton<SessionManager>
     public double GetTrialTime() {
         long currentTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         return (currentTime - _startTime);
+    }
+
+    public bool GetShowHandsInProx()
+    {
+        if (_settings != null)
+        {
+            return _settings.OffsetSettings.ShowHandsInProximity;
+        }
+        return false;
+    }
+
+    public int GetHandsVisibilityType()
+    {
+        if (_settings != null)
+        {
+            if (_settings.VisibilitySettings.HandsVisibilityType == "Full")
+            {
+                return 2;
+            }
+            else if (_settings.VisibilitySettings.HandsVisibilityType == "Flicker")
+            {
+                return 1;
+            }
+            else if (_settings.VisibilitySettings.HandsVisibilityType == "None")
+            {
+                return 0;
+            }
+        }
+        return -1;
+    }
+
+    public int GetTargetVisibilityType()
+    {
+        if (_settings != null)
+        {
+            if (_settings.VisibilitySettings.TargetVisibilityType == "Full")
+            {
+                return 2;
+            }
+            else if (_settings.VisibilitySettings.TargetVisibilityType == "Flicker")
+            {
+                return 1;
+            }
+            else if (_settings.VisibilitySettings.TargetVisibilityType == "None")
+            {
+                return 0;
+            }
+        }
+        return -1;
+    }
+
+    public string GetLeftHandColor()
+    {
+        if (_settings != null)
+        {
+            return _settings.VisibilitySettings.LeftHandColor;
+        }
+        return "0000FF"; 
+    }
+
+    public string GetRightHandColor()
+    {
+        if (_settings != null)
+        {
+            return _settings.VisibilitySettings.RightHandColor;
+        }
+        return "FF0000";
+    }
+
+    public string GetTargetColor()
+    {
+        if (_settings != null)
+        {
+            return _settings.VisibilitySettings.TargetColor;
+        }
+        return "C0C0C0";
+    }
+
+    public int GetTimeBeforeStart()
+    {
+        if(_settings != null)
+        {
+            return _settings.TargetSettings.TimeBeforeStart;
+        }
+        return 0;
     }
 
     public Vector3 getMovingBackgroundDirection() {

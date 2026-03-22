@@ -8480,7 +8480,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2736591588414947282, guid: 9fa079a9bea0fb64daa0eb725ab2d626, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2807397863637021467, guid: 9fa079a9bea0fb64daa0eb725ab2d626, type: 3}
       propertyPath: m_text
@@ -9249,6 +9249,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1908928721}
     - target: {fileID: 5986841092408968175, guid: 9fa079a9bea0fb64daa0eb725ab2d626, type: 3}
+      propertyPath: timeBeforeStart
+      value: 
+      objectReference: {fileID: 716809086}
+    - target: {fileID: 5986841092408968175, guid: 9fa079a9bea0fb64daa0eb725ab2d626, type: 3}
       propertyPath: objectColorInput
       value: 
       objectReference: {fileID: 1699523750}
@@ -9280,6 +9284,10 @@ PrefabInstance:
       propertyPath: targetFlickerFrequency
       value: 
       objectReference: {fileID: 7998032890434009240}
+    - target: {fileID: 5986841092408968175, guid: 9fa079a9bea0fb64daa0eb725ab2d626, type: 3}
+      propertyPath: modifyConfigurationButton
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5986841092408968175, guid: 9fa079a9bea0fb64daa0eb725ab2d626, type: 3}
       propertyPath: showHandInProximityToggle
       value: 
@@ -9366,7 +9374,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6579703182942950100, guid: 9fa079a9bea0fb64daa0eb725ab2d626, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6617709292384817634, guid: 9fa079a9bea0fb64daa0eb725ab2d626, type: 3}
       propertyPath: m_SizeDelta.x

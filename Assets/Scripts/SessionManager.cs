@@ -172,6 +172,7 @@ public class SessionManager : Singleton<SessionManager>
         {
             skyboxMaterial.SetTexture("_MainTex", newTexture);
             RenderSettings.skybox = skyboxMaterial;
+            Debug.Log("Skybox updated with image: " + filePath);
         }
     }
 

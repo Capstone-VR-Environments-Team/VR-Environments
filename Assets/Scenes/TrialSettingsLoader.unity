@@ -389,7 +389,6 @@ GameObject:
   - component: {fileID: 239143737}
   - component: {fileID: 239143736}
   - component: {fileID: 239143740}
-  - component: {fileID: 239143742}
   m_Layer: 1
   m_Name: GameManager
   m_TagString: Untagged
@@ -508,19 +507,6 @@ MonoBehaviour:
   rightHand: {fileID: 0}
   recorder: {fileID: 0}
   experimentController: {fileID: 0}
---- !u!114 &239143742
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 239143734}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f5671d6c465005c48a7b5e93f97c6d61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SessionManager
-  skyboxMaterial: {fileID: 2100000, guid: 13ca31fd089a5ce4882abadbceb22b38, type: 2}
 --- !u!1 &251783300
 GameObject:
   m_ObjectHideFlags: 0

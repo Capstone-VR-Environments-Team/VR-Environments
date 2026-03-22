@@ -13,6 +13,8 @@ public class SphereManager : MonoBehaviour
     [Header("Hand References")]
     public GameObject leftHand;
     public GameObject rightHand;
+    public GameObject leftHandCollider;
+    public GameObject rightHandCollider;
 
     [Header("Spawn Locations")]
     
@@ -23,13 +25,14 @@ public class SphereManager : MonoBehaviour
     private int spheresCollected = 0;
     private GameObject currentSphere;
     private GameObject prevSphere;
-    private bool showHands;
-    private bool showTargets;
-    private bool flickeringHands = true;
-    private bool flickeringTargets = true;
-    private float flickerInterval = 0.1f;
-    private float handVisibleTime;
+    private int handVisType;
+    private int targetVisType;
+    private float handFlickerFreq;
+    private float targetFlickerFreq;
     private float targetProximity;
+    private string leftHandColor;
+    private string rightHandColor;
+    private string targetColor;
     private bool started = false;
     private Vector3 offsetValues;
 
@@ -46,17 +49,31 @@ public class SphereManager : MonoBehaviour
         EventBus.StopExperiment -= ResetTrial;
     }
 
+    private void Update()
+    {
+        if (started)
+        {
+            ApplyOffsetSettings();
+        }
+
+    }
+
     public void BeginTrial(Vector3 headsetPosition)
     {
         List<Vector3> sphereVectors = SessionManager.Instance.GetLoadedTargets();
         
         targetProximity = SessionManager.Instance.GetTargetProximity();
         offsetValues = SessionManager.Instance.GetOffsetValues();
-        //flickerInterval = SessionManager.Instance.GetFlickerInterval();
-        //flickeringHands = SessionManager.Instance.GetFlickeringHands();
-        //flickeringTargets = SessionManager.Instance.GetFlickeringTargets();
+        handFlickerFreq = SessionManager.Instance.GetHandFlickerFrequency();
+        targetFlickerFreq = SessionManager.Instance.GetTargetFlickerFrequency();
+        handVisType = SessionManager.Instance.GetHandsVisibilityType();
+        targetVisType = SessionManager.Instance.GetTargetVisibilityType();
+        leftHandColor = '#' + SessionManager.Instance.GetLeftHandColor();
+        rightHandColor = '#' + SessionManager.Instance.GetRightHandColor();
+        targetColor = '#' + SessionManager.Instance.GetTargetColor();
         totalSpheres = sphereVectors.Count;
         spheres = new GameObject[totalSpheres];
+        SetColors();
         for (int i = 0; i < totalSpheres; i++) {
             spheres[i] = Instantiate(spherePrefab,
                                     sphereVectors[i] + headsetPosition,
@@ -101,7 +118,7 @@ public class SphereManager : MonoBehaviour
 
     public void HideAfterExit()
     {
-        if (currentSphere && !showTargets)
+        if (currentSphere && targetVisType == 0)
         {
             currentSphere.GetComponent<Renderer>().enabled = false;
         }
@@ -146,42 +163,23 @@ public class SphereManager : MonoBehaviour
 
     public void ApplyVisibilitySettings()
     {
-        //if (!showHands && handVisibleTime > 0)
-        //{
-        //    StartCoroutine(HideHandsAfterDelay(handVisibleTime));
-        //} else
-        //{
         if (leftHand != null)
         {
-            leftHand.GetComponent<MeshRenderer>().enabled = showHands;
+            leftHand.GetComponent<MeshRenderer>().enabled = handVisType != 0;
         }
         if (rightHand != null)
         {
-            rightHand.GetComponent<MeshRenderer>().enabled = showHands;
+            rightHand.GetComponent<MeshRenderer>().enabled = handVisType != 0;
         }
-        //}
     }
 
     void ApplyOffsetSettings()
     {
-        leftHand.transform.localPosition = offsetValues;
-        rightHand.transform.localPosition = offsetValues;
-    }
+        leftHand.transform.position = leftHandCollider.transform.position + offsetValues;
+        rightHand.transform.position = rightHandCollider.transform.position + offsetValues;
 
-    IEnumerator HideHandsAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-
-        if (leftHand != null)
-        {
-            leftHand.GetComponent<MeshRenderer>().enabled = false;
-        }
-        if (rightHand != null)
-        {
-            rightHand.GetComponent<MeshRenderer>().enabled = false;
-        }
-
-        Debug.Log("Hands hidden after visibility time expired");
+        leftHand.transform.rotation = leftHandCollider.transform.rotation; 
+        rightHand.transform.rotation = rightHandCollider.transform.rotation;
     }
 
     void EndTrial()
@@ -219,12 +217,11 @@ public class SphereManager : MonoBehaviour
         yield return new WaitForSeconds(waitTime);
 
         experimentController.StartExperiment();
-        ApplyOffsetSettings();
-        if (flickeringHands && showHands)
+        if (handVisType == 1)
         {
             handsFlickerRoutine = StartCoroutine(FlickerHands());
         }
-        if (flickeringTargets && showTargets)
+        if (targetVisType == 1)
         {
             targetsFlickerRoutine = StartCoroutine(FlickerTargets());
         }
@@ -236,10 +233,6 @@ public class SphereManager : MonoBehaviour
         spheresCollected++;
         EventBus.OnTargetHit?.Invoke(currentSphere.transform.position, spheresCollected);
         Debug.Log($"Sphere collected! {spheresCollected}/{totalSpheres}");
-
-        //if (currentSphere) {
-        //    currentSphere.SetActive(false);
-        //}
 
         if (spheresCollected >= totalSpheres) {
             EndTrial();
@@ -257,20 +250,16 @@ public class SphereManager : MonoBehaviour
     {
         while (started)
         {
-            yield return new WaitForSeconds(flickerInterval);
-
-            if (showHands)
+            yield return new WaitForSeconds(handFlickerFreq);
+            if (leftHand)
             {
-                if (leftHand)
-                {
-                    MeshRenderer lr = leftHand.GetComponent<MeshRenderer>();
-                    lr.enabled = !lr.enabled;
-                }
-                if (rightHand)
-                {
-                    MeshRenderer rr = rightHand.GetComponent<MeshRenderer>();
-                    rr.enabled = !rr.enabled;
-                }
+                MeshRenderer lr = leftHand.GetComponent<MeshRenderer>();
+                lr.enabled = !lr.enabled;
+            }
+            if (rightHand)
+            {
+                MeshRenderer rr = rightHand.GetComponent<MeshRenderer>();
+                rr.enabled = !rr.enabled;
             }
         }
     }
@@ -279,16 +268,20 @@ public class SphereManager : MonoBehaviour
     {
         while (started)
         {
-            yield return new WaitForSeconds(flickerInterval);
+            yield return new WaitForSeconds(targetFlickerFreq);
 
-            if (showTargets && currentSphere)
+            Renderer tr = currentSphere.GetComponent<Renderer>();
+            if (tr)
             {
-                Renderer tr = currentSphere.GetComponent<Renderer>();
-                if (tr)
-                {
-                    tr.enabled = !tr.enabled;
-                }
+                tr.enabled = !tr.enabled;
             }
         }
+    }
+
+    private void SetColors()
+    {
+        leftHand.GetComponent<MeshRenderer>().material.color = ColorUtility.TryParseHtmlString(leftHandColor, out Color lhColor) ? lhColor : Color.blue;
+        rightHand.GetComponent<MeshRenderer>().material.color = ColorUtility.TryParseHtmlString(rightHandColor, out Color rhColor) ? rhColor : Color.red;
+        spherePrefab.GetComponent<Renderer>().material.color = ColorUtility.TryParseHtmlString(targetColor, out Color tColor) ? tColor : Color.gray;
     }
 }

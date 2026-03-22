@@ -25,6 +25,7 @@ public class TrialSettingsData : IJsonable
     public VisibilitySettings VisibilitySettings;
     public OffsetSettings OffsetSettings;
     public BackgroundSettings BackgroundSettings;
+    public TargetSettings TargetSettings;
     public List<Vector3> TargetLocations;
 }
 
@@ -60,6 +61,12 @@ public class BackgroundSettings
     public int NumberOfObjects;
     public string ObjectColor;
     public float ObjectSize;
+}
+
+[Serializable]
+public class TargetSettings
+{
+    public int TimeBeforeStart;
 }
 
 [Serializable]

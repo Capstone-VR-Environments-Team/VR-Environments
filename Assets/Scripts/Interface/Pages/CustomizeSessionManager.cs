@@ -14,15 +14,9 @@ public class CustomizeSessionManager : MonoBehaviour
     [SerializeField] private TMP_Dropdown targetVisibility;
     [SerializeField] private TMP_InputField handFlickerFrequency;
     [SerializeField] private TMP_InputField targetFlickerFrequency;
-
     [SerializeField] private TMP_InputField leftHandColor;
-    public TMP_InputField LeftHandColor => leftHandColor;
-
     [SerializeField] private TMP_InputField rightHandColor;
-    public TMP_InputField RightHandColor => rightHandColor;
-
     [SerializeField] private TMP_InputField targetColor;
-    public TMP_InputField TargetColor => targetColor;
 
     [Header("Offset Settings")]
     [SerializeField] private TMP_Dropdown offsetTypeDropdown;
@@ -30,9 +24,7 @@ public class CustomizeSessionManager : MonoBehaviour
     [SerializeField] private TMP_InputField offsetYInput;
     [SerializeField] private TMP_InputField offsetZInput;
     [SerializeField] private TMP_InputField targetRangeInput;
-
     [SerializeField] private Toggle showHandInProximityToggle;
-    public Toggle ShowHandInProximityToggle => showHandInProximityToggle;
 
     [Header("Background Settings")]
     [SerializeField] private TMP_Dropdown backgroundTypeDropdown;
@@ -46,12 +38,14 @@ public class CustomizeSessionManager : MonoBehaviour
     [SerializeField] private TMP_InputField objectSizeInput;
     [SerializeField] private TMP_InputField objectColorInput;
 
+    [Header("Target Settings")]
+    [SerializeField] private TMP_InputField timeBeforeStart;
+
     [Header("Buttons")]
     [SerializeField] private Button saveConfigurationButton;
-    [SerializeField] private Button cancelButton;
+    [SerializeField] private Button backButton;
     [SerializeField] private Button uploadTargetLocationsButton;
     [SerializeField] private TMP_Text uploadedFileNameText;
-    [SerializeField] private Button modifyConfigurationButton;
 
     private List<Vector3> _tempTargetLocations = new List<Vector3>();
     private string imageBackgroundFilePath = "";
@@ -139,6 +133,10 @@ public class CustomizeSessionManager : MonoBehaviour
                 ObjectColor = string.IsNullOrEmpty(objectColorInput.text) ? "#000000" : objectColorInput.text,
                 ObjectSize = SafeParse(objectSizeInput.text, 0)
             },
+            TargetSettings = new TargetSettings
+            {
+                TimeBeforeStart = (int)SafeParse(timeBeforeStart.text, 3)
+            },
             TargetLocations = _tempTargetLocations
         };
         SessionManager.Instance.SaveSettingsFile(trial, trial.ConfigurationName);
@@ -168,6 +166,8 @@ public class CustomizeSessionManager : MonoBehaviour
         numberOfObjectsInput.text = "0";
         objectSizeInput.text = "0";
         objectColorInput.text = "#000000";
+
+        timeBeforeStart.text = "3";
 
         uploadedImageFileNameText.text = "No file uploaded";
         uploadedVideoFileNameText.text = "No file uploaded";

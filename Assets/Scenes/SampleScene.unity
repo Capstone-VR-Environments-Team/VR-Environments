@@ -1735,6 +1735,8 @@ MonoBehaviour:
   spheres: []
   leftHand: {fileID: 1291317697}
   rightHand: {fileID: 410543572}
+  leftHandCollider: {fileID: 415574388}
+  rightHandCollider: {fileID: 603914891}
   recorder: {fileID: 14778774}
   experimentController: {fileID: 23134606}
 --- !u!64 &1656044203

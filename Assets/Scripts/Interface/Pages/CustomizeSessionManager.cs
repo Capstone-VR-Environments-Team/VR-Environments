@@ -54,8 +54,8 @@ public class CustomizeSessionManager : MonoBehaviour
     [SerializeField] private Button modifyConfigurationButton;
 
     private List<Vector3> _tempTargetLocations = new List<Vector3>();
-    private String imageBackgroundFilePath = "";
-    private String videoBackgroundFilePath = "";
+    private string imageBackgroundFilePath = "";
+    private string videoBackgroundFilePath = "";
 
     public void OnUploadLocationsClicked()
     {

@@ -9,8 +9,14 @@ public class BackgroundManager : MonoBehaviour
 
     private VideoPlayer videoPlayer;
 
+    private void Start()
+    {
+        UpdateBackground();
+    }
+
     public void UpdateBackground()
     {
+        Debug.Log("Background Updating");
         string backgroundType = SessionManager.Instance.GetBackgroundType();
         if (backgroundType == "Image")
         {

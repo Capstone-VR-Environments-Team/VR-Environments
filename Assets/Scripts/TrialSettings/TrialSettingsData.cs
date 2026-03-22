@@ -49,6 +49,7 @@ public class OffsetSettings
     public bool ShowHandsInProximity;
 }
 
+[Serializable]
 public class BackgroundSettings
 {
     public string BackgroundType;
@@ -59,6 +60,12 @@ public class BackgroundSettings
     public int NumberOfObjects;
     public string ObjectColor;
     public float ObjectSize;
+}
+
+[Serializable]
+public class TargetSettings
+{
+    public int TimeBeforeStart;
 }
 
 [Serializable]

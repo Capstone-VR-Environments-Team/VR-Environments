@@ -46,6 +46,9 @@ public class CustomizeSessionManager : MonoBehaviour
     [SerializeField] private TMP_InputField objectSizeInput;
     [SerializeField] private TMP_InputField objectColorInput;
 
+    [Header("Target Settings")]
+    [SerializeField] private TMP_InputField timeBeforeStart;
+
     [Header("Buttons")]
     [SerializeField] private Button saveConfigurationButton;
     [SerializeField] private Button cancelButton;
@@ -129,6 +132,10 @@ public class CustomizeSessionManager : MonoBehaviour
                 ObjectColor = string.IsNullOrEmpty(objectColorInput.text) ? "#000000" : objectColorInput.text,
                 ObjectSize = SafeParse(objectSizeInput.text, 0)
             },
+            TargetSettings = new TargetSettings
+            {
+                TimeBeforeStart = (int)SafeParse(timeBeforeStart.text, 3)
+            },
             TargetLocations = _tempTargetLocations
         };
         SessionManager.Instance.SaveSettingsFile(trial, trial.ConfigurationName);
@@ -158,6 +165,8 @@ public class CustomizeSessionManager : MonoBehaviour
         numberOfObjectsInput.text = "0";
         objectSizeInput.text = "0";
         objectColorInput.text = "#000000";
+
+        timeBeforeStart.text = "3";
 
         uploadedImageFileNameText.text = "No file uploaded";
         uploadedVideoFileNameText.text = "No file uploaded";

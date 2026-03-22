@@ -1,4 +1,5 @@
 using SFB;
+using System.Linq;
 
 class FileSelector {
 
@@ -11,20 +12,20 @@ class FileSelector {
     }
 
     internal static string getFilePath(string startDirectory, string[] fileExtensions) {
-        return _getFilePaths(startDirectory, fileExtensions, false)[0];
+        return _getFilePaths(startDirectory, fileExtensions, false).FirstOrDefault();
     }
 
     internal static string getFilePath(string startDirectory, string fileExtension) {
-        return _getFilePaths(startDirectory, new string[] { fileExtension }, false)[0];
+        return _getFilePaths(startDirectory, new string[] { fileExtension }, false).FirstOrDefault();
     }
 
     internal static string getFolderPath(string startDirectory = "") {
-        var paths = StandaloneFileBrowser.OpenFolderPanel("Select Data Folder", startDirectory, false);
+        string[] paths = StandaloneFileBrowser.OpenFolderPanel("Select Data Folder", startDirectory, false);
         return (paths != null && paths.Length > 0) ? paths[0] : "";
     }
 
-    internal static string getSaveFilePath(string startDirectory, string defaultName, string fileExtension = "csv") {
-        string path = StandaloneFileBrowser.SaveFilePanel("Choose Export Base Name", startDirectory, defaultName, fileExtension);
+    internal static string getSaveFilePath(string startDirectory, string defaultName, string fileExtension = "csv", string title = "Save File") {
+        string path = StandaloneFileBrowser.SaveFilePanel(title, startDirectory, defaultName, fileExtension);
         return path ?? "";
     }
 

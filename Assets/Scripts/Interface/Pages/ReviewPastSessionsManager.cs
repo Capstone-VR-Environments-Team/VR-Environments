@@ -28,7 +28,7 @@ public class ReviewPastSessionsManager : MonoBehaviour
 
     public void SetSessionInfo()
     {
-        filePathText.SetText(AnalysisResultsStore.Instance.CurrentFilePath);
+        filePathText.SetText(AnalysisResultsStore.Instance.CurrentFileName);
 
         TrialSessionInformation sessionInfo = AnalysisResultsStore.Instance.TrialInfo.TrialSessionInformation;
         nameText.SetText(sessionInfo.SessionName);
@@ -43,6 +43,8 @@ public class ReviewPastSessionsManager : MonoBehaviour
         infoPanel.SetActive(mode);
         statisticalViewButton.interactable = mode;
         interactiveViewButton.interactable = mode;
+
+        Debug.Log("Interactable: " + mode);
     }
 
     public void AddCancelOnCLick(UnityEngine.Events.UnityAction action)

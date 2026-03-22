@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using UnityEngine.Video;
 
 public class SessionManager : Singleton<SessionManager>
 {
@@ -11,12 +10,7 @@ public class SessionManager : Singleton<SessionManager>
     TrialSessionInformation _trialSessionInformation;
     TrialSettingsData _settings;
     private long _startTime;
-    [Header("References")]
-    public Material skyboxMaterial;
-
-    private VideoPlayer videoPlayer;
     string _collectedDataDirectoryPath;
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -43,13 +37,6 @@ public class SessionManager : Singleton<SessionManager>
     public void SetTrialSessionInformation(TrialSessionInformation info) {
         _trialSessionInformation = info;
         _settings = info.TrialSettings;
-        if (_settings.BackgroundSettings.BackgroundType == "Image")
-        {
-            UpdateBackgroundFromFile(_settings.BackgroundSettings.ImageBackground);
-        } else if (_settings.BackgroundSettings.BackgroundType == "Video") 
-        {
-            UpdateBackgroundFromVideo(_settings.BackgroundSettings.VideoBackground);
-        }
     }
 
     public TrialSessionInformation GetTrialSessionInformation() {
@@ -74,7 +61,8 @@ public class SessionManager : Singleton<SessionManager>
 
         string rootPath = Path.Combine(Application.persistentDataPath, "TrialRuns");
 
-        _collectedDataDirectoryPath = Path.Combine(rootPath, folderName);
+        string folderPath = FileSelector.getFolderPath(rootPath);
+        _collectedDataDirectoryPath = Path.Combine(folderPath, folderName);
 
         if (!Directory.Exists(_collectedDataDirectoryPath)) {
             Directory.CreateDirectory(_collectedDataDirectoryPath);
@@ -167,52 +155,5 @@ public class SessionManager : Singleton<SessionManager>
     public double GetTrialTime() {
         long currentTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         return (currentTime - _startTime);
-    }
-
-    public void UpdateBackgroundFromFile(string filePath)
-    {
-        if (!File.Exists(filePath))
-        {
-            Debug.LogError("Image file not found at: " + filePath);
-            return;
-        }
-
-        ResetSkybox();
-        byte[] fileData = File.ReadAllBytes(filePath);
-        Texture2D newTexture = new Texture2D(2, 2);
-
-        if (newTexture.LoadImage(fileData))
-        {
-            skyboxMaterial.SetTexture("_MainTex", newTexture);
-            RenderSettings.skybox = skyboxMaterial;
-            Debug.Log("Skybox updated with image: " + filePath);
-        }
-    }
-
-    public void UpdateBackgroundFromVideo(string filePath)
-    {
-        if (!File.Exists(filePath))
-        {
-            Debug.LogError("Video file not found at: " + filePath);
-            return;
-        }
-
-        videoPlayer = GetComponent<VideoPlayer>();
-        if (videoPlayer == null) videoPlayer = gameObject.AddComponent<VideoPlayer>();
-
-        ResetSkybox();
-        videoPlayer.source = VideoSource.Url;
-        videoPlayer.url = filePath;
-        videoPlayer.renderMode = VideoRenderMode.APIOnly;
-        videoPlayer.isLooping = true;
-        videoPlayer.Play();
-
-        RenderSettings.skybox = skyboxMaterial;
-    }
-
-    private void ResetSkybox()
-    {
-        if (videoPlayer != null && videoPlayer.isPlaying) videoPlayer.Stop();
-        if (skyboxMaterial != null) skyboxMaterial.SetTexture("_MainTex", null);
     }
 }

@@ -125,6 +125,11 @@ public class SessionManager : Singleton<SessionManager>
     public String GetBackgroundVideoPath()
     {
         return _settings.BackgroundSettings.VideoBackground;
+    public float GetHandFlickerFrequency() {
+        if (_settings != null) {
+            return _settings.VisibilitySettings.HandFlickerFrequency;
+        }
+        return 0.0f;
     }
 
     public float GetTargetFlickerFrequency() {

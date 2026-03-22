@@ -4,6 +4,7 @@ using System.IO;
 
 public class BackgroundManager : MonoBehaviour
 {
+    [Header("References")]
     public Material skyboxMaterial;
 
     private VideoPlayer videoPlayer;

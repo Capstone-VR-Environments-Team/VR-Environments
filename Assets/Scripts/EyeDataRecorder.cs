@@ -4,7 +4,7 @@ using static Varjo.XR.VarjoEyeTracking;
 public class EyeDataRecorder : MonoBehaviour {
 
     public Transform headset;
-    private Transform camera;
+    private Transform cameraPos;
     public Vector3 gazeOrigin = Vector3.zero;
     public Vector3 gazeDirection = Vector3.zero;
     public float focusDistance = 0.0f;
@@ -31,7 +31,7 @@ public class EyeDataRecorder : MonoBehaviour {
             Debug.LogError("Varjo: Gaze is NOT allowed.");
         }
 
-        camera = Camera.main.transform;
+        cameraPos = Camera.main.transform;
     }
 
     void Update() {
@@ -41,8 +41,8 @@ public class EyeDataRecorder : MonoBehaviour {
             //Debug.Log("Eye Status: " + data.status); // expensive
             if (data.status == GazeStatus.Valid) {
                 isGazeValid = true;
-                EventBus.OnEyesTracked?.Invoke(camera.TransformPoint(data.gaze.origin) - _headsetStartPosition,
-                    camera.transform.TransformDirection(data.gaze.forward),
+                EventBus.OnEyesTracked?.Invoke(cameraPos.TransformPoint(data.gaze.origin) - _headsetStartPosition,
+                    cameraPos.transform.TransformDirection(data.gaze.forward),
                     data.focusDistance,
                     measurements.leftPupilDiameterInMM,
                     measurements.rightPupilDiameterInMM);

@@ -1711,6 +1711,7 @@ GameObject:
   - component: {fileID: 1656044203}
   - component: {fileID: 1656044202}
   - component: {fileID: 1656044207}
+  - component: {fileID: 1656044208}
   m_Layer: 1
   m_Name: GameManager
   m_TagString: Untagged
@@ -1843,6 +1844,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BackgroundManager
   skyboxMaterial: {fileID: 2100000, guid: 13ca31fd089a5ce4882abadbceb22b38, type: 2}
   defaultMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+--- !u!114 &1656044208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1656044201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ce0a8655381c5b40be62119518fa513, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ContinuousSpawner
+  objectToSpawn: {fileID: 2469316888457904560, guid: 9561b1b2c0219464eae59442614da05d, type: 3}
+  target: {fileID: 330585546}
+  spawnDistance: 20
+  minMissRadius: 2
+  maxMissRadius: 10
 --- !u!1001 &1666058570
 PrefabInstance:
   m_ObjectHideFlags: 0

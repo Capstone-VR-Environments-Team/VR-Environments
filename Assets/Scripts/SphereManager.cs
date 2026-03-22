@@ -51,11 +51,16 @@ public class SphereManager : MonoBehaviour
 
     private void Update()
     {
-        if (started)
-        {
-            ApplyOffsetSettings();
-        }
+        ApplyOffsetSettings();
+    }
 
+    public void Start()
+    {
+        leftHandColor = '#' + SessionManager.Instance.GetLeftHandColor();
+        rightHandColor = '#' + SessionManager.Instance.GetRightHandColor();
+        offsetValues = SessionManager.Instance.GetOffsetValues();
+        targetColor = '#' + SessionManager.Instance.GetTargetColor();
+        SetColors();
     }
 
     public void BeginTrial(Vector3 headsetPosition)
@@ -63,17 +68,13 @@ public class SphereManager : MonoBehaviour
         List<Vector3> sphereVectors = SessionManager.Instance.GetLoadedTargets();
         
         targetProximity = SessionManager.Instance.GetTargetProximity();
-        offsetValues = SessionManager.Instance.GetOffsetValues();
         handFlickerFreq = SessionManager.Instance.GetHandFlickerFrequency();
         targetFlickerFreq = SessionManager.Instance.GetTargetFlickerFrequency();
         handVisType = SessionManager.Instance.GetHandsVisibilityType();
         targetVisType = SessionManager.Instance.GetTargetVisibilityType();
-        leftHandColor = '#' + SessionManager.Instance.GetLeftHandColor();
-        rightHandColor = '#' + SessionManager.Instance.GetRightHandColor();
-        targetColor = '#' + SessionManager.Instance.GetTargetColor();
+
         totalSpheres = sphereVectors.Count;
         spheres = new GameObject[totalSpheres];
-        SetColors();
         for (int i = 0; i < totalSpheres; i++) {
             spheres[i] = Instantiate(spherePrefab,
                                     sphereVectors[i] + headsetPosition,
@@ -128,7 +129,7 @@ public class SphereManager : MonoBehaviour
     {
         if (currentSphere)
         {
-            currentSphere.GetComponent<Renderer>().enabled = true;
+            currentSphere.GetComponent<MeshRenderer>().enabled = true;
         }
         if (leftHand)
         {
@@ -282,6 +283,6 @@ public class SphereManager : MonoBehaviour
     {
         leftHand.GetComponent<MeshRenderer>().material.color = ColorUtility.TryParseHtmlString(leftHandColor, out Color lhColor) ? lhColor : Color.blue;
         rightHand.GetComponent<MeshRenderer>().material.color = ColorUtility.TryParseHtmlString(rightHandColor, out Color rhColor) ? rhColor : Color.red;
-        //spherePrefab.GetComponent<Renderer>().material.color = ColorUtility.TryParseHtmlString(targetColor, out Color tColor) ? tColor : Color.gray;
+        spherePrefab.GetComponent<MeshRenderer>().sharedMaterial.color = ColorUtility.TryParseHtmlString(targetColor, out Color tColor) ? tColor : Color.gray;
     }
 }

@@ -113,9 +113,9 @@ public class CustomizeSessionManager : MonoBehaviour
                 TargetVisibilityType = targetVisibility.options[targetVisibility.value].text,
                 HandFlickerFrequency = SafeParse(handFlickerFrequency.text, 0),
                 TargetFlickerFrequency = SafeParse(targetFlickerFrequency.text, 0),
-                LeftHandColor = string.IsNullOrEmpty(leftHandColor.text) ? "#0000FF" : leftHandColor.text,
-                RightHandColor = string.IsNullOrEmpty(rightHandColor.text) ? "#FF0000" : rightHandColor.text,
-                TargetColor = string.IsNullOrEmpty(targetColor.text) ? "#C0C0C0" : targetColor.text
+                LeftHandColor = string.IsNullOrEmpty(leftHandColor.text) ? "0000FF" : leftHandColor.text,
+                RightHandColor = string.IsNullOrEmpty(rightHandColor.text) ? "FF0000" : rightHandColor.text,
+                TargetColor = string.IsNullOrEmpty(targetColor.text) ? "C0C0C0" : targetColor.text
             },
             OffsetSettings = new OffsetSettings
             {
@@ -136,7 +136,7 @@ public class CustomizeSessionManager : MonoBehaviour
                 Direction = directionTypeDropdown.options[directionTypeDropdown.value].text,
                 Speed = SafeParse(speedInput.text, 0),
                 NumberOfObjects = (int)SafeParse(numberOfObjectsInput.text, 0),
-                ObjectColor = string.IsNullOrEmpty(objectColorInput.text) ? "#000000" : objectColorInput.text,
+                ObjectColor = string.IsNullOrEmpty(objectColorInput.text) ? "000000" : objectColorInput.text,
                 ObjectSize = SafeParse(objectSizeInput.text, 0)
             },
             TargetLocations = _tempTargetLocations
@@ -151,9 +151,9 @@ public class CustomizeSessionManager : MonoBehaviour
         targetVisibility.value = 0;
         handFlickerFrequency.text = "0";
         targetFlickerFrequency.text = "0";
-        leftHandColor.text = "#0000FF";
-        rightHandColor.text = "#FF0000";
-        targetColor.text = "#C0C0C0";
+        leftHandColor.text = "0000FF";
+        rightHandColor.text = "FF0000";
+        targetColor.text = "C0C0C0";
 
         offsetTypeDropdown.value = 0;
         offsetXInput.text = "0";
@@ -167,7 +167,7 @@ public class CustomizeSessionManager : MonoBehaviour
         speedInput.text = "0";
         numberOfObjectsInput.text = "0";
         objectSizeInput.text = "0";
-        objectColorInput.text = "#000000";
+        objectColorInput.text = "000000";
 
         uploadedImageFileNameText.text = "No file uploaded";
         uploadedVideoFileNameText.text = "No file uploaded";

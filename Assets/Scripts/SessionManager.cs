@@ -11,6 +11,7 @@ public class SessionManager : Singleton<SessionManager>
     TrialSettingsData _settings;
     private long _startTime;
     string _collectedDataDirectoryPath;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -109,7 +110,20 @@ public class SessionManager : Singleton<SessionManager>
         return -1;
     }
 
+    public String GetBackgroundType()
+    {
+        return _settings.BackgroundSettings.BackgroundType;
+    }
 
+    public String GetBackgroundImagePath()
+    {
+        return _settings.BackgroundSettings.ImageBackground;
+    }
+
+    public String GetBackgroundVideoPath()
+    {
+        return _settings.BackgroundSettings.VideoBackground;
+    }
 
     public Vector3 GetOffsetValues() {
         if (_settings != null) {

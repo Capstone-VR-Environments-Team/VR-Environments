@@ -19,6 +19,7 @@ public class SphereManager : MonoBehaviour
     [Header("Events")]
     public HandDataRecorder recorder;
     public ExperimentController experimentController;
+    public BackgroundManager backgroundManager;
 
     private int spheresCollected = 0;
     private GameObject currentSphere;
@@ -45,6 +46,7 @@ public class SphereManager : MonoBehaviour
         
         targetProximity = SessionManager.Instance.GetTargetProximity();
         offsetValues = SessionManager.Instance.GetOffsetValues();
+        backgroundManager.UpdateBackground();
         totalSpheres = sphereVectors.Count;
         spheres = new GameObject[totalSpheres];
         for (int i = 0; i < totalSpheres; i++) {

@@ -25,6 +25,7 @@ public class TrialSettingsData : IJsonable
     public VisibilitySettings VisibilitySettings;
     public OffsetSettings OffsetSettings;
     public BackgroundSettings BackgroundSettings;
+    public TargetSettings TargetSettings;
     public List<Vector3> TargetLocations;
 }
 

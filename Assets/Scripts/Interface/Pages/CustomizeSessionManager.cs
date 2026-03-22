@@ -51,10 +51,9 @@ public class CustomizeSessionManager : MonoBehaviour
 
     [Header("Buttons")]
     [SerializeField] private Button saveConfigurationButton;
-    [SerializeField] private Button cancelButton;
+    [SerializeField] private Button backButton;
     [SerializeField] private Button uploadTargetLocationsButton;
     [SerializeField] private TMP_Text uploadedFileNameText;
-    [SerializeField] private Button modifyConfigurationButton;
 
     private List<Vector3> _tempTargetLocations = new List<Vector3>();
 

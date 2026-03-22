@@ -14,15 +14,9 @@ public class CustomizeSessionManager : MonoBehaviour
     [SerializeField] private TMP_Dropdown targetVisibility;
     [SerializeField] private TMP_InputField handFlickerFrequency;
     [SerializeField] private TMP_InputField targetFlickerFrequency;
-
     [SerializeField] private TMP_InputField leftHandColor;
-    public TMP_InputField LeftHandColor => leftHandColor;
-
     [SerializeField] private TMP_InputField rightHandColor;
-    public TMP_InputField RightHandColor => rightHandColor;
-
     [SerializeField] private TMP_InputField targetColor;
-    public TMP_InputField TargetColor => targetColor;
 
     [Header("Offset Settings")]
     [SerializeField] private TMP_Dropdown offsetTypeDropdown;
@@ -30,9 +24,7 @@ public class CustomizeSessionManager : MonoBehaviour
     [SerializeField] private TMP_InputField offsetYInput;
     [SerializeField] private TMP_InputField offsetZInput;
     [SerializeField] private TMP_InputField targetRangeInput;
-
     [SerializeField] private Toggle showHandInProximityToggle;
-    public Toggle ShowHandInProximityToggle => showHandInProximityToggle;
 
     [Header("Background Settings")]
     [SerializeField] private TMP_Dropdown backgroundTypeDropdown;

@@ -149,14 +149,14 @@ public class SessionManager : Singleton<SessionManager>
             }
             else if (offsetType == 2)
             {
-                float xOffset = GetRandomOffset(_settings.OffsetSettings.OffsetValues.x);
-                float yOffset = GetRandomOffset(_settings.OffsetSettings.OffsetValues.y);
-                float zOffset = GetRandomOffset(_settings.OffsetSettings.OffsetValues.z);
+                float xOffset = GetRandomOffset(_settings.OffsetSettings.OffsetValues.x / 100.0f);
+                float yOffset = GetRandomOffset(_settings.OffsetSettings.OffsetValues.y / 100.0f);
+                float zOffset = GetRandomOffset(_settings.OffsetSettings.OffsetValues.z / 100.0f);
                 return new Vector3(xOffset, yOffset, zOffset);
             }
             else if (offsetType == 1)
             {
-                return _settings.OffsetSettings.OffsetValues;
+                return _settings.OffsetSettings.OffsetValues / 100.0f;
             }
         }
         return Vector3.zero;

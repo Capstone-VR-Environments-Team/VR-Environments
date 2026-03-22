@@ -15,7 +15,7 @@ public class SphereContact : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("GameController") && !hasBeenTriggered)
+        if (other.CompareTag("GameController"))
         {
             if (!hasBeenTriggered)
             {
@@ -36,7 +36,7 @@ public class SphereContact : MonoBehaviour
         if (other.CompareTag("GameController") && hasBeenTriggered)
         {
             sphereManager.ApplyVisibilitySettings();
-            //sphereManager.HideAfterExit();
+            sphereManager.HideAfterExit();
         }
 
     }

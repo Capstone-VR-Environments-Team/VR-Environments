@@ -1,14 +1,14 @@
 using UnityEngine;
 
-public class ContinuousSpawner : MonoBehaviour {
+public class ObjectSpawner : MonoBehaviour {
     [Header("Spawn References")]
     public GameObject objectToSpawn;
     public Transform target;
 
     [Header("Positioning Settings")]
-    public float spawnDistance = 20f;
-    public float minMissRadius = 2f;
-    public float maxMissRadius = 10f;
+    public float spawnDistance = 10f;
+    public float minMissRadius = .5f;
+    public float maxMissRadius = 3f;
 
     private float spawnTimer = 0f;
 

@@ -1858,9 +1858,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ContinuousSpawner
   objectToSpawn: {fileID: 2469316888457904560, guid: 9561b1b2c0219464eae59442614da05d, type: 3}
   target: {fileID: 330585546}
-  spawnDistance: 20
-  minMissRadius: 2
-  maxMissRadius: 10
+  spawnDistance: 10
+  minMissRadius: 4
+  maxMissRadius: 8
 --- !u!1001 &1666058570
 PrefabInstance:
   m_ObjectHideFlags: 0

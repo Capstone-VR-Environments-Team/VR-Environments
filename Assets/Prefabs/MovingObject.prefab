@@ -28,13 +28,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2469316888457904560}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 1.58558, y: 0, z: 1.33432}
-  m_LocalScale: {x: 1, y: 0.25, z: 0.25}
+  m_LocalScale: {x: 0.25, y: 0.25, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!33 &3261414528623132322
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -68,7 +68,6 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
   - {fileID: 2100000, guid: 69a3254d4bb665348971b703a0fea712, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -125,4 +124,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 558ecb0569bb3624ca1206028d5d9577, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnedObjectMover
-  lifetime: 5
+  maxTravelDistance: 50

@@ -7,7 +7,6 @@ public class BackgroundManager : MonoBehaviour
     [Header("References")]
     public Material skyboxMaterial;
     public Material defaultMaterial;
-
     private VideoPlayer videoPlayer;
 
     private void Start()

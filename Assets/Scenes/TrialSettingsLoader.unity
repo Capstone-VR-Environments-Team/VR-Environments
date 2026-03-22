@@ -503,6 +503,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SphereManager
   spherePrefab: {fileID: 8961088975295740174, guid: 5bd2216af10f6c042abe25d3b461c0af, type: 3}
   spheres: []
+  leftHand: {fileID: 0}
+  rightHand: {fileID: 0}
+  recorder: {fileID: 0}
+  experimentController: {fileID: 0}
 --- !u!1 &251783300
 GameObject:
   m_ObjectHideFlags: 0
@@ -1974,6 +1978,11 @@ MonoBehaviour:
     rightHandPos: {x: 0, y: 0, z: 0}
     leftHandRotation: {x: 0, y: 0, z: 0, w: 0}
     rightHandRotation: {x: 0, y: 0, z: 0, w: 0}
+    gazeOrigin: {x: 0, y: 0, z: 0}
+    gazeDirection: {x: 0, y: 0, z: 0}
+    focusDistance: 0
+    leftPupilDiameter: 0
+    rightPupilDiameter: 0
   collectedTimingData:
     TargetHits: []
     TargetProximityHits: []
@@ -1990,8 +1999,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 347bb2f6b4f15694cb8ec7373485677c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExperimentController
-  recorder: {fileID: 1239322772}
-  statusText: {fileID: 0}
+  headset: {fileID: 0}
+  liveTrialViewManager: {fileID: 0}
 --- !u!4 &864807285
 Transform:
   m_ObjectHideFlags: 0

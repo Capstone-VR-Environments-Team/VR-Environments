@@ -6,6 +6,7 @@ public class BackgroundManager : MonoBehaviour
 {
     [Header("References")]
     public Material skyboxMaterial;
+    public Material defaultMaterial;
 
     private VideoPlayer videoPlayer;
 
@@ -23,8 +24,10 @@ public class BackgroundManager : MonoBehaviour
             UpdateBackgroundFromImage(SessionManager.Instance.GetBackgroundImagePath());
         } else if (backgroundType == "Video")
         {
-            videoPlayer = new VideoPlayer();
             UpdateBackgroundFromVideo(SessionManager.Instance.GetBackgroundVideoPath());
+        } else
+        {
+            RenderSettings.skybox = defaultMaterial;
         }
     }
 
@@ -59,12 +62,21 @@ public class BackgroundManager : MonoBehaviour
         if (videoPlayer == null) videoPlayer = gameObject.AddComponent<VideoPlayer>();
 
         ResetSkybox();
-        videoPlayer.source = VideoSource.Url;
-        videoPlayer.url = filePath;
-        videoPlayer.renderMode = VideoRenderMode.APIOnly;
-        videoPlayer.isLooping = true;
-        videoPlayer.Play();
 
+        string formattedPath = filePath.Replace("\\", "/");
+
+        videoPlayer.url = formattedPath;
+        videoPlayer.source = VideoSource.Url;
+        videoPlayer.isLooping = true;
+        videoPlayer.renderMode = VideoRenderMode.RenderTexture;
+
+        RenderTexture videoRenderTexture = new RenderTexture(4096, 2048, 0);
+        videoRenderTexture.format = RenderTextureFormat.ARGB32;
+
+        videoPlayer.targetTexture = videoRenderTexture;
+        skyboxMaterial.mainTexture = videoRenderTexture;
+
+        videoPlayer.Play();
         RenderSettings.skybox = skyboxMaterial;
     }
 

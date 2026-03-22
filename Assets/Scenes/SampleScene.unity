@@ -1736,7 +1736,6 @@ MonoBehaviour:
   rightHand: {fileID: 410543572}
   recorder: {fileID: 14778774}
   experimentController: {fileID: 23134606}
-  backgroundManager: {fileID: 1656044207}
 --- !u!64 &1656044203
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1843,6 +1842,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BackgroundManager
   skyboxMaterial: {fileID: 2100000, guid: 13ca31fd089a5ce4882abadbceb22b38, type: 2}
+  defaultMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
 --- !u!1001 &1666058570
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1,3 +1,4 @@
+using System.IO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -63,7 +64,7 @@ public class StartNewSessionManager : MonoBehaviour
     }
 
     public void OnUploadSettingsClicked() {
-        string filePath = FileSelector.getFilePath(SessionManager.BaseDataPath, "json");
+        string filePath = FileSelector.getFilePath(Path.Combine(SessionManager.BaseDataPath, "TrialFiles"), "json");
         var (loadedData, fileName) = FileManager.LoadFromFile<TrialSettingsData>(filePath);
 
         if (loadedData != null) {

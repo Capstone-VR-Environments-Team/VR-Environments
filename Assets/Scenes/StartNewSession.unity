@@ -1043,6 +1043,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: StartNewSessionManager, Assembly-CSharp
       objectReference: {fileID: 0}
+    - target: {fileID: 7462717024041249254, guid: 9959dbd2973cf1e4e83f2ef60be908ca, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7533294666889749272, guid: 9959dbd2973cf1e4e83f2ef60be908ca, type: 3}
       propertyPath: m_fontSize
       value: 40
@@ -1306,7 +1310,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5671d6c465005c48a7b5e93f97c6d61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SessionManager
-  skyboxMaterial: {fileID: 2100000, guid: 13ca31fd089a5ce4882abadbceb22b38, type: 2}
 --- !u!4 &1998101725
 Transform:
   m_ObjectHideFlags: 0

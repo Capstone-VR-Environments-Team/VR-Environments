@@ -105,8 +105,8 @@ public class CustomizeSessionManager : MonoBehaviour
             {
                 HandsVisibilityType = handVisibility.options[handVisibility.value].text,
                 TargetVisibilityType = targetVisibility.options[targetVisibility.value].text,
-                HandFlickerFrequency = SafeParse(handFlickerFrequency.text, 0),
-                TargetFlickerFrequency = SafeParse(targetFlickerFrequency.text, 0),
+                HandFlickerFrequency = SafeParse(handFlickerFrequency.text, 1),
+                TargetFlickerFrequency = SafeParse(targetFlickerFrequency.text, 1),
                 LeftHandColor = string.IsNullOrEmpty(leftHandColor.text) ? "0000FF" : leftHandColor.text,
                 RightHandColor = string.IsNullOrEmpty(rightHandColor.text) ? "FF0000" : rightHandColor.text,
                 TargetColor = string.IsNullOrEmpty(targetColor.text) ? "C0C0C0" : targetColor.text
@@ -119,7 +119,7 @@ public class CustomizeSessionManager : MonoBehaviour
                     SafeParse(offsetYInput.text, 0),
                     SafeParse(offsetZInput.text, 0)
                 ),
-                TargetProximity = SafeParse(targetRangeInput.text, 0),
+                TargetProximity = SafeParse(targetRangeInput.text, 10),
                 ShowHandsInProximity = showHandInProximityToggle.isOn
             },
             BackgroundSettings = new BackgroundSettings
@@ -128,10 +128,10 @@ public class CustomizeSessionManager : MonoBehaviour
                 ImageBackground = imageBackgroundFilePath,
                 VideoBackground = videoBackgroundFilePath,
                 Direction = directionTypeDropdown.options[directionTypeDropdown.value].text,
-                Speed = SafeParse(speedInput.text, 0),
-                NumberOfObjects = (int)SafeParse(numberOfObjectsInput.text, 0),
+                Speed = SafeParse(speedInput.text, 10),
+                NumberOfObjects = (int)SafeParse(numberOfObjectsInput.text, 100),
                 ObjectColor = string.IsNullOrEmpty(objectColorInput.text) ? "000000" : objectColorInput.text,
-                ObjectSize = SafeParse(objectSizeInput.text, 0)
+                ObjectSize = SafeParse(objectSizeInput.text, 1)
             },
             TargetSettings = new TargetSettings
             {
@@ -147,8 +147,8 @@ public class CustomizeSessionManager : MonoBehaviour
         configurationNameInput.text = "";
         handVisibility.value = 0;
         targetVisibility.value = 0;
-        handFlickerFrequency.text = "0";
-        targetFlickerFrequency.text = "0";
+        handFlickerFrequency.text = "1";
+        targetFlickerFrequency.text = "1";
         leftHandColor.text = "0000FF";
         rightHandColor.text = "FF0000";
         targetColor.text = "C0C0C0";
@@ -157,14 +157,14 @@ public class CustomizeSessionManager : MonoBehaviour
         offsetXInput.text = "0";
         offsetYInput.text = "0";
         offsetZInput.text = "0";
-        targetRangeInput.text = "0";
+        targetRangeInput.text = "10";
         showHandInProximityToggle.isOn = false;
 
         backgroundTypeDropdown.value = 0;
         directionTypeDropdown.value = 0;
-        speedInput.text = "0";
-        numberOfObjectsInput.text = "0";
-        objectSizeInput.text = "0";
+        speedInput.text = "10";
+        numberOfObjectsInput.text = "100";
+        objectSizeInput.text = "1";
         objectColorInput.text = "000000";
 
         timeBeforeStart.text = "3";

@@ -251,7 +251,7 @@ public class SphereManager : MonoBehaviour
     {
         while (started)
         {
-            yield return new WaitForSeconds(handFlickerFreq);
+            yield return new WaitForSeconds(1/handFlickerFreq);
             if (leftHand)
             {
                 MeshRenderer lr = leftHand.GetComponent<MeshRenderer>();
@@ -269,7 +269,7 @@ public class SphereManager : MonoBehaviour
     {
         while (started)
         {
-            yield return new WaitForSeconds(targetFlickerFreq);
+            yield return new WaitForSeconds(1/targetFlickerFreq);
 
             Renderer tr = currentSphere.GetComponent<Renderer>();
             if (tr)

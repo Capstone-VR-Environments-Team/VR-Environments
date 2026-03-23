@@ -14,16 +14,12 @@ public class SessionManager : Singleton<SessionManager>
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        BaseDataPath = Application.persistentDataPath;
     }
 
 
     // Update is called once per frame
     void Update()
     {
-        if (BaseDataPath == null) {
-            BaseDataPath = Application.persistentDataPath;
-        }
     }
 
     private void OnEnable() {

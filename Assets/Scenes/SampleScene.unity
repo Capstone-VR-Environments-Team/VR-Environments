@@ -297,7 +297,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 64
 --- !u!114 &43258493
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -330,7 +330,7 @@ Canvas:
   m_GameObject: {fileID: 43258491}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 1
+  m_RenderMode: 0
   m_Camera: {fileID: 522969651}
   m_PlaneDistance: 10
   m_PixelPerfect: 0
@@ -1860,7 +1860,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ContinuousSpawner
   objectToSpawn: {fileID: 2469316888457904560, guid: 9561b1b2c0219464eae59442614da05d, type: 3}
   target: {fileID: 330585546}
-  spawnDistance: 10
+  spawnDistance: 25
   minMissRadius: 4
   maxMissRadius: 8
 --- !u!1001 &1666058570
@@ -1934,6 +1934,10 @@ PrefabInstance:
     - target: {fileID: 1031166155073704994, guid: 246b11ef67518904f8abf338a2d8f227, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1071779672563000030, guid: 246b11ef67518904f8abf338a2d8f227, type: 3}
+      propertyPath: m_Color.a
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1430424841700932559, guid: 246b11ef67518904f8abf338a2d8f227, type: 3}
       propertyPath: m_fontSize
@@ -2241,11 +2245,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4140887301249406101, guid: 246b11ef67518904f8abf338a2d8f227, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.0000075101852
+      value: -0.000030517578
       objectReference: {fileID: 0}
     - target: {fileID: 4140887301249406101, guid: 246b11ef67518904f8abf338a2d8f227, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.0000047683716
+      value: -0.00004196167
       objectReference: {fileID: 0}
     - target: {fileID: 4908494172169633159, guid: 246b11ef67518904f8abf338a2d8f227, type: 3}
       propertyPath: m_fontSize

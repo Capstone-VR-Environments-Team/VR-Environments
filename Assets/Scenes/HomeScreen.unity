@@ -759,6 +759,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6613768737929370885, guid: a8fb689fd80667549b0d9294f5324763, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7055967925503794450, guid: a8fb689fd80667549b0d9294f5324763, type: 3}
       propertyPath: m_fontSize
       value: 50

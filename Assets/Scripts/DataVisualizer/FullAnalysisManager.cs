@@ -15,7 +15,7 @@ public class FullAnalysisManager : MonoBehaviour {
     }
 
     public void OnBrowseAndAnalyze() {
-        string selectedPath = FileSelector.getFolderPath(Application.persistentDataPath);
+        string selectedPath = FileSelector.getFolderPath(Path.Combine(Application.persistentDataPath, "TrialRuns"));
         if (string.IsNullOrEmpty(selectedPath)) return;
 
         _currentFolderPath = selectedPath;

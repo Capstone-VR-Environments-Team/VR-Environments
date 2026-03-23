@@ -8500,7 +8500,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2736591588414947282, guid: 9fa079a9bea0fb64daa0eb725ab2d626, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2807397863637021467, guid: 9fa079a9bea0fb64daa0eb725ab2d626, type: 3}
       propertyPath: m_text
@@ -8838,7 +8838,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3983580099316531894, guid: 9fa079a9bea0fb64daa0eb725ab2d626, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4097962364296673834, guid: 9fa079a9bea0fb64daa0eb725ab2d626, type: 3}
       propertyPath: m_text
@@ -9526,7 +9526,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7265166553592477396, guid: 9fa079a9bea0fb64daa0eb725ab2d626, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 300
+      value: 450
       objectReference: {fileID: 0}
     - target: {fileID: 7308800420548509014, guid: 9fa079a9bea0fb64daa0eb725ab2d626, type: 3}
       propertyPath: m_SizeDelta.x

@@ -37,6 +37,8 @@ public class SphereManager : MonoBehaviour
     private bool started = false;
     private Vector3 offsetValues;
 
+    private bool showHandsInProximity;
+
     private Coroutine handsFlickerRoutine;
     private Coroutine targetsFlickerRoutine;
 
@@ -75,6 +77,7 @@ public class SphereManager : MonoBehaviour
         targetFlickerFreq = SessionManager.Instance.GetTargetFlickerFrequency();
         handVisType = SessionManager.Instance.GetHandsVisibilityType();
         targetVisType = SessionManager.Instance.GetTargetVisibilityType();
+        showHandsInProximity = SessionManager.Instance.GetShowHandsInProximity();
 
         totalSpheres = sphereVectors.Count;
         spheres = new GameObject[totalSpheres];
@@ -117,7 +120,23 @@ public class SphereManager : MonoBehaviour
     private void OnProximityEnter(int targetId)
     {
         EventBus.OnProximityHit?.Invoke(currentSphere.transform.position);
+        if (showHandsInProximity)
+        {
+            ShowHandsInProximity();
+        }
         Debug.Log("Proximity Hit");
+    }
+
+    private void ShowHandsInProximity()
+    {
+        if (leftHand)
+        {
+            leftHand.GetComponent<MeshRenderer>().enabled = true;
+        }
+        if (rightHand)
+        {
+            rightHand.GetComponent<MeshRenderer>().enabled = true;
+        }
     }
 
     public void HideAfterExit()

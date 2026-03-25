@@ -12,11 +12,10 @@ public class CustomizeSessionManager : MonoBehaviour
     [Header("Visibility Settings")]
     [SerializeField] private TMP_Dropdown handVisibility;
     [SerializeField] private TMP_Dropdown targetVisibility;
-    [SerializeField] private TMP_InputField handFlickerFrequency;
-    [SerializeField] private TMP_InputField targetFlickerFrequency;
-    [SerializeField] private TMP_InputField leftHandColor;
-    [SerializeField] private TMP_InputField rightHandColor;
-    [SerializeField] private TMP_InputField targetColor;
+    [SerializeField] private TMP_InputField handFlickerShow;
+    [SerializeField] private TMP_InputField handFlickerHide;
+    [SerializeField] private TMP_InputField targetFlickerShow;
+    [SerializeField] private TMP_InputField targetFlickerHide;
 
     [Header("Offset Settings")]
     [SerializeField] private TMP_Dropdown offsetTypeDropdown;
@@ -27,11 +26,9 @@ public class CustomizeSessionManager : MonoBehaviour
     [SerializeField] private Toggle showHandInProximityToggle;
 
     [Header("Background Settings")]
-    [SerializeField] private TMP_Dropdown backgroundTypeDropdown;
-    [SerializeField] private Button uploadImage;
-    [SerializeField] private TMP_Text uploadedImageFileNameText;
-    [SerializeField] private TMP_Text uploadedVideoFileNameText;
-    [SerializeField] private Button uploadVideo;
+    [SerializeField] private Button uploadBackgroundFile; // TODO: needs to be able to handle both image and video
+    [SerializeField] private TMP_Text uploadedBackgroundFileNameText;
+    [SerializeField] private Toggle movingObjectsToggle;
     [SerializeField] private TMP_Dropdown directionTypeDropdown;
     [SerializeField] private TMP_InputField speedInput;
     [SerializeField] private TMP_InputField numberOfObjectsInput;
@@ -40,6 +37,11 @@ public class CustomizeSessionManager : MonoBehaviour
 
     [Header("Target Settings")]
     [SerializeField] private TMP_InputField timeBeforeStart;
+
+    [Header("Color Settings")]
+    [SerializeField] private TMP_InputField leftHandColor;
+    [SerializeField] private TMP_InputField rightHandColor;
+    [SerializeField] private TMP_InputField targetColor;
 
     [Header("Buttons")]
     [SerializeField] private Button saveConfigurationButton;
@@ -50,6 +52,72 @@ public class CustomizeSessionManager : MonoBehaviour
     private List<Vector3> _tempTargetLocations = new List<Vector3>();
     private string imageBackgroundFilePath = "";
     private string videoBackgroundFilePath = "";
+
+    private float _diffY;
+
+    private void Start()
+    {
+        _diffY = handFlickerShow.gameObject.transform.localPosition.y -
+                 targetFlickerShow.gameObject.transform.localPosition.y;
+        ;
+        handVisibility.onValueChanged.AddListener(delegate { UpdateFlickerInputFields(); });
+        targetVisibility.onValueChanged.AddListener(delegate { UpdateFlickerInputFields(); });
+        movingObjectsToggle.onValueChanged.AddListener(delegate { UpdateBackgroundInputFields(); });
+        
+        UpdateFlickerInputFields();
+        UpdateBackgroundInputFields();
+    }
+
+    private void UpdateFlickerInputFields()
+    {
+        string handFlickerState = handVisibility.options[handVisibility.value].text;
+        string targetFlickerState = targetVisibility.options[targetVisibility.value].text;
+
+        if (handFlickerState == "Flicker" && targetFlickerState == "Flicker")
+        {
+            targetFlickerShow.gameObject.transform.localPosition =
+                handFlickerShow.gameObject.transform.localPosition - new Vector3(0, _diffY, 0);
+            targetFlickerHide.gameObject.transform.localPosition =
+                handFlickerHide.gameObject.transform.localPosition - new Vector3(0, _diffY, 0);
+            UpdateFlickerInputFields(true, true);
+        }
+        else if (handFlickerState == "Flicker")
+        {
+            UpdateFlickerInputFields(true, false);
+        }
+        else if (targetFlickerState == "Flicker")
+        {
+            targetFlickerShow.gameObject.transform.localPosition =
+                handFlickerShow.gameObject.transform.localPosition;
+            targetFlickerHide.gameObject.transform.localPosition =
+                handFlickerHide.gameObject.transform.localPosition;
+            UpdateFlickerInputFields(false, true);
+        }
+        else
+        {
+            UpdateFlickerInputFields(false, false);
+        }
+
+    }
+
+    private void UpdateFlickerInputFields(bool handFields, bool targetFields)
+    {
+        handFlickerShow.gameObject.SetActive(handFields);
+        handFlickerHide.gameObject.SetActive(handFields);
+        targetFlickerShow.gameObject.SetActive(targetFields);
+        targetFlickerHide.gameObject.SetActive(targetFields);
+    }
+
+    private void UpdateBackgroundInputFields()
+    {
+        bool movingObjectsState = movingObjectsToggle.isOn;
+        
+        directionTypeDropdown.gameObject.SetActive(movingObjectsState);
+        speedInput.gameObject.SetActive(movingObjectsState);
+        numberOfObjectsInput.gameObject.SetActive(movingObjectsState);
+        objectColorInput.gameObject.SetActive(movingObjectsState);
+        objectSizeInput.gameObject.SetActive(movingObjectsState);
+    }
 
     public void OnUploadLocationsClicked()
     {
@@ -105,11 +173,14 @@ public class CustomizeSessionManager : MonoBehaviour
             {
                 HandsVisibilityType = handVisibility.options[handVisibility.value].text,
                 TargetVisibilityType = targetVisibility.options[targetVisibility.value].text,
-                HandFlickerFrequency = SafeParse(handFlickerFrequency.text, 1),
-                TargetFlickerFrequency = SafeParse(targetFlickerFrequency.text, 1),
+                HandFlickerFrequency = SafeParse(handFlickerShow.text, 1),
+                // TODO: add hide
+                TargetFlickerFrequency = SafeParse(targetFlickerShow.text, 1),
+                // TODO: add hide
                 LeftHandColor = string.IsNullOrEmpty(leftHandColor.text) ? "0000FF" : leftHandColor.text,
                 RightHandColor = string.IsNullOrEmpty(rightHandColor.text) ? "FF0000" : rightHandColor.text,
                 TargetColor = string.IsNullOrEmpty(targetColor.text) ? "C0C0C0" : targetColor.text
+                // TODO: move to new color settings
             },
             OffsetSettings = new OffsetSettings
             {
@@ -124,7 +195,7 @@ public class CustomizeSessionManager : MonoBehaviour
             },
             BackgroundSettings = new BackgroundSettings
             {
-                BackgroundType = backgroundTypeDropdown.options[backgroundTypeDropdown.value].text,
+                // TODO: a lot of this is different sorry
                 ImageBackground = imageBackgroundFilePath,
                 VideoBackground = videoBackgroundFilePath,
                 Direction = directionTypeDropdown.options[directionTypeDropdown.value].text,
@@ -147,11 +218,10 @@ public class CustomizeSessionManager : MonoBehaviour
         configurationNameInput.text = "";
         handVisibility.value = 0;
         targetVisibility.value = 0;
-        handFlickerFrequency.text = "1";
-        targetFlickerFrequency.text = "1";
-        leftHandColor.text = "0000FF";
-        rightHandColor.text = "FF0000";
-        targetColor.text = "C0C0C0";
+        handFlickerShow.text = "1";
+        handFlickerHide.text = "1";
+        targetFlickerShow.text = "1";
+        targetFlickerHide.text = "1";
 
         offsetTypeDropdown.value = 0;
         offsetXInput.text = "0";
@@ -160,7 +230,7 @@ public class CustomizeSessionManager : MonoBehaviour
         targetRangeInput.text = "10";
         showHandInProximityToggle.isOn = false;
 
-        backgroundTypeDropdown.value = 0;
+        movingObjectsToggle.isOn = false;
         directionTypeDropdown.value = 0;
         speedInput.text = "10";
         numberOfObjectsInput.text = "100";
@@ -169,8 +239,11 @@ public class CustomizeSessionManager : MonoBehaviour
 
         timeBeforeStart.text = "3";
 
-        uploadedImageFileNameText.text = "No file uploaded";
-        uploadedVideoFileNameText.text = "No file uploaded";
+        leftHandColor.text = "0000FF";
+        rightHandColor.text = "FF0000";
+        targetColor.text = "C0C0C0";
+
+        uploadedBackgroundFileNameText.text = "No file uploaded";
         uploadedFileNameText.text = "No file uploaded";
     }
 

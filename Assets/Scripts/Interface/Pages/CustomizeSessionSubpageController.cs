@@ -6,6 +6,7 @@ public class CustomizeSessionSubpageController : MonoBehaviour
     [SerializeField] private GameObject offsetSettings;
     [SerializeField] private GameObject targetSettings;
     [SerializeField] private GameObject backgroundSettings;
+    [SerializeField] private GameObject colorSettings;
 
     void Start()
     {
@@ -18,29 +19,35 @@ public class CustomizeSessionSubpageController : MonoBehaviour
         offsetSettings.SetActive(false);
         targetSettings.SetActive(false);
         backgroundSettings.SetActive(false);
+        colorSettings.SetActive(false);
     }
 
     public void ShowVisibilitySettings()
     {
-        toggleSettings(visibilitySettings);
+        ToggleSettings(visibilitySettings);
     }
 
     public void ShowOffsetSettings()
     {
-        toggleSettings(offsetSettings);
+        ToggleSettings(offsetSettings);
     }
 
     public void ShowTargetSettings()
     {
-        toggleSettings(targetSettings);
+        ToggleSettings(targetSettings);
     }
 
     public void ShowBackgroundSettings()
     {
-        toggleSettings(backgroundSettings);
+        ToggleSettings(backgroundSettings);
     }
 
-    public void toggleSettings(GameObject settings)
+    public void ShowColorSettings()
+    {
+        ToggleSettings(colorSettings);
+    }
+
+    public void ToggleSettings(GameObject settings)
     {
         if (settings.activeSelf)
         {

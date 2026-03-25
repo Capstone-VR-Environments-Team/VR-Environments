@@ -29,6 +29,8 @@ public class LoggingManager : MonoBehaviour
         EventBus.OnProximityHit += LogProximityHit;
         EventBus.OnNoteEnter += LogNote;
         EventBus.OnEyesTracked += UpdateEyes;
+        EventBus.OnTargetReEntry += LogTargetReEntry;
+        EventBus.OnTargetExit += LogTargetExit;
     }
 
     private void OnDisable() {
@@ -40,6 +42,8 @@ public class LoggingManager : MonoBehaviour
         EventBus.OnProximityHit -= LogProximityHit;
         EventBus.OnNoteEnter -= LogNote;
         EventBus.OnEyesTracked -= UpdateEyes;
+        EventBus.OnTargetReEntry -= LogTargetReEntry;
+        EventBus.OnTargetExit -= LogTargetExit;
 
 
     }
@@ -129,6 +133,36 @@ public class LoggingManager : MonoBehaviour
         if (!logging) return;
 
         collectedTimingData.Notes.Add(new NoteEvent(timestamp, content));
+    }
+
+    public void LogTargetReEntry(int targetId)
+    {
+        if (!logging) return;
+        double time = SessionManager.Instance.GetTrialTime();
+        string noteContent = $"Target {targetId} re-entered";
+        collectedTimingData.Notes.Add(new NoteEvent(time, noteContent));
+        LiveTrialViewManager ui = FindFirstObjectByType<LiveTrialViewManager>();
+        if (ui != null)
+        {
+            TimeSpan t = TimeSpan.FromSeconds(time / 1000);
+            string timeString = string.Format("{0:D1}:{1:D2}", t.Minutes, t.Seconds);
+            ui.AppendToLog($"{timeString} - {noteContent}");
+        }
+    }
+
+    public void LogTargetExit(int targetId)
+    {
+        if (!logging) return;
+        double time = SessionManager.Instance.GetTrialTime();
+        string noteContent = $"Target {targetId} exited";
+        collectedTimingData.Notes.Add(new NoteEvent(time, noteContent));
+        LiveTrialViewManager ui = FindFirstObjectByType<LiveTrialViewManager>();
+        if (ui != null)
+        {
+            TimeSpan t = TimeSpan.FromSeconds(time / 1000);
+            string timeString = string.Format("{0:D1}:{1:D2}", t.Minutes, t.Seconds);
+            ui.AppendToLog($"{timeString} - {noteContent}");
+        }
     }
 
 }

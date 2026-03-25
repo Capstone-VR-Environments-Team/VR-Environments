@@ -33,6 +33,7 @@ public class SphereManager : MonoBehaviour
     private string leftHandColor;
     private string rightHandColor;
     private string targetColor;
+    private int timeBeforeStart;
     private bool started = false;
     private Vector3 offsetValues;
 
@@ -61,6 +62,8 @@ public class SphereManager : MonoBehaviour
         offsetValues = SessionManager.Instance.GetOffsetValues();
         targetColor = '#' + SessionManager.Instance.GetTargetColor();
         SetColors();
+
+        timeBeforeStart = SessionManager.Instance.GetTimeBeforeStart();
     }
 
     public void BeginTrial(Vector3 headsetPosition)
@@ -211,10 +214,10 @@ public class SphereManager : MonoBehaviour
     void StartTrial() {
         Debug.Log("Beginning Start Process");
         started = true;
-        StartCoroutine(DelayStart(3.0f));
+        StartCoroutine(DelayStart(timeBeforeStart));
     }
 
-    IEnumerator DelayStart(float waitTime) {
+    IEnumerator DelayStart(int waitTime) {
         yield return new WaitForSeconds(waitTime);
 
         experimentController.StartExperiment();

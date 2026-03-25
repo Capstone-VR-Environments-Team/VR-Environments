@@ -27,8 +27,10 @@ public class SphereManager : MonoBehaviour
     private GameObject prevSphere;
     private int handVisType;
     private int targetVisType;
-    private float handFlickerFreq;
-    private float targetFlickerFreq;
+    private float handFlickerOnDuration;
+    private float handFlickerOffDuration;
+    private float targetFlickerOnDuration;
+    private float targetFlickerOffDuration;
     private float targetProximity;
     private string leftHandColor;
     private string rightHandColor;
@@ -68,8 +70,10 @@ public class SphereManager : MonoBehaviour
         List<Vector3> sphereVectors = SessionManager.Instance.GetLoadedTargets();
         
         targetProximity = SessionManager.Instance.GetTargetProximity();
-        handFlickerFreq = SessionManager.Instance.GetHandFlickerFrequency();
-        targetFlickerFreq = SessionManager.Instance.GetTargetFlickerFrequency();
+        handFlickerOnDuration = SessionManager.Instance.GetHandFlickerOnDuration();
+        handFlickerOffDuration = SessionManager.Instance.GetHandFlickerOffDuration();
+        targetFlickerOnDuration = SessionManager.Instance.GetTargetFlickerOnDuration();
+        targetFlickerOffDuration = SessionManager.Instance.GetTargetFlickerOffDuration();
         handVisType = SessionManager.Instance.GetHandsVisibilityType();
         targetVisType = SessionManager.Instance.GetTargetVisibilityType();
 
@@ -251,17 +255,33 @@ public class SphereManager : MonoBehaviour
     {
         while (started)
         {
-            yield return new WaitForSeconds(1/handFlickerFreq);
+            // Turn hands on
             if (leftHand)
             {
                 MeshRenderer lr = leftHand.GetComponent<MeshRenderer>();
-                lr.enabled = !lr.enabled;
+                if (lr) lr.enabled = true;
             }
             if (rightHand)
             {
                 MeshRenderer rr = rightHand.GetComponent<MeshRenderer>();
-                rr.enabled = !rr.enabled;
+                if (rr) rr.enabled = true;
             }
+
+            yield return new WaitForSeconds(handFlickerOnDuration);
+
+            // Turn hands off
+            if (leftHand)
+            {
+                MeshRenderer lr = leftHand.GetComponent<MeshRenderer>();
+                if (lr) lr.enabled = false;
+            }
+            if (rightHand)
+            {
+                MeshRenderer rr = rightHand.GetComponent<MeshRenderer>();
+                if (rr) rr.enabled = false;
+            }
+
+            yield return new WaitForSeconds(handFlickerOffDuration);
         }
     }
 
@@ -269,13 +289,21 @@ public class SphereManager : MonoBehaviour
     {
         while (started)
         {
-            yield return new WaitForSeconds(1/targetFlickerFreq);
-
-            Renderer tr = currentSphere.GetComponent<Renderer>();
-            if (tr)
+            if (currentSphere)
             {
-                tr.enabled = !tr.enabled;
+                Renderer tr = currentSphere.GetComponent<Renderer>();
+                if (tr) tr.enabled = true;
             }
+
+            yield return new WaitForSeconds(targetFlickerOnDuration);
+
+            if (currentSphere)
+            {
+                Renderer tr = currentSphere.GetComponent<Renderer>();
+                if (tr) tr.enabled = false;
+            }
+
+            yield return new WaitForSeconds(targetFlickerOffDuration);
         }
     }
 

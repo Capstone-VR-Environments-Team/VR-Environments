@@ -124,16 +124,34 @@ public class SessionManager : Singleton<SessionManager>
     {
         return _settings.BackgroundSettings.VideoBackground;
     }
-    public float GetHandFlickerFrequency() {
+
+    public float GetHandFlickerOnDuration()
+    {
+        if (_settings != null)
+        {
+            return _settings.VisibilitySettings.HandsFlickerOnDuration;
+        }
+        return 0.0f;
+    }
+    public float GetHandFlickerOffDuration() {
         if (_settings != null) {
-            return _settings.VisibilitySettings.HandFlickerFrequency;
+            return _settings.VisibilitySettings.HandsFlickerOffDuration;
         }
         return 0.0f;
     }
 
-    public float GetTargetFlickerFrequency() {
+    public float GetTargetFlickerOnDuration()
+    {
+        if (_settings != null)
+        {
+            return _settings.VisibilitySettings.TargetFlickerOnDuration;
+        }
+        return 0.0f;
+    }
+
+    public float GetTargetFlickerOffDuration() {
         if (_settings != null) {
-            return _settings.VisibilitySettings.TargetFlickerFrequency;
+            return _settings.VisibilitySettings.TargetFlickerOffDuration;
         }
         return 0.0f;
     }
@@ -229,7 +247,7 @@ public class SessionManager : Singleton<SessionManager>
     {
         if (_settings != null)
         {
-            return _settings.VisibilitySettings.LeftHandColor;
+            return _settings.ColorSettings.LeftHandColor;
         }
         return "0000FF"; 
     }
@@ -238,7 +256,7 @@ public class SessionManager : Singleton<SessionManager>
     {
         if (_settings != null)
         {
-            return _settings.VisibilitySettings.RightHandColor;
+            return _settings.ColorSettings.RightHandColor;
         }
         return "FF0000";
     }
@@ -247,7 +265,7 @@ public class SessionManager : Singleton<SessionManager>
     {
         if (_settings != null)
         {
-            return _settings.VisibilitySettings.TargetColor;
+            return _settings.ColorSettings.TargetColor;
         }
         return "C0C0C0";
     }

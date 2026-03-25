@@ -173,14 +173,10 @@ public class CustomizeSessionManager : MonoBehaviour
             {
                 HandsVisibilityType = handVisibility.options[handVisibility.value].text,
                 TargetVisibilityType = targetVisibility.options[targetVisibility.value].text,
-                HandFlickerFrequency = SafeParse(handFlickerShow.text, 1),
-                // TODO: add hide
-                TargetFlickerFrequency = SafeParse(targetFlickerShow.text, 1),
-                // TODO: add hide
-                LeftHandColor = string.IsNullOrEmpty(leftHandColor.text) ? "0000FF" : leftHandColor.text,
-                RightHandColor = string.IsNullOrEmpty(rightHandColor.text) ? "FF0000" : rightHandColor.text,
-                TargetColor = string.IsNullOrEmpty(targetColor.text) ? "C0C0C0" : targetColor.text
-                // TODO: move to new color settings
+                HandsFlickerOnDuration = SafeParse(handFlickerShow.text, 1),
+                HandsFlickerOffDuration = SafeParse(handFlickerHide.text, 1),
+                TargetFlickerOnDuration = SafeParse(handFlickerShow.text, 1),
+                TargetFlickerOffDuration = SafeParse(targetFlickerHide.text, 1),
             },
             OffsetSettings = new OffsetSettings
             {
@@ -201,12 +197,18 @@ public class CustomizeSessionManager : MonoBehaviour
                 Direction = directionTypeDropdown.options[directionTypeDropdown.value].text,
                 Speed = SafeParse(speedInput.text, 10),
                 NumberOfObjects = (int)SafeParse(numberOfObjectsInput.text, 100),
-                ObjectColor = string.IsNullOrEmpty(objectColorInput.text) ? "000000" : objectColorInput.text,
                 ObjectSize = SafeParse(objectSizeInput.text, 1)
             },
             TargetSettings = new TargetSettings
             {
                 TimeBeforeStart = (int)SafeParse(timeBeforeStart.text, 3)
+            },
+            ColorSettings = new ColorSettings
+            {
+                BackgroundObjectColor = string.IsNullOrEmpty(objectColorInput.text) ? "000000" : objectColorInput.text,
+                LeftHandColor = string.IsNullOrEmpty(leftHandColor.text) ? "0000FF" : leftHandColor.text,
+                RightHandColor = string.IsNullOrEmpty(rightHandColor.text) ? "FF0000" : rightHandColor.text,
+                TargetColor = string.IsNullOrEmpty(targetColor.text) ? "C0C0C0" : targetColor.text
             },
             TargetLocations = _tempTargetLocations
         };

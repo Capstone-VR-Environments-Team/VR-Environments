@@ -89,7 +89,7 @@ public class SphereManager : MonoBehaviour
             SphereContact sc = spheres[i].GetComponent<SphereContact>();
             if (sc != null)
             {
-                sc.targetId = i + 1;
+                sc.Initialize(i + 1, sphereVectors[i]);
             }
 
             SphereCollider c = spheres[i].GetComponent<SphereCollider>();
@@ -254,7 +254,6 @@ public class SphereManager : MonoBehaviour
 
     void HandleSphereInteract() {
         spheresCollected++;
-        EventBus.OnTargetHit?.Invoke(currentSphere.transform.position, spheresCollected);
         Debug.Log($"Sphere collected! {spheresCollected}/{totalSpheres}");
 
         if (spheresCollected >= totalSpheres) {

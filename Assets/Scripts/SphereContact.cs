@@ -4,8 +4,14 @@ public class SphereContact : MonoBehaviour
 {
     private SphereManager sphereManager;
     private Renderer sphereRenderer;
-    public int targetId = -1;
+    private int targetId = -1;
     private bool hasBeenTriggered = false;
+    private Vector3 location;
+
+    void Initialize(int id, Vector3 loc)
+    {
+        targetId = id;
+        location = loc;
 
     void Start()
     {
@@ -23,6 +29,7 @@ public class SphereContact : MonoBehaviour
                 Debug.Log($"Sphere {targetId} found!");
                 sphereRenderer.enabled = true;
                 sphereRenderer.material.color = Color.green;
+                EventBus.OnTargetHit?.Invoke(location, targetId);
                 sphereManager.OnSphereInteracted();
             } else
             {

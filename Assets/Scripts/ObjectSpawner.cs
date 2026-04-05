@@ -57,6 +57,11 @@ public class ObjectSpawner : MonoBehaviour {
         newObject.transform.localScale = SessionManager.Instance.getMovingBackgroundSize();
 
         string color = SessionManager.Instance.getMovingBackgroundColor();
-        newObject.GetComponent<MeshRenderer>().material.color = ColorUtility.TryParseHtmlString(color, out Color lhColor) ? lhColor : Color.black;
+        if (!color.StartsWith("#")) {
+            color = "#" + color;
+        }
+
+        MeshRenderer meshRenderer = newObject.GetComponent<MeshRenderer>();
+        meshRenderer.material.color = ColorUtility.TryParseHtmlString(color, out Color parsedColor) ? parsedColor : Color.black;
     }
 }

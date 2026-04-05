@@ -13442,7 +13442,7 @@ PrefabInstance:
       objectReference: {fileID: 7998032890434009243}
     - target: {fileID: 5376902742469528622, guid: 9fa079a9bea0fb64daa0eb725ab2d626, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: onImageUpload
+      value: onFileUpload
       objectReference: {fileID: 0}
     - target: {fileID: 5376902742469528622, guid: 9fa079a9bea0fb64daa0eb725ab2d626, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName

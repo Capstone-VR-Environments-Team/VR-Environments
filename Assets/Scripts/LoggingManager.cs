@@ -27,6 +27,8 @@ public class LoggingManager : MonoBehaviour
         EventBus.StopExperiment += StopRecording;
         EventBus.OnTargetHit += LogTargetHit;
         EventBus.OnProximityHit += LogProximityHit;
+        EventBus.OnPreviousSphereReentered += LogPreviousSphereReentered;
+        EventBus.OnPreviousSphereLeft += LogPreviousSphereLeft;
         EventBus.OnNoteEnter += LogNote;
         EventBus.OnEyesTracked += UpdateEyes;
     }
@@ -38,6 +40,8 @@ public class LoggingManager : MonoBehaviour
         EventBus.StopExperiment -= StopRecording;
         EventBus.OnTargetHit -= LogTargetHit;
         EventBus.OnProximityHit -= LogProximityHit;
+        EventBus.OnPreviousSphereReentered -= LogPreviousSphereReentered;
+        EventBus.OnPreviousSphereLeft -= LogPreviousSphereLeft;
         EventBus.OnNoteEnter -= LogNote;
         EventBus.OnEyesTracked -= UpdateEyes;
 
@@ -122,6 +126,20 @@ public class LoggingManager : MonoBehaviour
         if (!logging) return;
 
         collectedTimingData.TargetProximityHits.Add(new HitEvent(SessionManager.Instance.GetTrialTime(), targetLocation - _headsetPosition));
+    }
+
+    public void LogPreviousSphereReentered(Vector3 targetLocation)
+    {
+        if (!logging) return;
+
+        collectedTimingData.ReEnterTargetHits.Add(new HitEvent(SessionManager.Instance.GetTrialTime(), targetLocation - _headsetPosition));
+    }
+
+    public void LogPreviousSphereLeft(Vector3 targetLocation)
+    {
+        if (!logging) return;
+
+        collectedTimingData.LeaveTargetHits.Add(new HitEvent(SessionManager.Instance.GetTrialTime(), targetLocation - _headsetPosition));
     }
 
     public void LogNote(string content, double timestamp)

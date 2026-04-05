@@ -914,6 +914,42 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: 4.4299927
       objectReference: {fileID: 0}
+    - target: {fileID: 4532543791764653422, guid: 17397d062c6969b448d99352e8fb73ca, type: 3}
+      propertyPath: targetSpherePrefab
+      value: 
+      objectReference: {fileID: 5071468709229480330, guid: 1b2ca9e16e6469c4bae5bf4f65bc6b77, type: 3}
+    - target: {fileID: 4532543791764653422, guid: 17397d062c6969b448d99352e8fb73ca, type: 3}
+      propertyPath: defaultTargetColor.b
+      value: 0.46540874
+      objectReference: {fileID: 0}
+    - target: {fileID: 4532543791764653422, guid: 17397d062c6969b448d99352e8fb73ca, type: 3}
+      propertyPath: defaultTargetColor.g
+      value: 0.46540874
+      objectReference: {fileID: 0}
+    - target: {fileID: 4532543791764653422, guid: 17397d062c6969b448d99352e8fb73ca, type: 3}
+      propertyPath: defaultTargetColor.r
+      value: 0.46540874
+      objectReference: {fileID: 0}
+    - target: {fileID: 4532543791764653422, guid: 17397d062c6969b448d99352e8fb73ca, type: 3}
+      propertyPath: defaultLeftLineColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4532543791764653422, guid: 17397d062c6969b448d99352e8fb73ca, type: 3}
+      propertyPath: defaultLeftLineColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4532543791764653422, guid: 17397d062c6969b448d99352e8fb73ca, type: 3}
+      propertyPath: defaultRightLineColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4532543791764653422, guid: 17397d062c6969b448d99352e8fb73ca, type: 3}
+      propertyPath: defaultRightLineColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4532543791764653422, guid: 17397d062c6969b448d99352e8fb73ca, type: 3}
+      propertyPath: defaultRightLineColor.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4646963770593491489, guid: 17397d062c6969b448d99352e8fb73ca, type: 3}
       propertyPath: m_SizeDelta.y
       value: 70

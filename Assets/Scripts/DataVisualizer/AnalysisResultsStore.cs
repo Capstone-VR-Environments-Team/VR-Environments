@@ -269,7 +269,15 @@ public class AnalysisResultsStore : Singleton<AnalysisResultsStore> {
     }
 
     private string MapPointType(AnalysisMode pointType) {
-        return pointType == AnalysisMode.POINTTOTARGET ? "Search" : "Approach";
+        if (pointType == AnalysisMode.POINTTOTARGET) {
+            return "Search";
+        }
+
+        if (pointType == AnalysisMode.PREVIOUSSPHERE) {
+            return "PreviousSphere";
+        }
+
+        return "Approach";
     }
 
     private string ToCsvRow(IReadOnlyList<string> columns) {

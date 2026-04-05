@@ -9,6 +9,13 @@ public class InteractiveViewManager : MonoBehaviour
     [Header("Visualization Settings")]
     public Material lineMaterial;
     public float lineWidth = 2f;
+    [SerializeField] private GameObject targetSpherePrefab;
+    [SerializeField] private Vector3 defaultTargetSphereScale = new Vector3(0.05f, 0.05f, 0.05f);
+
+    [Header("Default Colors")]
+    [SerializeField] private Color defaultLeftLineColor = Color.blue;
+    [SerializeField] private Color defaultRightLineColor = Color.red;
+    [SerializeField] private Color defaultTargetColor = Color.gray;
 
     [Header("Control Panel")]
     [SerializeField] private Button endReviewButton;
@@ -27,6 +34,11 @@ public class InteractiveViewManager : MonoBehaviour
     private GameObject _targets;
 
     private CameraController _controller;
+    private Color _leftLineColor;
+    private Color _rightLineColor;
+    private Color _targetColor;
+    private Color _optimalLineColor = Color.green;
+    private Vector3 _targetSphereScale;
 
     private void Awake() {
         _controller = FindFirstObjectByType<CameraController>();
@@ -34,6 +46,11 @@ public class InteractiveViewManager : MonoBehaviour
 
     private void Start()
     {
+        _leftLineColor = defaultLeftLineColor;
+        _rightLineColor = defaultRightLineColor;
+        _targetColor = defaultTargetColor;
+        _targetSphereScale = defaultTargetSphereScale;
+
         pathDropdown.onValueChanged.AddListener(UpdatePath);
         showLeftPathsToggle.onValueChanged.AddListener(ToggleLeft);
         showRightPathsToggle.onValueChanged.AddListener(ToggleRight);
@@ -61,6 +78,9 @@ public class InteractiveViewManager : MonoBehaviour
         {
             return;
         }
+
+        ApplyColorsFromTrialSettings(store.TrialInfo);
+        ApplySphereScaleFromTrialSettings(store.TrialInfo);
 
         SetStatistics(
             store.ProcessedData.AnalyzedData.GetStatistics(Hand.LEFT, MovementZone.OVERALL, DeviationType.TOTAL),
@@ -105,22 +125,84 @@ public class InteractiveViewManager : MonoBehaviour
 
         foreach (HitEvent point in targetData) {
             targetPoints.Add(point.location);
-            GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+
+            GameObject sphere = targetSpherePrefab != null
+                ? Instantiate(targetSpherePrefab)
+                : GameObject.CreatePrimitive(PrimitiveType.Sphere);
+
             sphere.transform.SetParent(_targets.transform);
             sphere.transform.localPosition = point.location;
-            sphere.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
+            sphere.transform.localScale = _targetSphereScale;
+
+            MeshRenderer sphereRenderer = sphere.GetComponent<MeshRenderer>();
+            if (sphereRenderer != null) {
+                sphereRenderer.material.color = _targetColor;
+            }
+
+            SphereLabel label = sphere.GetComponent<SphereLabel>();
+            if (label != null) {
+                label.Initialize(targetPoints.Count);
+            }
         }
 
         if (leftPoints.Count > 1)
-            _leftLine = CreateLine("LeftHand", leftPoints, Color.red);
+            _leftLine = CreateLine("LeftHand", leftPoints, _leftLineColor);
 
         if (rightPoints.Count > 1)
-            _rightLine = CreateLine("RightHand", rightPoints, Color.blue);
+            _rightLine = CreateLine("RightHand", rightPoints, _rightLineColor);
 
         if (targetPoints.Count > 1)
-            _targetLine = CreateLine("Targets", targetPoints, Color.green);
+            _targetLine = CreateLine("Targets", targetPoints, _optimalLineColor);
 
         Debug.Log($"Added lines with {leftPoints.Count} left, {rightPoints.Count} right, and {targetPoints.Count} points");
+    }
+
+    private void ApplyColorsFromTrialSettings(JsonWrapper trialInfo) {
+        _leftLineColor = defaultLeftLineColor;
+        _rightLineColor = defaultRightLineColor;
+        _targetColor = defaultTargetColor;
+
+        VisibilitySettings visibilitySettings = trialInfo?.TrialSessionInformation?.TrialSettings?.VisibilitySettings;
+        if (visibilitySettings == null) {
+            return;
+        }
+
+        if (TryParseHexColor(visibilitySettings.LeftHandColor, out Color leftColor)) {
+            _leftLineColor = leftColor;
+        }
+
+        if (TryParseHexColor(visibilitySettings.RightHandColor, out Color rightColor)) {
+            _rightLineColor = rightColor;
+        }
+
+        if (TryParseHexColor(visibilitySettings.TargetColor, out Color targetColor)) {
+            _targetColor = targetColor;
+        }
+    }
+
+    private void ApplySphereScaleFromTrialSettings(JsonWrapper trialInfo) {
+        _targetSphereScale = defaultTargetSphereScale;
+
+        TargetSettings targetSettings = trialInfo?.TrialSessionInformation?.TrialSettings?.TargetSettings;
+        if (targetSettings == null) {
+            return;
+        }
+
+        //TODO: Add sphere scale settings to trial settings and apply here
+    }
+
+    private bool TryParseHexColor(string colorString, out Color color) {
+        color = Color.white;
+        if (string.IsNullOrWhiteSpace(colorString)) {
+            return false;
+        }
+
+        string normalized = colorString.Trim();
+        if (!normalized.StartsWith("#")) {
+            normalized = "#" + normalized;
+        }
+
+        return ColorUtility.TryParseHtmlString(normalized, out color);
     }
 
     private void UpdatePath()
@@ -220,7 +302,7 @@ public class InteractiveViewManager : MonoBehaviour
         lr.SetPositions(points.ToArray());
         lr.material = lineMaterial != null ? lineMaterial : new Material(Shader.Find("Sprites/Default"));
         lr.widthCurve = AnimationCurve.Constant(0,1,1);
-        lr.widthMultiplier = 0.01f;
+        lr.widthMultiplier = Mathf.Max(0.0001f, lineWidth * 0.005f);
         lr.startColor = color;
         lr.endColor = color;
         lr.useWorldSpace = true;

@@ -177,7 +177,8 @@ public class StatisticalViewManager : MonoBehaviour
         AnalysisMode previousType = AnalysisMode.LINETOTARGET;
 
         Color approachColor = new Color{ r = 106.0f / 255.0f, g = 153.0f / 255.0f, b = 77.0f / 255.0f, a = 1 }; 
-        Color homingColor = Color.purple;
+        Color searchColor = Color.purple;
+        Color previousSphereColor = Color.red;
 
         int currentSerieIndex = -1;
 
@@ -196,10 +197,15 @@ public class StatisticalViewManager : MonoBehaviour
                 newSerie.lineStyle.width = 2.0f;
 
                 // Set Color based on Mode
-                if (currentType == AnalysisMode.POINTTOTARGET)
+                if (currentType == AnalysisMode.PREVIOUSSPHERE)
                 {
-                    newSerie.lineStyle.color = homingColor;
-                    newSerie.itemStyle.color = homingColor;
+                    newSerie.lineStyle.color = previousSphereColor;
+                    newSerie.itemStyle.color = previousSphereColor;
+                }
+                else if (currentType == AnalysisMode.POINTTOTARGET)
+                {
+                    newSerie.lineStyle.color = searchColor;
+                    newSerie.itemStyle.color = searchColor;
                 } 
                 else
                 {

@@ -13,4 +13,5 @@ public class GeometryResults {
     public Geometry total = new Geometry();
     public Geometry search = new Geometry();
     public Geometry approach = new Geometry();
+    public Geometry previousSphere = new Geometry();
 }

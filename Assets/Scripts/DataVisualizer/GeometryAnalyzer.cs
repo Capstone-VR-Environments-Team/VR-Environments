@@ -29,26 +29,39 @@ public static class GeometryAnalyzer {
             Vector3 closestPointOnLine = origin + (lineDir * t);
 
             Vector3 diff = point - closestPointOnLine;
+            Vector3 totalDiff = diff;
+            float totalDistance = diff.magnitude;
 
             if (input.Mode == AnalysisMode.LINETOTARGET) {
                 // Perpendicular distance to the path
-                results.total.DistancesFromLine.Add(diff.magnitude);
                 results.approach.DistancesFromLine.Add(diff.magnitude);
                 results.approach.DeviationsX.Add(diff.x);
                 results.approach.DeviationsY.Add(diff.y);
                 results.approach.DeviationsZ.Add(diff.z);
                 results.approach.Timestamps.Add(input.Timestamps[i]);
-            } else {
-                results.total.DistancesFromLine.Add(Vector3.Distance(point, input.LinePointB));
+            } else if (input.Mode == AnalysisMode.POINTTOTARGET) {
+                totalDistance = Vector3.Distance(point, input.LinePointB);
                 results.search.DistancesFromLine.Add(Vector3.Distance(point, input.LinePointB));
                 results.search.DeviationsX.Add(diff.x);
                 results.search.DeviationsY.Add(diff.y);
                 results.search.DeviationsZ.Add(diff.z);
                 results.search.Timestamps.Add(input.Timestamps[i]);
+            } else {
+                Vector3 sphereDiff = point - input.LinePointA;
+                totalDiff = sphereDiff;
+                totalDistance = sphereDiff.magnitude;
+
+                results.previousSphere.DistancesFromLine.Add(totalDistance);
+                results.previousSphere.DeviationsX.Add(sphereDiff.x);
+                results.previousSphere.DeviationsY.Add(sphereDiff.y);
+                results.previousSphere.DeviationsZ.Add(sphereDiff.z);
+                results.previousSphere.Timestamps.Add(input.Timestamps[i]);
             }
-            results.total.DeviationsX.Add(diff.x);
-            results.total.DeviationsY.Add(diff.y);
-            results.total.DeviationsZ.Add(diff.z);
+
+            results.total.DistancesFromLine.Add(totalDistance);
+            results.total.DeviationsX.Add(totalDiff.x);
+            results.total.DeviationsY.Add(totalDiff.y);
+            results.total.DeviationsZ.Add(totalDiff.z);
             results.total.Timestamps.Add(input.Timestamps[i]);
         }
 

@@ -7,6 +7,8 @@ public class CollectedTimingData
 {
     public List<HitEvent> TargetHits = new List<HitEvent>();
     public List<HitEvent> TargetProximityHits = new List<HitEvent>();
+    public List<HitEvent> LeaveTargetHits = new List<HitEvent>();
+    public List<HitEvent> ReEnterTargetHits = new List<HitEvent>();
     public List<NoteEvent> Notes = new List<NoteEvent>();
 }
 

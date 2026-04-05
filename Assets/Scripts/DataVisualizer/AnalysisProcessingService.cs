@@ -26,7 +26,7 @@ public sealed class ProcessedAnalysisData {
 }
 
 public static class AnalysisProcessingService {
-    public static ProcessedAnalysisData Process(List<TrackingData> rawData, CollectedTimingData timingData) {
+    public static ProcessedAnalysisData Process(List<TrackingData> rawData, CollectedTimingData timingData, bool includeProximityHits = true) {
         if (rawData == null || rawData.Count == 0) {
             throw new ArgumentException("Raw data cannot be null or empty.", nameof(rawData));
         }
@@ -35,10 +35,14 @@ public static class AnalysisProcessingService {
             throw new ArgumentNullException(nameof(timingData));
         }
 
-        AnalysisContext context = CreateContext(rawData, timingData);
-        Dictionary<Hand, IReadOnlyList<AnalysisMode>> pointTypesByHand = ProcessHands(context);
+        List<HitEvent> filteredProximityHits = includeProximityHits
+            ? DataSlicer.FilterValidProximityHits(timingData.TargetHits, timingData.TargetProximityHits)
+            : new List<HitEvent>();
 
-        TargetAnalysisResults targetAnalysisResults = TargetAnalyzer.AnalyzeData(timingData.TargetHits, timingData.TargetProximityHits);
+        AnalysisContext context = CreateContext(rawData, timingData);
+        Dictionary<Hand, IReadOnlyList<AnalysisMode>> pointTypesByHand = ProcessHands(context, filteredProximityHits);
+
+        TargetAnalysisResults targetAnalysisResults = TargetAnalyzer.AnalyzeData(timingData.TargetHits, filteredProximityHits);
 
         pointTypesByHand.TryGetValue(Hand.LEFT, out IReadOnlyList<AnalysisMode> leftPointTypes);
         pointTypesByHand.TryGetValue(Hand.RIGHT, out IReadOnlyList<AnalysisMode> rightPointTypes);
@@ -61,13 +65,15 @@ public static class AnalysisProcessingService {
         return new AnalysisContext(timingData, allTimes, positionsByHand, new AnalyzedData());
     }
 
-    private static Dictionary<Hand, IReadOnlyList<AnalysisMode>> ProcessHands(AnalysisContext context) {
+    private static Dictionary<Hand, IReadOnlyList<AnalysisMode>> ProcessHands(AnalysisContext context, List<HitEvent> filteredProximityHits) {
         Dictionary<Hand, IReadOnlyList<AnalysisMode>> pointTypesByHand = new Dictionary<Hand, IReadOnlyList<AnalysisMode>>();
 
         foreach (KeyValuePair<Hand, List<Vector3>> handData in context.PositionsByHand) {
             SlicingResult segments = DataSlicer.AnalyzeSegments(
                 context.TimingData.TargetHits,
-                context.TimingData.TargetProximityHits,
+                filteredProximityHits,
+                context.TimingData.ReEnterTargetHits,
+                context.TimingData.LeaveTargetHits,
                 handData.Value,
                 context.AllTimes);
 

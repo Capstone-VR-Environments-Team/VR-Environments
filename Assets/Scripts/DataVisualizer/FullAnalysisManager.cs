@@ -40,6 +40,17 @@ public class FullAnalysisManager : MonoBehaviour {
 
         if (rawData == null || rawData.Count == 0) return;
 
+        if (trialInfo.CollectedTimingData == null) {
+            trialInfo.CollectedTimingData = new CollectedTimingData();
+        }
+
+        IReadOnlyList<Vector3> configuredTargets = trialInfo?.TrialSessionInformation?.TrialSettings?.TargetLocations;
+        double initialTime = rawData[0].timeStamp;
+        trialInfo.CollectedTimingData.TargetHits = TargetHitSequenceBuilder.BuildWithInitialTarget(
+            trialInfo.CollectedTimingData.TargetHits,
+            configuredTargets,
+            initialTime);
+
         bool includeProximityHits = ShouldIncludeProximityHits(trialInfo);
         ProcessedAnalysisData analysis = AnalysisProcessingService.Process(rawData, trialInfo.CollectedTimingData, includeProximityHits);
         Debug.Log($"Times = {analysis.AllTimes.Count}, leftPoints = {analysis.AnalyzedData.GetPoints(Hand.LEFT, MovementZone.OVERALL, DeviationType.TOTAL).Count}");

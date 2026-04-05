@@ -162,7 +162,7 @@ public class InteractiveViewManager : MonoBehaviour
         _rightLineColor = defaultRightLineColor;
         _targetColor = defaultTargetColor;
 
-        VisibilitySettings visibilitySettings = trialInfo?.TrialSessionInformation?.TrialSettings?.VisibilitySettings;
+        ColorSettings visibilitySettings = trialInfo?.TrialSessionInformation?.TrialSettings?.ColorSettings;
         if (visibilitySettings == null) {
             return;
         }

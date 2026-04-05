@@ -30,7 +30,10 @@ public class LiveTrialViewManager : MonoBehaviour
     {
         noteInput.onValueChanged.AddListener(OnNoteValueChanged);
         logButton.onClick.AddListener(OnSaveNoteClicked);
-        beginTrialButton.onClick.AddListener(() => endButton.interactable = true);
+        beginTrialButton.onClick.AddListener(() => {
+            endButton.interactable = true;
+            beginTrialButton.interactable = false;
+        });
 
         ResetLiveTrialViewManager();
     }

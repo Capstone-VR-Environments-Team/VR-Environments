@@ -112,8 +112,8 @@ public class SphereManager : MonoBehaviour
                 proximityObject.transform.localScale = new Vector3(1 + targetProximity / spheres[i].transform.localScale.x, 1 + targetProximity / spheres[i].transform.localScale.x, 1 + targetProximity / spheres[i].transform.localScale.x);
                 triggerCollider.center = c.center;
                 ProximityAlertTrigger proximityAlert = proximityObject.AddComponent<ProximityAlertTrigger>();
-                proximityAlert.Initialize(i + 1);
-                proximityAlert.OnProximityEnter += OnProximityEnter;
+                proximityAlert.Initialize(sphereVectors[i]);
+                EventBus.OnProximityHit += OnProximityEnter;
             }
             spheres[i].SetActive(false);
         }
@@ -121,9 +121,8 @@ public class SphereManager : MonoBehaviour
         SpawnNextSphere();
     }
 
-    private void OnProximityEnter(int targetId)
+    private void OnProximityEnter(Vector3 location)
     {
-        EventBus.OnProximityHit?.Invoke(currentSphere.transform.position);
         if (showHandsInProximity)
         {
             ShowHandsInProximity();
@@ -267,7 +266,7 @@ public class SphereManager : MonoBehaviour
             rightHand.GetComponent<MeshRenderer>().enabled = true;
             if (prevSphere)
             {
-                prevSphere.GetComponent<Renderer>().enabled = false;
+                prevSphere.gameObject.SetActive(false);
             }
             SpawnNextSphere();
         }

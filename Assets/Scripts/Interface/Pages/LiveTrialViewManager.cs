@@ -30,6 +30,7 @@ public class LiveTrialViewManager : MonoBehaviour
     {
         noteInput.onValueChanged.AddListener(OnNoteValueChanged);
         logButton.onClick.AddListener(OnSaveNoteClicked);
+        beginTrialButton.onClick.AddListener(() => endButton.interactable = true);
 
         ResetLiveTrialViewManager();
     }
@@ -39,7 +40,7 @@ public class LiveTrialViewManager : MonoBehaviour
         beginTrialButton.interactable = true;
         endButton.GetComponentInChildren<TMP_Text>().text = "End Trial";
         endButton.interactable = false;
-        endButton.onClick.RemoveAllListeners();
+        endButton.onClick.RemoveListener(OnGoHomeClicked);
         endButton.onClick.AddListener(disableButtonsOnEnd);
     }
 
@@ -47,7 +48,7 @@ public class LiveTrialViewManager : MonoBehaviour
     {
         beginTrialButton.interactable = false;
         endButton.GetComponentInChildren<TMP_Text>().text = "Go Home";
-        endButton.onClick.RemoveAllListeners();
+        endButton.onClick.RemoveListener(disableButtonsOnEnd);
         endButton.onClick.AddListener(OnGoHomeClicked);
     }
 

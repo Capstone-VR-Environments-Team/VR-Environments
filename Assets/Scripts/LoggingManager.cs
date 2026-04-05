@@ -114,7 +114,7 @@ public class LoggingManager : MonoBehaviour
         if (!logging) return;
 
         double time = SessionManager.Instance.GetTrialTime();
-        collectedTimingData.TargetHits.Add(new HitEvent(time, targetLocation - _headsetPosition));
+        collectedTimingData.TargetHits.Add(new HitEvent(time, targetLocation));
         LogHitEvent(time, $"Target {targetId} hit");
     }
 
@@ -123,7 +123,7 @@ public class LoggingManager : MonoBehaviour
         if (!logging) return;
 
         collectedTimingData.TargetProximityHits.Add(new HitEvent(SessionManager.Instance.GetTrialTime(),
-            targetLocation - _headsetPosition));
+            targetLocation));
     }
 
     public void LogNote(string content, double timestamp)
@@ -138,7 +138,7 @@ public class LoggingManager : MonoBehaviour
         if (!logging) return;
 
         double time = SessionManager.Instance.GetTrialTime();
-        collectedTimingData.ReEnterTargetHits.Add(new HitEvent(time, targetLocation - _headsetPosition));
+        collectedTimingData.ReEnterTargetHits.Add(new HitEvent(time, targetLocation));
         LogHitEvent(time, $"Target {targetId} re-entered");
     }
 
@@ -147,7 +147,7 @@ public class LoggingManager : MonoBehaviour
         if (!logging) return;
 
         double time = SessionManager.Instance.GetTrialTime();
-        collectedTimingData.LeaveTargetHits.Add(new HitEvent(time, targetLocation - _headsetPosition));
+        collectedTimingData.LeaveTargetHits.Add(new HitEvent(time, targetLocation));
         LogHitEvent(time, $"Target {targetId} exited");
     }
 

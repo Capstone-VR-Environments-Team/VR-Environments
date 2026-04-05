@@ -110,19 +110,29 @@ public class SessionManager : Singleton<SessionManager>
         return -1;
     }
 
+    public bool GetMovingBackground()
+    {
+        return _settings.BackgroundSettings.MovingBackground;
+    }
+
     public String GetBackgroundType()
     {
-        return _settings.BackgroundSettings.BackgroundType;
+        string extension = Path.GetExtension(_settings.BackgroundSettings.BackgroundFile).ToLower();
+        if (extension == ".jpg" || extension == ".jpeg" || extension == ".png" || extension == ".webp")
+        {
+            return "Image";
+        }
+        if (extension == ".mp4" || extension == ".avi" || extension == ".mov")
+        {
+            return "Video";
+        }
+
+        return "None";
     }
 
-    public String GetBackgroundImagePath()
+    public String GetBackgroundFilePath()
     {
-        return _settings.BackgroundSettings.ImageBackground;
-    }
-
-    public String GetBackgroundVideoPath()
-    {
-        return _settings.BackgroundSettings.VideoBackground;
+        return _settings.BackgroundSettings.BackgroundFile;
     }
 
     public float GetHandFlickerOnDuration()
@@ -300,5 +310,14 @@ public class SessionManager : Singleton<SessionManager>
 
     public int getMovingBackgroundQuantity() {
         return _settings.BackgroundSettings.NumberOfObjects;
+    }
+
+    public string getMovingBackgroundColor()
+    {
+        return _settings.BackgroundSettings.Color;
+    }
+
+    public Vector3 getMovingBackgroundSize() {
+        return _settings.BackgroundSettings.ObjectSize / 100.0f;
     }
 }

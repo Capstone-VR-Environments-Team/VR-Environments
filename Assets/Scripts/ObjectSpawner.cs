@@ -13,8 +13,7 @@ public class ObjectSpawner : MonoBehaviour {
     private float spawnTimer = 0f;
 
     void Update() {
-        string backgroundType = SessionManager.Instance.GetBackgroundType();
-        if (backgroundType == "Moving") {
+        if (SessionManager.Instance.GetMovingBackground()) {
             int objPerMin = SessionManager.Instance.getMovingBackgroundQuantity();
             // Prevent division by zero if someone sets the rate to 0
             if (objPerMin <= 0f) return;
@@ -54,6 +53,15 @@ public class ObjectSpawner : MonoBehaviour {
         Vector3 finalSpawnPos = baseSpawnPos + perpendicularOffset;
 
         // Instantiate with the orientation matching the movement direction
-        Instantiate(objectToSpawn, finalSpawnPos, spawnOrientation);
+        GameObject newObject = Instantiate(objectToSpawn, finalSpawnPos, spawnOrientation);
+        newObject.transform.localScale = SessionManager.Instance.getMovingBackgroundSize();
+
+        string color = SessionManager.Instance.getMovingBackgroundColor();
+        if (!color.StartsWith("#")) {
+            color = "#" + color;
+        }
+
+        MeshRenderer meshRenderer = newObject.GetComponent<MeshRenderer>();
+        meshRenderer.material.color = ColorUtility.TryParseHtmlString(color, out Color parsedColor) ? parsedColor : Color.black;
     }
 }

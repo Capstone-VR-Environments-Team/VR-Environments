@@ -19,9 +19,9 @@ public class BackgroundManager : MonoBehaviour
         Debug.Log("Background Updating");
         string backgroundType = SessionManager.Instance.GetBackgroundType();
         if (backgroundType == "Image") {
-            UpdateBackgroundFromImage(SessionManager.Instance.GetBackgroundImagePath());
+            UpdateBackgroundFromImage(SessionManager.Instance.GetBackgroundFilePath());
         } else if (backgroundType == "Video") {
-            UpdateBackgroundFromVideo(SessionManager.Instance.GetBackgroundVideoPath());
+            UpdateBackgroundFromVideo(SessionManager.Instance.GetBackgroundFilePath());
         } else {
             RenderSettings.skybox = defaultMaterial;
         }

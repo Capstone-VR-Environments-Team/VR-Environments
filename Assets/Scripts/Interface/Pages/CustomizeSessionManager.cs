@@ -26,14 +26,17 @@ public class CustomizeSessionManager : MonoBehaviour
     [SerializeField] private Toggle showHandInProximityToggle;
 
     [Header("Background Settings")]
-    [SerializeField] private Button uploadBackgroundFile; // TODO: needs to be able to handle both image and video
+    [SerializeField] private Button uploadBackgroundFile;
     [SerializeField] private TMP_Text uploadedBackgroundFileNameText;
     [SerializeField] private Toggle movingObjectsToggle;
     [SerializeField] private TMP_Dropdown directionTypeDropdown;
     [SerializeField] private TMP_InputField speedInput;
     [SerializeField] private TMP_InputField numberOfObjectsInput;
-    [SerializeField] private TMP_InputField objectSizeInput;
     [SerializeField] private TMP_InputField objectColorInput;
+    [SerializeField] private TMP_Text objectSizeInput;
+    [SerializeField] private TMP_InputField objectSizeXInput;
+    [SerializeField] private TMP_InputField objectSizeYInput;
+    [SerializeField] private TMP_InputField objectSizeZInput;
 
     [Header("Target Settings")]
     [SerializeField] private TMP_InputField timeBeforeStart;
@@ -51,8 +54,7 @@ public class CustomizeSessionManager : MonoBehaviour
     [SerializeField] private TMP_Text uploadedFileNameText;
 
     private List<Vector3> _tempTargetLocations = new List<Vector3>();
-    private string imageBackgroundFilePath = "";
-    private string videoBackgroundFilePath = "";
+    private string backgroundFilePath = "";
 
     private float _diffY;
 
@@ -118,6 +120,9 @@ public class CustomizeSessionManager : MonoBehaviour
         numberOfObjectsInput.gameObject.SetActive(movingObjectsState);
         objectColorInput.gameObject.SetActive(movingObjectsState);
         objectSizeInput.gameObject.SetActive(movingObjectsState);
+        objectSizeXInput.gameObject.SetActive(movingObjectsState);
+        objectSizeYInput.gameObject.SetActive(movingObjectsState);
+        objectSizeZInput.gameObject.SetActive(movingObjectsState);
     }
 
     public void OnUploadLocationsClicked()
@@ -146,21 +151,12 @@ public class CustomizeSessionManager : MonoBehaviour
         return defaultValue;
     }
 
-    public void onImageUpload()
+    public void onFileUpload()
     {
-        string filePath = FileSelector.getFilePath(SessionManager.BaseDataPath, new string[] { "jpg", "png" });
+        string filePath = FileSelector.getFilePath(SessionManager.BaseDataPath, new string[] { "jpg", "png", "mp4" });
         if (!string.IsNullOrEmpty(filePath))
         {
-            imageBackgroundFilePath = filePath;
-        }
-    }
-
-    public void onVideoUpload()
-    {
-        string filePath = FileSelector.getFilePath(SessionManager.BaseDataPath, new string[] { "mp4" });
-        if (!string.IsNullOrEmpty(filePath))
-        {
-            videoBackgroundFilePath = filePath;
+            backgroundFilePath = filePath;
         }
     }
 
@@ -192,13 +188,17 @@ public class CustomizeSessionManager : MonoBehaviour
             },
             BackgroundSettings = new BackgroundSettings
             {
-                // TODO: a lot of this is different sorry
-                ImageBackground = imageBackgroundFilePath,
-                VideoBackground = videoBackgroundFilePath,
+                MovingBackground = movingObjectsToggle.isOn,
+                BackgroundFile = backgroundFilePath,
                 Direction = directionTypeDropdown.options[directionTypeDropdown.value].text,
                 Speed = SafeParse(speedInput.text, 10),
                 NumberOfObjects = (int)SafeParse(numberOfObjectsInput.text, 100),
-                ObjectSize = SafeParse(objectSizeInput.text, 1)
+                Color = string.IsNullOrEmpty(objectColorInput.text) ? "000000" : objectColorInput.text,
+                ObjectSize = new Vector3(
+                    SafeParse(objectSizeXInput.text, 25),
+                    SafeParse(objectSizeYInput.text, 25),
+                    SafeParse(objectSizeZInput.text, 100)
+                    )
             },
             TargetSettings = new TargetSettings
             {
@@ -238,7 +238,9 @@ public class CustomizeSessionManager : MonoBehaviour
         directionTypeDropdown.value = 0;
         speedInput.text = "10";
         numberOfObjectsInput.text = "100";
-        objectSizeInput.text = "1";
+        objectSizeXInput.text = "25";
+        objectSizeYInput.text = "25";
+        objectSizeZInput.text = "100";
         objectColorInput.text = "000000";
 
         timeBeforeStart.text = "3";

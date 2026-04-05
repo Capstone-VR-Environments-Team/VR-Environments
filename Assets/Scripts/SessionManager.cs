@@ -279,6 +279,13 @@ public class SessionManager : Singleton<SessionManager>
         return 0;
     }
 
+    public float GetTargetSize() {
+        if (_settings != null) {
+            return _settings.TargetSettings.TargetSize / 100.0f;
+        }
+        return 0.0f;
+    }
+
     public Vector3 getMovingBackgroundDirection() {
         int dirVal = (int)Enum.Parse<Direction>(_settings.BackgroundSettings.Direction);
         Vector3 direction = Vector3.zero;

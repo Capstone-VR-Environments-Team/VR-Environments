@@ -24,7 +24,7 @@ public class SphereContact : MonoBehaviour
     {
         if (other.CompareTag("GameController"))
         {
-            if (!hasBeenTriggered)
+            if (!hasBeenTriggered || targetId == 1)
             {
                 hasBeenTriggered = true;
                 Debug.Log($"Sphere {targetId} found!");
@@ -44,6 +44,11 @@ public class SphereContact : MonoBehaviour
     {
         if (other.CompareTag("GameController") && hasBeenTriggered)
         {
+            if (targetId == 1)
+            {
+
+            }
+
             EventBus.OnTargetExit?.Invoke(location, targetId);
             sphereManager.ApplyVisibilitySettings();
             sphereManager.HideAfterExit();

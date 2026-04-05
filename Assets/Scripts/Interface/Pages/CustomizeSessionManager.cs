@@ -37,6 +37,7 @@ public class CustomizeSessionManager : MonoBehaviour
 
     [Header("Target Settings")]
     [SerializeField] private TMP_InputField timeBeforeStart;
+    [SerializeField] private TMP_InputField targetSize;
 
     [Header("Color Settings")]
     [SerializeField] private TMP_InputField leftHandColor;
@@ -201,7 +202,8 @@ public class CustomizeSessionManager : MonoBehaviour
             },
             TargetSettings = new TargetSettings
             {
-                TimeBeforeStart = (int)SafeParse(timeBeforeStart.text, 3)
+                TimeBeforeStart = (int)SafeParse(timeBeforeStart.text, 3),
+                TargetSize = SafeParse(targetSize.text, 5)
             },
             ColorSettings = new ColorSettings
             {
@@ -240,6 +242,7 @@ public class CustomizeSessionManager : MonoBehaviour
         objectColorInput.text = "000000";
 
         timeBeforeStart.text = "3";
+        targetSize.text = "5";
 
         leftHandColor.text = "0000FF";
         rightHandColor.text = "FF0000";

@@ -188,7 +188,7 @@ public class InteractiveViewManager : MonoBehaviour
             return;
         }
 
-        //TODO: Add sphere scale settings to trial settings and apply here
+        _targetSphereScale = Vector3.one * (targetSettings.TargetSize / 100.0f * 2f);
     }
 
     private bool TryParseHexColor(string colorString, out Color color) {

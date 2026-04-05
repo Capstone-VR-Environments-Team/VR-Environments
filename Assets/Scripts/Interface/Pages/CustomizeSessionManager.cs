@@ -188,6 +188,7 @@ public class CustomizeSessionManager : MonoBehaviour
             },
             BackgroundSettings = new BackgroundSettings
             {
+                MovingBackground = movingObjectsToggle.isOn,
                 BackgroundFile = backgroundFilePath,
                 Direction = directionTypeDropdown.options[directionTypeDropdown.value].text,
                 Speed = SafeParse(speedInput.text, 10),

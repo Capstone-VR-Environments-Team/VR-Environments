@@ -194,7 +194,7 @@ public class SessionManager : Singleton<SessionManager>
         return (currentTime - _startTime);
     }
 
-    public bool GetShowHandsInProx()
+    public bool GetShowHandsInProximity()
     {
         if (_settings != null)
         {

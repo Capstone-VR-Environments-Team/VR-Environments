@@ -12,8 +12,8 @@ public static class EventBus {
     public static Action<Vector3, int> OnTargetHit;
     public static Action<Vector3> OnProximityHit;
     public static Action<string, double> OnNoteEnter;
-    public static Action<int> OnTargetReEntry;
-    public static Action<int> OnTargetExit;
+    public static Action<Vector3, int> OnTargetReEntry;
+    public static Action<Vector3, int> OnTargetExit;
 
 
     public static Action<Vector3> StartExperiment;

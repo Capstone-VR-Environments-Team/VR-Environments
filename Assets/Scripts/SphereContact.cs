@@ -8,10 +8,11 @@ public class SphereContact : MonoBehaviour
     private bool hasBeenTriggered = false;
     private Vector3 location;
 
-    void Initialize(int id, Vector3 loc)
+    public void Initialize(int id, Vector3 loc)
     {
         targetId = id;
         location = loc;
+    }
 
     void Start()
     {
@@ -33,7 +34,7 @@ public class SphereContact : MonoBehaviour
                 sphereManager.OnSphereInteracted();
             } else
             {
-                EventBus.OnTargetReEntry?.Invoke(targetId);
+                EventBus.OnTargetReEntry?.Invoke(location, targetId);
                 sphereManager.ShowCurrentSphere();
             }
         }
@@ -43,7 +44,7 @@ public class SphereContact : MonoBehaviour
     {
         if (other.CompareTag("GameController") && hasBeenTriggered)
         {
-            EventBus.OnTargetExit?.Invoke(targetId);
+            EventBus.OnTargetExit?.Invoke(location, targetId);
             sphereManager.ApplyVisibilitySettings();
             sphereManager.HideAfterExit();
         }

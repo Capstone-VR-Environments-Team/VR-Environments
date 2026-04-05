@@ -4,7 +4,8 @@ using UnityEngine;
 
 public enum AnalysisMode {
     LINETOTARGET,
-    POINTTOTARGET
+    POINTTOTARGET,
+    PREVIOUSSPHERE
 }
 
 public enum Hand {

@@ -40,8 +40,18 @@ public class FullAnalysisManager : MonoBehaviour {
 
         if (rawData == null || rawData.Count == 0) return;
 
-        ProcessedAnalysisData analysis = AnalysisProcessingService.Process(rawData, trialInfo.CollectedTimingData);
+        bool includeProximityHits = ShouldIncludeProximityHits(trialInfo);
+        ProcessedAnalysisData analysis = AnalysisProcessingService.Process(rawData, trialInfo.CollectedTimingData, includeProximityHits);
         Debug.Log($"Times = {analysis.AllTimes.Count}, leftPoints = {analysis.AnalyzedData.GetPoints(Hand.LEFT, MovementZone.OVERALL, DeviationType.TOTAL).Count}");
         AnalysisResultsStore.Instance.SetAnalysisResults(rawData, analysis);
+    }
+
+    private static bool ShouldIncludeProximityHits(JsonWrapper trialInfo) {
+        OffsetSettings offsetSettings = trialInfo?.TrialSessionInformation?.TrialSettings?.OffsetSettings;
+        if (offsetSettings == null) {
+            return true;
+        }
+
+        return offsetSettings.TargetProximity > 0f;
     }
 }

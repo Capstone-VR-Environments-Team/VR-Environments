@@ -3,12 +3,11 @@ using UnityEngine;
 
 public class ProximityAlertTrigger : MonoBehaviour
 {
-    private int targetId;
     private bool isHandInProximity = false;
-    public event Action<int> OnProximityEnter;
-    public void Initialize(int id)
+    public Vector3 location;
+    public void Initialize(Vector3 loc)
     {
-        targetId = id;
+        location = loc;
     }
 
     void OnTriggerEnter(Collider other)
@@ -16,7 +15,7 @@ public class ProximityAlertTrigger : MonoBehaviour
         if (other.CompareTag("GameController") && !isHandInProximity)
         {
             isHandInProximity = true;
-            OnProximityEnter.Invoke(targetId);
+            EventBus.OnProximityHit.Invoke(location);
         }
     }
 

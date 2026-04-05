@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 
 [Serializable]
@@ -27,6 +28,7 @@ public class TrialSettingsData : IJsonable
     public OffsetSettings OffsetSettings;
     public BackgroundSettings BackgroundSettings;
     public TargetSettings TargetSettings;
+    public ColorSettings ColorSettings;
     public List<Vector3> TargetLocations;
 }
 
@@ -35,11 +37,10 @@ public class VisibilitySettings
 {
     public string HandsVisibilityType;
     public string TargetVisibilityType;
-    public float HandFlickerFrequency;
-    public float TargetFlickerFrequency;
-    public string LeftHandColor;
-    public string RightHandColor;
-    public string TargetColor;
+    public float HandsFlickerOnDuration;
+    public float HandsFlickerOffDuration;
+    public float TargetFlickerOnDuration;
+    public float TargetFlickerOffDuration;
 }
 
 [Serializable]
@@ -60,7 +61,6 @@ public class BackgroundSettings
     public string Direction;
     public float Speed;
     public int NumberOfObjects;
-    public string ObjectColor;
     public float ObjectSize;
 }
 
@@ -68,6 +68,15 @@ public class BackgroundSettings
 public class TargetSettings
 {
     public int TimeBeforeStart;
+}
+
+[Serializable]
+public class ColorSettings
+{
+    public string BackgroundObjectColor;
+    public string LeftHandColor;
+    public string RightHandColor;
+    public string TargetColor;
 }
 
 [Serializable]

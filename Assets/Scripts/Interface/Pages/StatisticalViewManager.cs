@@ -174,6 +174,14 @@ public class StatisticalViewManager : MonoBehaviour
             return;
         }
 
+        Tooltip tooltip = graph.EnsureChartComponent<Tooltip>();
+        if (tooltip != null) {
+            tooltip.show = true;
+            tooltip.trigger = Tooltip.Trigger.Item;
+            tooltip.titleFormatter = "{i}";
+            tooltip.itemFormatter = "Time: {c0:f0}\nDeviation: {c1:f4}";
+        }
+
         graph.ClearData();
         graph.RemoveAllSerie();
 
@@ -200,6 +208,7 @@ public class StatisticalViewManager : MonoBehaviour
 
                 // Configure Style
                 newSerie.lineStyle.width = 2.0f;
+                newSerie.symbol.show = false;
 
                 // Set Color based on Mode
                 if (currentType == AnalysisMode.PREVIOUSSPHERE)

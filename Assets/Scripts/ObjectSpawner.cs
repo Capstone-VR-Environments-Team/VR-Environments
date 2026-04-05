@@ -54,6 +54,7 @@ public class ObjectSpawner : MonoBehaviour {
         Vector3 finalSpawnPos = baseSpawnPos + perpendicularOffset;
 
         // Instantiate with the orientation matching the movement direction
-        Instantiate(objectToSpawn, finalSpawnPos, spawnOrientation);
+        GameObject newObject = Instantiate(objectToSpawn, finalSpawnPos, spawnOrientation);
+        newObject.transform.localScale = SessionManager.Instance.getMovingBackgroundSize();
     }
 }

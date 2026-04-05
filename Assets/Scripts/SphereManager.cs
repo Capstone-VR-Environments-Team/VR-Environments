@@ -32,6 +32,7 @@ public class SphereManager : MonoBehaviour
     private float targetFlickerOnDuration;
     private float targetFlickerOffDuration;
     private float targetProximity;
+    private float targetSize;
     private string leftHandColor;
     private string rightHandColor;
     private string targetColor;
@@ -75,6 +76,7 @@ public class SphereManager : MonoBehaviour
         List<Vector3> sphereVectors = SessionManager.Instance.GetLoadedTargets();
         
         targetProximity = SessionManager.Instance.GetTargetProximity();
+        targetSize = SessionManager.Instance.GetTargetSize();
         handFlickerOnDuration = SessionManager.Instance.GetHandFlickerOnDuration();
         handFlickerOffDuration = SessionManager.Instance.GetHandFlickerOffDuration();
         targetFlickerOnDuration = SessionManager.Instance.GetTargetFlickerOnDuration();
@@ -89,7 +91,7 @@ public class SphereManager : MonoBehaviour
             spheres[i] = Instantiate(spherePrefab,
                                     sphereVectors[i] + headsetPosition,
                                     Quaternion.identity);
-
+            spheres[i].transform.localScale = Vector3.one * (targetSize * 2);
             SphereContact sc = spheres[i].GetComponent<SphereContact>();
             if (sc != null)
             {
@@ -237,13 +239,12 @@ public class SphereManager : MonoBehaviour
 
     void StartTrial() {
         Debug.Log("Beginning Start Process");
-        started = true;
         StartCoroutine(DelayStart(timeBeforeStart));
     }
 
     IEnumerator DelayStart(int waitTime) {
         yield return new WaitForSeconds(waitTime);
-
+        started = true;
         experimentController.StartExperiment();
         if (handVisType == 1)
         {

@@ -68,6 +68,7 @@ public class BackgroundSettings
 public class TargetSettings
 {
     public int TimeBeforeStart;
+    public float TargetSize;
 }
 
 [Serializable]

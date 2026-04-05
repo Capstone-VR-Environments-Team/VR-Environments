@@ -26,7 +26,6 @@ public class SphereContact : MonoBehaviour
                 sphereManager.OnSphereInteracted();
             } else
             {
-                EventBus.OnPreviousSphereReentered?.Invoke(transform.position);
                 sphereManager.ShowCurrentSphere();
             }
         }
@@ -36,7 +35,6 @@ public class SphereContact : MonoBehaviour
     {
         if (other.CompareTag("GameController") && hasBeenTriggered)
         {
-            EventBus.OnPreviousSphereLeft?.Invoke(transform.position);
             sphereManager.ApplyVisibilitySettings();
             sphereManager.HideAfterExit();
         }

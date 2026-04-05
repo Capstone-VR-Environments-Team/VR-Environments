@@ -10,8 +10,6 @@ public static class EventBus {
     // Discrete game events
     public static Action<Vector3, int> OnTargetHit;
     public static Action<Vector3> OnProximityHit;
-    public static Action<Vector3> OnPreviousSphereReentered;
-    public static Action<Vector3> OnPreviousSphereLeft;
     public static Action<string, double> OnNoteEnter;
 
 

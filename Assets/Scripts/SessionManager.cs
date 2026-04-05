@@ -112,17 +112,27 @@ public class SessionManager : Singleton<SessionManager>
 
     public String GetBackgroundType()
     {
-        return _settings.BackgroundSettings.BackgroundType;
+        if (_settings.BackgroundSettings.MovingBackground)
+        {
+            return "Moving";
+        }
+
+        string extension = Path.GetExtension(_settings.BackgroundSettings.BackgroundFile).ToLower();
+        if (extension == ".jpg" || extension == ".jpeg" || extension == ".png" || extension == ".webp")
+        {
+            return "Image";
+        }
+        if (extension == ".mp4" || extension == ".avi" || extension == ".mov")
+        {
+            return "Video";
+        }
+
+        return "None";
     }
 
-    public String GetBackgroundImagePath()
+    public String GetBackgroundFilePath()
     {
-        return _settings.BackgroundSettings.ImageBackground;
-    }
-
-    public String GetBackgroundVideoPath()
-    {
-        return _settings.BackgroundSettings.VideoBackground;
+        return _settings.BackgroundSettings.BackgroundFile;
     }
 
     public float GetHandFlickerOnDuration()
@@ -300,6 +310,11 @@ public class SessionManager : Singleton<SessionManager>
 
     public int getMovingBackgroundQuantity() {
         return _settings.BackgroundSettings.NumberOfObjects;
+    }
+
+    public string getMovingBackgroundColor()
+    {
+        return _settings.BackgroundSettings.Color;
     }
 
     public Vector3 getMovingBackgroundSize() {

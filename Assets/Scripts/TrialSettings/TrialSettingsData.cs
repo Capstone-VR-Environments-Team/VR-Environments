@@ -55,12 +55,12 @@ public class OffsetSettings
 [Serializable]
 public class BackgroundSettings
 {
-    public string BackgroundType;
-    public string ImageBackground;
-    public string VideoBackground;
+    public Boolean MovingBackground;
+    public string BackgroundFile;
     public string Direction;
     public float Speed;
     public int NumberOfObjects;
+    public string Color;
     public Vector3 ObjectSize;
 }
 

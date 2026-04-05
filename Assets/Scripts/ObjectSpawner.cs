@@ -56,5 +56,8 @@ public class ObjectSpawner : MonoBehaviour {
         // Instantiate with the orientation matching the movement direction
         GameObject newObject = Instantiate(objectToSpawn, finalSpawnPos, spawnOrientation);
         newObject.transform.localScale = SessionManager.Instance.getMovingBackgroundSize();
+
+        string color = SessionManager.Instance.getMovingBackgroundColor();
+        newObject.GetComponent<MeshRenderer>().material.color = ColorUtility.TryParseHtmlString(color, out Color lhColor) ? lhColor : Color.black;
     }
 }

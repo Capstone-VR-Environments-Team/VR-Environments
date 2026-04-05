@@ -26,7 +26,8 @@ public class StatisticalViewManager : MonoBehaviour
     [SerializeField] private Button exportButton;
     [SerializeField] private Button endAnalysisButton;
 
-    private List<double> allTimes;
+    private IReadOnlyList<double> allTimes = System.Array.Empty<double>();
+    private IReadOnlyList<double> currentTimes = System.Array.Empty<double>();
     private AnalyzedData analyzedData;
     TargetAnalysisResults targetData;
     private IReadOnlyList<AnalysisMode> currentPointTypes = System.Array.Empty<AnalysisMode>();
@@ -42,7 +43,7 @@ public class StatisticalViewManager : MonoBehaviour
     public void SetResults(AnalyzedData analyzedData, IReadOnlyList<AnalysisMode> leftPointTypes, IReadOnlyList<AnalysisMode> rightPointTypes,
         TargetAnalysisResults targetData, List<double> allTimes)
     {
-        this.allTimes = allTimes;
+        this.allTimes = allTimes ?? (IReadOnlyList<double>)System.Array.Empty<double>();
         this.targetData = targetData;
         this.analyzedData = analyzedData;
 
@@ -161,18 +162,22 @@ public class StatisticalViewManager : MonoBehaviour
 
     private void UpdateGraphs()
     {
-        UpdateGraph(deviationMagnitudeGraph, currentDistValues, currentPointTypes);
-        UpdateGraph(xAxisDeviationGraph, currentXValues, currentPointTypes);
-        UpdateGraph(yAxisDeviationGraph, currentYValues, currentPointTypes);
-        UpdateGraph(zAxisDeviationGraph, currentZValues, currentPointTypes);
+        UpdateGraph(deviationMagnitudeGraph, currentTimes, currentDistValues, currentPointTypes);
+        UpdateGraph(xAxisDeviationGraph, currentTimes, currentXValues, currentPointTypes);
+        UpdateGraph(yAxisDeviationGraph, currentTimes, currentYValues, currentPointTypes);
+        UpdateGraph(zAxisDeviationGraph, currentTimes, currentZValues, currentPointTypes);
     }
 
-    private void UpdateGraph(BaseChart graph, IReadOnlyList<double> values, IReadOnlyList<AnalysisMode> pointTypes)
+    private void UpdateGraph(BaseChart graph, IReadOnlyList<double> times, IReadOnlyList<double> values, IReadOnlyList<AnalysisMode> pointTypes)
     {
+        if (graph == null) {
+            return;
+        }
+
         graph.ClearData();
         graph.RemoveAllSerie();
 
-        int count = Mathf.Min(values.Count, Mathf.Min(allTimes.Count, pointTypes.Count));
+        int count = Mathf.Min(values.Count, Mathf.Min(times.Count, pointTypes.Count));
         if (count == 0) { return; }
         AnalysisMode previousType = AnalysisMode.LINETOTARGET;
 
@@ -183,7 +188,7 @@ public class StatisticalViewManager : MonoBehaviour
         int currentSerieIndex = -1;
 
         for (int i = 0; i < count; i++) {
-            double timestamp = allTimes[i];
+            double timestamp = times[i];
             double val = values[i];
             AnalysisMode currentType = pointTypes[i];
 
@@ -232,10 +237,19 @@ public class StatisticalViewManager : MonoBehaviour
     {
         Hand selectedHand = GetSelectedHand();
 
-        currentDistValues = analyzedData?.GetPoints(selectedHand, MovementZone.OVERALL, DeviationType.TOTAL) ?? System.Array.Empty<double>();
-        currentXValues = analyzedData?.GetPoints(selectedHand, MovementZone.OVERALL, DeviationType.X_DEV) ?? System.Array.Empty<double>();
-        currentYValues = analyzedData?.GetPoints(selectedHand, MovementZone.OVERALL, DeviationType.Y_DEV) ?? System.Array.Empty<double>();
-        currentZValues = analyzedData?.GetPoints(selectedHand, MovementZone.OVERALL, DeviationType.Z_DEV) ?? System.Array.Empty<double>();
+        // Graphs intentionally always use OVERALL values regardless of selected component.
+        SingleDataSet overallTotalData = analyzedData?.GetDataOrEmpty(selectedHand, MovementZone.OVERALL, DeviationType.TOTAL) ?? SingleDataSet.Empty;
+        SingleDataSet overallXData = analyzedData?.GetDataOrEmpty(selectedHand, MovementZone.OVERALL, DeviationType.X_DEV) ?? SingleDataSet.Empty;
+        SingleDataSet overallYData = analyzedData?.GetDataOrEmpty(selectedHand, MovementZone.OVERALL, DeviationType.Y_DEV) ?? SingleDataSet.Empty;
+        SingleDataSet overallZData = analyzedData?.GetDataOrEmpty(selectedHand, MovementZone.OVERALL, DeviationType.Z_DEV) ?? SingleDataSet.Empty;
+
+        currentDistValues = overallTotalData.Points ?? System.Array.Empty<double>();
+        currentXValues = overallXData.Points ?? System.Array.Empty<double>();
+        currentYValues = overallYData.Points ?? System.Array.Empty<double>();
+        currentZValues = overallZData.Points ?? System.Array.Empty<double>();
+        currentTimes = overallTotalData.Times != null && overallTotalData.Times.Count > 0
+            ? overallTotalData.Times
+            : allTimes;
 
         if (!pointTypesByHand.TryGetValue(selectedHand, out currentPointTypes))
         {

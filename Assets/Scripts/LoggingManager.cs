@@ -20,7 +20,8 @@ public class LoggingManager : MonoBehaviour
         logger = new CsvLogger();
     }
 
-    private void OnEnable() {
+    private void OnEnable()
+    {
         EventBus.OnLeftHandTracked += UpdateLeftHand;
         EventBus.OnRightHandTracked += UpdateRightHand;
         EventBus.StartExperiment += StartRecording;
@@ -29,9 +30,12 @@ public class LoggingManager : MonoBehaviour
         EventBus.OnProximityHit += LogProximityHit;
         EventBus.OnNoteEnter += LogNote;
         EventBus.OnEyesTracked += UpdateEyes;
+        EventBus.OnTargetReEntry += LogTargetReEntry;
+        EventBus.OnTargetExit += LogTargetExit;
     }
 
-    private void OnDisable() {
+    private void OnDisable()
+    {
         EventBus.OnLeftHandTracked -= UpdateLeftHand;
         EventBus.OnRightHandTracked -= UpdateRightHand;
         EventBus.StartExperiment -= StartRecording;
@@ -40,6 +44,8 @@ public class LoggingManager : MonoBehaviour
         EventBus.OnProximityHit -= LogProximityHit;
         EventBus.OnNoteEnter -= LogNote;
         EventBus.OnEyesTracked -= UpdateEyes;
+        EventBus.OnTargetReEntry -= LogTargetReEntry;
+        EventBus.OnTargetExit -= LogTargetExit;
 
 
     }
@@ -47,19 +53,23 @@ public class LoggingManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (logging) {
+        if (logging)
+        {
             // Accumulate time passed since last frame
             _logTimer += Time.deltaTime;
 
             // Check if 25ms has passed
-            if (_logTimer >= LogInterval) {
+            if (_logTimer >= LogInterval)
+            {
                 logger.LogData(new TrackingData(currentTrackingData));
                 _logTimer -= LogInterval;
             }
         }
     }
 
-    public void UpdateEyes(Vector3 gazeOrigin, Vector3 gazeDir, float focusDist, float leftEyeDiameter, float rightEyeDiameter) {
+    public void UpdateEyes(Vector3 gazeOrigin, Vector3 gazeDir, float focusDist, float leftEyeDiameter,
+        float rightEyeDiameter)
+    {
         currentTrackingData.gazeOrigin = gazeOrigin;
         currentTrackingData.gazeDirection = gazeDir;
         currentTrackingData.focusDistance = focusDist;
@@ -67,17 +77,20 @@ public class LoggingManager : MonoBehaviour
         currentTrackingData.rightPupilDiameter = rightEyeDiameter;
     }
 
-    public void UpdateLeftHand(Vector3 leftPos, Quaternion leftRot) {
+    public void UpdateLeftHand(Vector3 leftPos, Quaternion leftRot)
+    {
         currentTrackingData.leftHandPos = leftPos;
         currentTrackingData.leftHandRotation = leftRot;
     }
 
-    public void UpdateRightHand(Vector3 rightPos, Quaternion rightRot) {
+    public void UpdateRightHand(Vector3 rightPos, Quaternion rightRot)
+    {
         currentTrackingData.rightHandPos = rightPos;
         currentTrackingData.rightHandRotation = rightRot;
     }
 
-    public void StartRecording(Vector3 headsetPosition) {
+    public void StartRecording(Vector3 headsetPosition)
+    {
         _headsetPosition = headsetPosition;
         // Reset data for new trial
         collectedTimingData = new CollectedTimingData();
@@ -101,27 +114,16 @@ public class LoggingManager : MonoBehaviour
         if (!logging) return;
 
         double time = SessionManager.Instance.GetTrialTime();
-
-        collectedTimingData.TargetHits.Add(new HitEvent(time, targetLocation - _headsetPosition));
-
-        string noteContent = $"Target {targetId} hit";
-
-        collectedTimingData.Notes.Add(new NoteEvent(time, noteContent));
-
-        LiveTrialViewManager ui = FindFirstObjectByType<LiveTrialViewManager>();
-        if (ui != null)
-        {
-            TimeSpan t = TimeSpan.FromSeconds(time / 1000);
-            string timeString = string.Format("{0:D1}:{1:D2}", t.Minutes, t.Seconds);
-            ui.AppendToLog($"{timeString} - {noteContent}");
-        }
+        collectedTimingData.TargetHits.Add(new HitEvent(time, targetLocation));
+        LogHitEvent(time, $"Target {targetId} hit");
     }
 
     public void LogProximityHit(Vector3 targetLocation)
     {
         if (!logging) return;
 
-        collectedTimingData.TargetProximityHits.Add(new HitEvent(SessionManager.Instance.GetTrialTime(), targetLocation - _headsetPosition));
+        collectedTimingData.TargetProximityHits.Add(new HitEvent(SessionManager.Instance.GetTrialTime(),
+            targetLocation));
     }
 
     public void LogNote(string content, double timestamp)
@@ -131,4 +133,33 @@ public class LoggingManager : MonoBehaviour
         collectedTimingData.Notes.Add(new NoteEvent(timestamp, content));
     }
 
+    public void LogTargetReEntry(Vector3 targetLocation, int targetId)
+    {
+        if (!logging) return;
+
+        double time = SessionManager.Instance.GetTrialTime();
+        collectedTimingData.ReEnterTargetHits.Add(new HitEvent(time, targetLocation));
+        LogHitEvent(time, $"Target {targetId} re-entered");
+    }
+
+    public void LogTargetExit(Vector3 targetLocation, int targetId)
+    {
+        if (!logging) return;
+
+        double time = SessionManager.Instance.GetTrialTime();
+        collectedTimingData.LeaveTargetHits.Add(new HitEvent(time, targetLocation));
+        LogHitEvent(time, $"Target {targetId} exited");
+    }
+
+    private void LogHitEvent(double time, string noteContent)
+    {
+        collectedTimingData.Notes.Add(new NoteEvent(time, noteContent));
+        LiveTrialViewManager ui = FindFirstObjectByType<LiveTrialViewManager>();
+        if (ui != null)
+        {
+            TimeSpan t = TimeSpan.FromSeconds(time / 1000);
+            string timeString = string.Format("{0:D1}:{1:D2}", t.Minutes, t.Seconds);
+            ui.AppendToLog($"{timeString} - {noteContent}");
+        }
+    }
 }

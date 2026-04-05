@@ -27,14 +27,19 @@ public class SphereManager : MonoBehaviour
     private GameObject prevSphere;
     private int handVisType;
     private int targetVisType;
-    private float handFlickerFreq;
-    private float targetFlickerFreq;
+    private float handFlickerOnDuration;
+    private float handFlickerOffDuration;
+    private float targetFlickerOnDuration;
+    private float targetFlickerOffDuration;
     private float targetProximity;
     private string leftHandColor;
     private string rightHandColor;
     private string targetColor;
+    private int timeBeforeStart;
     private bool started = false;
     private Vector3 offsetValues;
+
+    private bool showHandsInProximity;
 
     private Coroutine handsFlickerRoutine;
     private Coroutine targetsFlickerRoutine;
@@ -61,6 +66,8 @@ public class SphereManager : MonoBehaviour
         offsetValues = SessionManager.Instance.GetOffsetValues();
         targetColor = '#' + SessionManager.Instance.GetTargetColor();
         SetColors();
+
+        timeBeforeStart = SessionManager.Instance.GetTimeBeforeStart();
     }
 
     public void BeginTrial(Vector3 headsetPosition)
@@ -68,10 +75,13 @@ public class SphereManager : MonoBehaviour
         List<Vector3> sphereVectors = SessionManager.Instance.GetLoadedTargets();
         
         targetProximity = SessionManager.Instance.GetTargetProximity();
-        handFlickerFreq = SessionManager.Instance.GetHandFlickerFrequency();
-        targetFlickerFreq = SessionManager.Instance.GetTargetFlickerFrequency();
+        handFlickerOnDuration = SessionManager.Instance.GetHandFlickerOnDuration();
+        handFlickerOffDuration = SessionManager.Instance.GetHandFlickerOffDuration();
+        targetFlickerOnDuration = SessionManager.Instance.GetTargetFlickerOnDuration();
+        targetFlickerOffDuration = SessionManager.Instance.GetTargetFlickerOffDuration();
         handVisType = SessionManager.Instance.GetHandsVisibilityType();
         targetVisType = SessionManager.Instance.GetTargetVisibilityType();
+        showHandsInProximity = SessionManager.Instance.GetShowHandsInProximity();
 
         totalSpheres = sphereVectors.Count;
         spheres = new GameObject[totalSpheres];
@@ -83,7 +93,7 @@ public class SphereManager : MonoBehaviour
             SphereContact sc = spheres[i].GetComponent<SphereContact>();
             if (sc != null)
             {
-                sc.targetId = i + 1;
+                sc.Initialize(i + 1, sphereVectors[i]);
             }
 
             SphereCollider c = spheres[i].GetComponent<SphereCollider>();
@@ -102,8 +112,8 @@ public class SphereManager : MonoBehaviour
                 proximityObject.transform.localScale = new Vector3(1 + targetProximity / spheres[i].transform.localScale.x, 1 + targetProximity / spheres[i].transform.localScale.x, 1 + targetProximity / spheres[i].transform.localScale.x);
                 triggerCollider.center = c.center;
                 ProximityAlertTrigger proximityAlert = proximityObject.AddComponent<ProximityAlertTrigger>();
-                proximityAlert.Initialize(i + 1);
-                proximityAlert.OnProximityEnter += OnProximityEnter;
+                proximityAlert.Initialize(sphereVectors[i]);
+                EventBus.OnProximityHit += OnProximityEnter;
             }
             spheres[i].SetActive(false);
         }
@@ -111,10 +121,25 @@ public class SphereManager : MonoBehaviour
         SpawnNextSphere();
     }
 
-    private void OnProximityEnter(int targetId)
+    private void OnProximityEnter(Vector3 location)
     {
-        EventBus.OnProximityHit?.Invoke(currentSphere.transform.position);
+        if (showHandsInProximity)
+        {
+            ShowHandsInProximity();
+        }
         Debug.Log("Proximity Hit");
+    }
+
+    private void ShowHandsInProximity()
+    {
+        if (leftHand)
+        {
+            leftHand.GetComponent<MeshRenderer>().enabled = true;
+        }
+        if (rightHand)
+        {
+            rightHand.GetComponent<MeshRenderer>().enabled = true;
+        }
     }
 
     public void HideAfterExit()
@@ -211,10 +236,10 @@ public class SphereManager : MonoBehaviour
     void StartTrial() {
         Debug.Log("Beginning Start Process");
         started = true;
-        StartCoroutine(DelayStart(3.0f));
+        StartCoroutine(DelayStart(timeBeforeStart));
     }
 
-    IEnumerator DelayStart(float waitTime) {
+    IEnumerator DelayStart(int waitTime) {
         yield return new WaitForSeconds(waitTime);
 
         experimentController.StartExperiment();
@@ -232,7 +257,6 @@ public class SphereManager : MonoBehaviour
 
     void HandleSphereInteract() {
         spheresCollected++;
-        EventBus.OnTargetHit?.Invoke(currentSphere.transform.position, spheresCollected);
         Debug.Log($"Sphere collected! {spheresCollected}/{totalSpheres}");
 
         if (spheresCollected >= totalSpheres) {
@@ -242,26 +266,43 @@ public class SphereManager : MonoBehaviour
             rightHand.GetComponent<MeshRenderer>().enabled = true;
             if (prevSphere)
             {
-                prevSphere.GetComponent<Renderer>().enabled = false;
+                prevSphere.gameObject.SetActive(false);
             }
             SpawnNextSphere();
         }
     }
+
     private IEnumerator FlickerHands()
     {
         while (started)
         {
-            yield return new WaitForSeconds(handFlickerFreq);
+            // Turn hands on
             if (leftHand)
             {
                 MeshRenderer lr = leftHand.GetComponent<MeshRenderer>();
-                lr.enabled = !lr.enabled;
+                if (lr) lr.enabled = true;
             }
             if (rightHand)
             {
                 MeshRenderer rr = rightHand.GetComponent<MeshRenderer>();
-                rr.enabled = !rr.enabled;
+                if (rr) rr.enabled = true;
             }
+
+            yield return new WaitForSeconds(handFlickerOnDuration);
+
+            // Turn hands off
+            if (leftHand)
+            {
+                MeshRenderer lr = leftHand.GetComponent<MeshRenderer>();
+                if (lr) lr.enabled = false;
+            }
+            if (rightHand)
+            {
+                MeshRenderer rr = rightHand.GetComponent<MeshRenderer>();
+                if (rr) rr.enabled = false;
+            }
+
+            yield return new WaitForSeconds(handFlickerOffDuration);
         }
     }
 
@@ -269,13 +310,21 @@ public class SphereManager : MonoBehaviour
     {
         while (started)
         {
-            yield return new WaitForSeconds(targetFlickerFreq);
-
-            Renderer tr = currentSphere.GetComponent<Renderer>();
-            if (tr)
+            if (currentSphere)
             {
-                tr.enabled = !tr.enabled;
+                Renderer tr = currentSphere.GetComponent<Renderer>();
+                if (tr) tr.enabled = true;
             }
+
+            yield return new WaitForSeconds(targetFlickerOnDuration);
+
+            if (currentSphere)
+            {
+                Renderer tr = currentSphere.GetComponent<Renderer>();
+                if (tr) tr.enabled = false;
+            }
+
+            yield return new WaitForSeconds(targetFlickerOffDuration);
         }
     }
 

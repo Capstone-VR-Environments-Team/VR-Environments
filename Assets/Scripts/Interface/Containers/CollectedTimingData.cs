@@ -5,9 +5,11 @@ using UnityEngine;
 [Serializable]
 public class CollectedTimingData
 {
-    public List<HitEvent> TargetHits = new List<HitEvent>();
-    public List<HitEvent> TargetProximityHits = new List<HitEvent>();
-    public List<NoteEvent> Notes = new List<NoteEvent>();
+    public List<HitEvent> TargetHits = new();
+    public List<HitEvent> TargetProximityHits = new();
+    public List<HitEvent> LeaveTargetHits = new();
+    public List<HitEvent> ReEnterTargetHits = new();
+    public List<NoteEvent> Notes = new();
 }
 
 [Serializable]

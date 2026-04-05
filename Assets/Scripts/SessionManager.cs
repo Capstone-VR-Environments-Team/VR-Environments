@@ -301,4 +301,8 @@ public class SessionManager : Singleton<SessionManager>
     public int getMovingBackgroundQuantity() {
         return _settings.BackgroundSettings.NumberOfObjects;
     }
+
+    public Vector3 getMovingBackgroundSize() {
+        return _settings.BackgroundSettings.ObjectSize / 100.0f;
+    }
 }

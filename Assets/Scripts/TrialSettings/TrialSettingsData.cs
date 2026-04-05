@@ -61,7 +61,7 @@ public class BackgroundSettings
     public string Direction;
     public float Speed;
     public int NumberOfObjects;
-    public float ObjectSize;
+    public Vector3 ObjectSize;
 }
 
 [Serializable]

@@ -110,13 +110,13 @@ public class SessionManager : Singleton<SessionManager>
         return -1;
     }
 
+    public bool GetMovingBackground()
+    {
+        return _settings.BackgroundSettings.MovingBackground;
+    }
+
     public String GetBackgroundType()
     {
-        if (_settings.BackgroundSettings.MovingBackground)
-        {
-            return "Moving";
-        }
-
         string extension = Path.GetExtension(_settings.BackgroundSettings.BackgroundFile).ToLower();
         if (extension == ".jpg" || extension == ".jpeg" || extension == ".png" || extension == ".webp")
         {

@@ -189,9 +189,9 @@ public class StatisticalViewManager : MonoBehaviour
         if (count == 0) { return; }
         AnalysisMode previousType = AnalysisMode.LINETOTARGET;
 
+        Color previousSphereColor = new Color { r = 188f / 255f, g = 71f / 255.0f, b = 73f / 255.0f, a = 1 };
         Color approachColor = new Color{ r = 106.0f / 255.0f, g = 153.0f / 255.0f, b = 77.0f / 255.0f, a = 1 }; 
         Color searchColor = Color.purple;
-        Color previousSphereColor = Color.red;
 
         int currentSerieIndex = -1;
 

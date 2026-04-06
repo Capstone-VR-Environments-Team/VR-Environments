@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class FullscreenToggle : MonoBehaviour
 {
@@ -9,9 +10,12 @@ public class FullscreenToggle : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F11))
+        if (Keyboard.current != null)
         {
-            Screen.fullScreen = !Screen.fullScreen;
+            if (Keyboard.current.f11Key.wasPressedThisFrame)
+            {
+                Screen.fullScreen = !Screen.fullScreen;
+            }
         }
     }
 }

@@ -283,7 +283,7 @@ public class SphereManager : MonoBehaviour
     {
         while (started)
         {
-            if (!showHandsInProximity && !inProximity)
+            if (!(showHandsInProximity && inProximity))
             {
                 if (leftHand)
                 {
@@ -296,9 +296,13 @@ public class SphereManager : MonoBehaviour
                     MeshRenderer rr = rightHand.GetComponent<MeshRenderer>();
                     if (rr) rr.enabled = true;
                 }
+            }
 
-                yield return new WaitForSeconds(handFlickerOnDuration);
+            yield return new WaitForSeconds(handFlickerOnDuration);
 
+
+            if (!(showHandsInProximity && inProximity))
+            {
                 // Turn hands off
                 if (leftHand)
                 {
@@ -314,6 +318,7 @@ public class SphereManager : MonoBehaviour
             }
 
             yield return new WaitForSeconds(handFlickerOffDuration);
+            
         }
     }
 

@@ -305,7 +305,7 @@ public class SessionManager : Singleton<SessionManager>
     }
 
     public float getMovingBackgroundSpeed() {
-        return _settings.BackgroundSettings.Speed;
+        return _settings.BackgroundSettings.Speed / 100f;
     }
 
     public int getMovingBackgroundQuantity() {

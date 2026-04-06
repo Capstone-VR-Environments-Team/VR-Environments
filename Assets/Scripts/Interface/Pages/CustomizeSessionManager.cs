@@ -66,13 +66,16 @@ public class CustomizeSessionManager : MonoBehaviour
         handVisibility.onValueChanged.AddListener(delegate { UpdateFlickerInputFields(); });
         targetVisibility.onValueChanged.AddListener(delegate { UpdateFlickerInputFields(); });
         movingObjectsToggle.onValueChanged.AddListener(delegate { UpdateBackgroundInputFields(); });
+        configurationNameInput.onValueChanged.AddListener(delegate { EnableButtons(); });
         
         UpdateFlickerInputFields();
         UpdateBackgroundInputFields();
+        EnableButtons();
     }
 
     private void UpdateFlickerInputFields()
     {
+        Debug.Log("here");
         string handFlickerState = handVisibility.options[handVisibility.value].text;
         string targetFlickerState = targetVisibility.options[targetVisibility.value].text;
 
@@ -125,6 +128,11 @@ public class CustomizeSessionManager : MonoBehaviour
         objectSizeZInput.gameObject.SetActive(movingObjectsState);
     }
 
+    private void EnableButtons()
+    {
+        saveConfigurationButton.interactable = !string.IsNullOrEmpty(configurationNameInput.text) && _tempTargetLocations.Count > 0;
+    }
+
     public void OnUploadLocationsClicked()
     {
         string filePath = FileSelector.getFilePath(SessionManager.BaseDataPath, new string[] { "json", "csv" });
@@ -140,6 +148,7 @@ public class CustomizeSessionManager : MonoBehaviour
             uploadedFileNameText.SetText("File Upload Failed");
             Debug.LogError("Failed to load target locations from file.");
         }
+        EnableButtons();
     }
 
     public float SafeParse(string input, float defaultValue)

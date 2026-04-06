@@ -45,6 +45,8 @@ public class SphereManager : MonoBehaviour
     private Coroutine handsFlickerRoutine;
     private Coroutine targetsFlickerRoutine;
 
+    private bool inProximity = false;
+
     private void OnEnable() {
         EventBus.PrimeExperiment += BeginTrial;
         EventBus.StopExperiment += ResetTrial;
@@ -127,6 +129,7 @@ public class SphereManager : MonoBehaviour
 
     private void OnProximityEnter(Vector3 location)
     {
+        inProximity = true;
         if (showHandsInProximity)
         {
             ShowHandsInProximity();
@@ -148,6 +151,7 @@ public class SphereManager : MonoBehaviour
 
     public void HideAfterExit()
     {
+        inProximity = false;
         if (currentSphere && targetVisType == 0)
         {
             currentSphere.GetComponent<Renderer>().enabled = false;
@@ -279,33 +283,42 @@ public class SphereManager : MonoBehaviour
     {
         while (started)
         {
-            // Turn hands on
-            if (leftHand)
+            if (!(showHandsInProximity && inProximity))
             {
-                MeshRenderer lr = leftHand.GetComponent<MeshRenderer>();
-                if (lr) lr.enabled = true;
-            }
-            if (rightHand)
-            {
-                MeshRenderer rr = rightHand.GetComponent<MeshRenderer>();
-                if (rr) rr.enabled = true;
+                if (leftHand)
+                {
+                    MeshRenderer lr = leftHand.GetComponent<MeshRenderer>();
+                    if (lr) lr.enabled = true;
+                }
+
+                if (rightHand)
+                {
+                    MeshRenderer rr = rightHand.GetComponent<MeshRenderer>();
+                    if (rr) rr.enabled = true;
+                }
             }
 
             yield return new WaitForSeconds(handFlickerOnDuration);
 
-            // Turn hands off
-            if (leftHand)
+
+            if (!(showHandsInProximity && inProximity))
             {
-                MeshRenderer lr = leftHand.GetComponent<MeshRenderer>();
-                if (lr) lr.enabled = false;
-            }
-            if (rightHand)
-            {
-                MeshRenderer rr = rightHand.GetComponent<MeshRenderer>();
-                if (rr) rr.enabled = false;
+                // Turn hands off
+                if (leftHand)
+                {
+                    MeshRenderer lr = leftHand.GetComponent<MeshRenderer>();
+                    if (lr) lr.enabled = false;
+                }
+
+                if (rightHand)
+                {
+                    MeshRenderer rr = rightHand.GetComponent<MeshRenderer>();
+                    if (rr) rr.enabled = false;
+                }
             }
 
             yield return new WaitForSeconds(handFlickerOffDuration);
+            
         }
     }
 

@@ -75,6 +75,7 @@ public class CustomizeSessionManager : MonoBehaviour
 
     private void UpdateFlickerInputFields()
     {
+        Debug.Log("here");
         string handFlickerState = handVisibility.options[handVisibility.value].text;
         string targetFlickerState = targetVisibility.options[targetVisibility.value].text;
 

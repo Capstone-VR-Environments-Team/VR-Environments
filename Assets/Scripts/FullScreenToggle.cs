@@ -14,7 +14,14 @@ public class FullscreenToggle : MonoBehaviour
         {
             if (Keyboard.current.f11Key.wasPressedThisFrame)
             {
-                Screen.fullScreen = !Screen.fullScreen;
+                if (Screen.fullScreen)
+                {
+                    Screen.fullScreenMode = FullScreenMode.Windowed;
+                }
+                else
+                {
+                    Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
+                }
             }
         }
     }

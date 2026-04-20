@@ -114,16 +114,16 @@ public class LoggingManager : MonoBehaviour
         if (!logging) return;
 
         double time = SessionManager.Instance.GetTrialTime();
-        collectedTimingData.TargetHits.Add(new HitEvent(time, targetLocation));
+        collectedTimingData.TargetHits.Add(new HitEvent(time, targetId, targetLocation));
         LogHitEvent(time, $"Target {targetId} hit");
     }
 
-    public void LogProximityHit(Vector3 targetLocation)
+    public void LogProximityHit(Vector3 targetLocation, int targetId)
     {
         if (!logging) return;
 
         collectedTimingData.TargetProximityHits.Add(new HitEvent(SessionManager.Instance.GetTrialTime(),
-            targetLocation));
+            targetId, targetLocation));
     }
 
     public void LogNote(string content, double timestamp)
@@ -138,7 +138,7 @@ public class LoggingManager : MonoBehaviour
         if (!logging) return;
 
         double time = SessionManager.Instance.GetTrialTime();
-        collectedTimingData.ReEnterTargetHits.Add(new HitEvent(time, targetLocation));
+        collectedTimingData.ReEnterTargetHits.Add(new HitEvent(time, targetId, targetLocation));
         LogHitEvent(time, $"Target {targetId} re-entered");
     }
 
@@ -147,7 +147,7 @@ public class LoggingManager : MonoBehaviour
         if (!logging) return;
 
         double time = SessionManager.Instance.GetTrialTime();
-        collectedTimingData.LeaveTargetHits.Add(new HitEvent(time, targetLocation));
+        collectedTimingData.LeaveTargetHits.Add(new HitEvent(time, targetId, targetLocation));
         LogHitEvent(time, $"Target {targetId} exited");
     }
 

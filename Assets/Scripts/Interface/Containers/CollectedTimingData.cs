@@ -16,11 +16,13 @@ public class CollectedTimingData
 public class HitEvent
 {
     public double time;
+    public int targetId;
     public Vector3 location;
 
-    public HitEvent(double time, Vector3 location)
+    public HitEvent(double time, int targetId, Vector3 location)
     {
         this.time = time;
+        this.targetId = targetId;
         this.location = location;
     }
 }

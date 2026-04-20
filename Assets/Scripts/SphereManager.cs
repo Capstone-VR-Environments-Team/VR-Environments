@@ -118,7 +118,7 @@ public class SphereManager : MonoBehaviour
                 proximityObject.transform.localScale = Vector3.one * scaleRatio;
                 triggerCollider.center = c.center;
                 ProximityAlertTrigger proximityAlert = proximityObject.AddComponent<ProximityAlertTrigger>();
-                proximityAlert.Initialize(sphereVectors[i]);
+                proximityAlert.Initialize(sphereVectors[i], i);
                 EventBus.OnProximityHit += OnProximityEnter;
             }
             spheres[i].SetActive(false);
@@ -127,7 +127,7 @@ public class SphereManager : MonoBehaviour
         SpawnNextSphere();
     }
 
-    private void OnProximityEnter(Vector3 location)
+    private void OnProximityEnter(Vector3 location, int id)
     {
         inProximity = true;
         if (showHandsInProximity)

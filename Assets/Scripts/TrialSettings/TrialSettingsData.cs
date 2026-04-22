@@ -37,10 +37,10 @@ public class VisibilitySettings
 {
     public string HandsVisibilityType;
     public string TargetVisibilityType;
-    public double HandsFlickerOnDuration;
-    public double HandsFlickerOffDuration;
-    public double TargetFlickerOnDuration;
-    public double TargetFlickerOffDuration;
+    public float HandsFlickerOnDuration;
+    public float HandsFlickerOffDuration;
+    public float TargetFlickerOnDuration;
+    public float TargetFlickerOffDuration;
 }
 
 [Serializable]
@@ -48,7 +48,7 @@ public class OffsetSettings
 {
     public string OffsetType;
     public Vector3 OffsetValues;
-    public double TargetProximity;
+    public float TargetProximity;
     public bool ShowHandsInProximity;
 }
 
@@ -58,7 +58,7 @@ public class BackgroundSettings
     public Boolean MovingBackground;
     public string BackgroundFile;
     public string Direction;
-    public double Speed;
+    public float Speed;
     public int NumberOfObjects;
     public string Color;
     public Vector3 ObjectSize;
@@ -68,7 +68,7 @@ public class BackgroundSettings
 public class TargetSettings
 {
     public int TimeBeforeStart;
-    public double TargetSize;
+    public float TargetSize;
 }
 
 [Serializable]

@@ -152,13 +152,13 @@ public class CustomizeSessionManager : MonoBehaviour
         EnableButtons();
     }
 
-    public double SafeParse(string input, float defaultValue)
+    public float SafeParse(string input, float defaultValue)
     {
         if (float.TryParse(input, out float result))
         {
-            return Math.Round(result, 5);
+            return (float)Math.Round(result, 5);
         }
-        return Math.Round(defaultValue, 5);
+        return (float)Math.Round(defaultValue, 5);
     }
 
     public void onFileUpload()

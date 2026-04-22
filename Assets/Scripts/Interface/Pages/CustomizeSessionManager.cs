@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -151,13 +152,13 @@ public class CustomizeSessionManager : MonoBehaviour
         EnableButtons();
     }
 
-    public float SafeParse(string input, float defaultValue)
+    public double SafeParse(string input, float defaultValue)
     {
         if (float.TryParse(input, out float result))
         {
-            return result;
+            return Math.Round(result, 5);
         }
-        return defaultValue;
+        return Math.Round(defaultValue, 5);
     }
 
     public void onFileUpload()
@@ -188,9 +189,9 @@ public class CustomizeSessionManager : MonoBehaviour
             {
                 OffsetType = offsetTypeDropdown.options[offsetTypeDropdown.value].text,
                 OffsetValues = new Vector3(
-                    SafeParse(offsetXInput.text, 0),
-                    SafeParse(offsetYInput.text, 0),
-                    SafeParse(offsetZInput.text, 0)
+                    (float)SafeParse(offsetXInput.text, 0),
+                    (float)SafeParse(offsetYInput.text, 0),
+                    (float)SafeParse(offsetZInput.text, 0)
                 ),
                 TargetProximity = SafeParse(targetRangeInput.text, 10),
                 ShowHandsInProximity = showHandInProximityToggle.isOn
@@ -204,9 +205,9 @@ public class CustomizeSessionManager : MonoBehaviour
                 NumberOfObjects = (int)SafeParse(numberOfObjectsInput.text, 100),
                 Color = string.IsNullOrEmpty(objectColorInput.text) ? "000000" : objectColorInput.text,
                 ObjectSize = new Vector3(
-                    SafeParse(objectSizeXInput.text, 25),
-                    SafeParse(objectSizeYInput.text, 25),
-                    SafeParse(objectSizeZInput.text, 100)
+                    (float)SafeParse(objectSizeXInput.text, 25),
+                    (float)SafeParse(objectSizeYInput.text, 25),
+                    (float)SafeParse(objectSizeZInput.text, 100)
                     )
             },
             TargetSettings = new TargetSettings

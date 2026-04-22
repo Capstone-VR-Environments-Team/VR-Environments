@@ -5,9 +5,11 @@ public class ProximityAlertTrigger : MonoBehaviour
 {
     private bool isHandInProximity = false;
     public Vector3 location;
-    public void Initialize(Vector3 loc)
+    public int targetId;
+    public void Initialize(Vector3 loc, int id)
     {
         location = loc;
+        targetId = id;
     }
 
     void OnTriggerEnter(Collider other)
@@ -15,7 +17,7 @@ public class ProximityAlertTrigger : MonoBehaviour
         if (other.CompareTag("GameController") && !isHandInProximity)
         {
             isHandInProximity = true;
-            EventBus.OnProximityHit.Invoke(location);
+            EventBus.OnProximityHit.Invoke(location, targetId);
         }
     }
 

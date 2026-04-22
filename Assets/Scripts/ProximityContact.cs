@@ -3,6 +3,11 @@ using UnityEngine;
 public class ProximityContact : MonoBehaviour
 {
     private bool hasBeenTriggered = false;
+    public int targetId;
+    public void Initialize(int id)
+    {
+        targetId = id;
+    }
 
     void OnTriggerEnter(Collider other)
     {
@@ -15,7 +20,7 @@ public class ProximityContact : MonoBehaviour
             // centered on the target.
             if (transform.parent != null)
             {
-                EventBus.OnProximityHit?.Invoke(transform.parent.position);
+                EventBus.OnProximityHit?.Invoke(transform.parent.position, targetId);
             }
         }
     }

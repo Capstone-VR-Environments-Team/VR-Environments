@@ -53,6 +53,7 @@ public class StatisticalViewManager : MonoBehaviour
         UpdatePath();
         UpdateComponent();
         RefreshData();
+        UpdateGraphs();
     }
 
     private void Start()
@@ -115,6 +116,7 @@ public class StatisticalViewManager : MonoBehaviour
         }
 
         RefreshData();
+        UpdateGraphs();
     }
 
     private void UpdateComponent()
@@ -266,7 +268,6 @@ public class StatisticalViewManager : MonoBehaviour
         }
 
         UpdateDeviationStatistics();
-        UpdateGraphs();
     }
 
     private Hand GetSelectedHand()

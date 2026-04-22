@@ -11,7 +11,7 @@ public static class TargetHitSequenceBuilder {
         double initialTime) {
 
         List<HitEvent> normalizedHits = recordedHits != null
-            ? recordedHits.OrderBy(hit => hit.time).Select(hit => new HitEvent(hit.time, hit.location)).ToList()
+            ? recordedHits.OrderBy(hit => hit.time).Select(hit => new HitEvent(hit.time, hit.targetId, hit.location)).ToList()
             : new List<HitEvent>();
 
         if (configuredTargets == null || configuredTargets.Count == 0) {
@@ -23,7 +23,7 @@ public static class TargetHitSequenceBuilder {
             return normalizedHits;
         }
 
-        normalizedHits.Insert(0, new HitEvent(initialTime, firstConfiguredTarget));
+        normalizedHits.Insert(0, new HitEvent(initialTime, 1, firstConfiguredTarget));
         return normalizedHits;
     }
 

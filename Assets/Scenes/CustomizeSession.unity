@@ -8172,7 +8172,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Target Size (cm)
+  m_text: Target Radius (cm)
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -14198,7 +14198,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9213748521821656519, guid: 9fa079a9bea0fb64daa0eb725ab2d626, type: 3}
       propertyPath: m_text
-      value: Object Speed (cm/s)
+      value: Object Speed (m/s)
       objectReference: {fileID: 0}
     - target: {fileID: 9213748521821656519, guid: 9fa079a9bea0fb64daa0eb725ab2d626, type: 3}
       propertyPath: m_fontSize

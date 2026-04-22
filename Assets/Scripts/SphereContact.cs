@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using UnityEngine;
 
 public class SphereContact : MonoBehaviour
@@ -29,6 +28,7 @@ public class SphereContact : MonoBehaviour
             {
                 Debug.Log("Holding start sphere. Timer started.");
                 sphereRenderer.enabled = true;
+                hasBeenTriggered = true;
                 sphereRenderer.material.color = Color.green; 
                 sphereManager.OnStartSphereEnter();
                 return; 
@@ -56,6 +56,7 @@ public class SphereContact : MonoBehaviour
             if (targetId == 1 && !sphereManager.started)
             {
                 Debug.Log("Exited start sphere too early. Timer canceled.");
+                hasBeenTriggered = false;
                 sphereRenderer.material.color = sphereManager.GetTargetColor(); 
                 sphereManager.OnStartSphereExit();
                 return;

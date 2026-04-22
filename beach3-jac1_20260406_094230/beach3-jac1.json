@@ -1,0 +1,178 @@
+{
+    "TrialSessionInformation": {
+        "SessionName": "beach3",
+        "ParticipantID": "jac1",
+        "Notes": "",
+        "TrialSettings": {
+            "ConfigurationName": "large-obj-on-beach",
+            "VisibilitySettings": {
+                "HandsVisibilityType": "Flicker",
+                "TargetVisibilityType": "Full",
+                "HandsFlickerOnDuration": 0.20000000298023225,
+                "HandsFlickerOffDuration": 0.75,
+                "TargetFlickerOnDuration": 0.20000000298023225,
+                "TargetFlickerOffDuration": 1.0
+            },
+            "OffsetSettings": {
+                "OffsetType": "Randomized",
+                "OffsetValues": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "TargetProximity": 10.0,
+                "ShowHandsInProximity": true
+            },
+            "BackgroundSettings": {
+                "MovingBackground": true,
+                "BackgroundFile": "C:\\Users\\doolitge\\Downloads\\beach-calm-clouds-459522.jpg",
+                "Direction": "Backward",
+                "Speed": 100.0,
+                "NumberOfObjects": 100,
+                "Color": "880000",
+                "ObjectSize": {
+                    "x": 100.0,
+                    "y": 100.0,
+                    "z": 400.0
+                }
+            },
+            "TargetSettings": {
+                "TimeBeforeStart": 2,
+                "TargetSize": 10.0
+            },
+            "ColorSettings": {
+                "BackgroundObjectColor": "880000",
+                "LeftHandColor": "008800",
+                "RightHandColor": "880088",
+                "TargetColor": "880000"
+            },
+            "TargetLocations": [
+                {
+                    "x": 0.0,
+                    "y": -0.5,
+                    "z": 0.5
+                },
+                {
+                    "x": 0.5,
+                    "y": -0.30000001192092898,
+                    "z": 0.4000000059604645
+                },
+                {
+                    "x": 0.5,
+                    "y": 0.30000001192092898,
+                    "z": 0.4000000059604645
+                },
+                {
+                    "x": 0.0,
+                    "y": 0.10000000149011612,
+                    "z": 0.5
+                },
+                {
+                    "x": -0.4000000059604645,
+                    "y": 0.30000001192092898,
+                    "z": 0.5
+                },
+                {
+                    "x": -0.4000000059604645,
+                    "y": -0.30000001192092898,
+                    "z": 0.5
+                },
+                {
+                    "x": 0.4000000059604645,
+                    "y": -0.30000001192092898,
+                    "z": 0.5
+                },
+                {
+                    "x": -0.4000000059604645,
+                    "y": 0.30000001192092898,
+                    "z": 0.5
+                },
+                {
+                    "x": 0.0,
+                    "y": -0.5,
+                    "z": 0.5
+                },
+                {
+                    "x": 0.0,
+                    "y": 0.5,
+                    "z": 0.5
+                }
+            ]
+        }
+    },
+    "CollectedTimingData": {
+        "TargetHits": [
+            {
+                "time": 9115.0,
+                "location": {
+                    "x": 0.5,
+                    "y": -0.30000001192092898,
+                    "z": 0.4000000059604645
+                }
+            },
+            {
+                "time": 18569.0,
+                "location": {
+                    "x": 0.5,
+                    "y": 0.30000001192092898,
+                    "z": 0.4000000059604645
+                }
+            }
+        ],
+        "TargetProximityHits": [
+            {
+                "time": 6682.0,
+                "location": {
+                    "x": 0.5,
+                    "y": -0.30000001192092898,
+                    "z": 0.4000000059604645
+                }
+            },
+            {
+                "time": 15989.0,
+                "location": {
+                    "x": 0.5,
+                    "y": 0.30000001192092898,
+                    "z": 0.4000000059604645
+                }
+            }
+        ],
+        "LeaveTargetHits": [
+            {
+                "time": 1849.0,
+                "location": {
+                    "x": 0.0,
+                    "y": -0.5,
+                    "z": 0.5
+                }
+            },
+            {
+                "time": 12272.0,
+                "location": {
+                    "x": 0.5,
+                    "y": -0.30000001192092898,
+                    "z": 0.4000000059604645
+                }
+            }
+        ],
+        "ReEnterTargetHits": [],
+        "Notes": [
+            {
+                "time": 1849.0,
+                "content": "Target 1 exited"
+            },
+            {
+                "time": 9115.0,
+                "content": "Target 2 hit"
+            },
+            {
+                "time": 12272.0,
+                "content": "Target 2 exited"
+            },
+            {
+                "time": 18569.0,
+                "content": "Target 3 hit"
+            }
+        ]
+    }
+}

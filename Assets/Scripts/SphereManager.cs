@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 
 public class SphereManager : MonoBehaviour
@@ -269,6 +268,7 @@ public class SphereManager : MonoBehaviour
     IEnumerator DelayStart(int waitTime)
     {
         yield return new WaitForSeconds(waitTime);
+        Debug.Log("Setting started to true");
         started = true;
         experimentController.StartExperiment();
 

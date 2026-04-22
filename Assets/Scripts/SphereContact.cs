@@ -24,6 +24,15 @@ public class SphereContact : MonoBehaviour
     {
         if (other.CompareTag("GameController"))
         {
+            if (targetId == 1 && !sphereManager.started)
+            {
+                Debug.Log("Holding start sphere. Timer started.");
+                sphereRenderer.enabled = true;
+                hasBeenTriggered = true;
+                sphereRenderer.material.color = Color.green; 
+                sphereManager.OnStartSphereEnter();
+                return; 
+            }
             if (!hasBeenTriggered || targetId == 1)
             {
                 hasBeenTriggered = true;
@@ -44,14 +53,20 @@ public class SphereContact : MonoBehaviour
     {
         if (other.CompareTag("GameController") && hasBeenTriggered)
         {
-            if (targetId == 1)
+            if (targetId == 1 && !sphereManager.started)
             {
-
+                Debug.Log("Exited start sphere too early. Timer canceled.");
+                hasBeenTriggered = false;
+                sphereRenderer.material.color = sphereManager.GetTargetColor(); 
+                sphereManager.OnStartSphereExit();
+                return;
             }
-
-            EventBus.OnTargetExit?.Invoke(location, targetId);
-            sphereManager.ApplyVisibilitySettings();
-            sphereManager.HideAfterExit();
+            if (hasBeenTriggered)
+            {
+                EventBus.OnTargetExit?.Invoke(location, targetId);
+                sphereManager.ApplyVisibilitySettings();
+                sphereManager.HideAfterExit();
+            }
         }
 
     }

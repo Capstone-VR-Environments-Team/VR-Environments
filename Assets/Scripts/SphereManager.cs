@@ -37,13 +37,14 @@ public class SphereManager : MonoBehaviour
     private string rightHandColor;
     private string targetColor;
     private int timeBeforeStart;
-    private bool started = false;
+    public bool started = false;
     private Vector3 offsetValues;
 
     private bool showHandsInProximity;
 
     private Coroutine handsFlickerRoutine;
     private Coroutine targetsFlickerRoutine;
+    private Coroutine startTimerRoutine;
 
     private bool inProximity = false;
 
@@ -174,12 +175,30 @@ public class SphereManager : MonoBehaviour
         }
     }
 
+    public void OnStartSphereEnter()
+    {
+        if (!started)
+        {
+            if (startTimerRoutine != null) StopCoroutine(startTimerRoutine);
+            startTimerRoutine = StartCoroutine(DelayStart(timeBeforeStart));
+        }
+    }
+
+    public void OnStartSphereExit()
+    {
+        if (!started)
+        {
+            if (startTimerRoutine != null)
+            {
+                StopCoroutine(startTimerRoutine);
+                startTimerRoutine = null;
+                Debug.Log("Hand removed from start sphere early. Timer reset.");
+            }
+        }
+    }
+
     public void OnSphereInteracted()
     {
-        if (spheresCollected == 0) {
-            if (!started) StartTrial();
-            return;
-        }
         HandleSphereInteract();
     }
 
@@ -246,10 +265,13 @@ public class SphereManager : MonoBehaviour
         StartCoroutine(DelayStart(timeBeforeStart));
     }
 
-    IEnumerator DelayStart(int waitTime) {
+    IEnumerator DelayStart(int waitTime)
+    {
         yield return new WaitForSeconds(waitTime);
+        Debug.Log("Setting started to true");
         started = true;
         experimentController.StartExperiment();
+
         if (handVisType == 1)
         {
             handsFlickerRoutine = StartCoroutine(FlickerHands());
@@ -258,6 +280,12 @@ public class SphereManager : MonoBehaviour
         {
             targetsFlickerRoutine = StartCoroutine(FlickerTargets());
         }
+
+        if (spheres != null && spheres.Length > 0)
+        {
+            EventBus.OnTargetHit?.Invoke(spheres[0].transform.position, 1);
+        }
+
         HandleSphereInteract();
         Debug.Log("Trial Started");
     }
@@ -349,5 +377,10 @@ public class SphereManager : MonoBehaviour
         leftHand.GetComponent<MeshRenderer>().material.color = ColorUtility.TryParseHtmlString(leftHandColor, out Color lhColor) ? lhColor : Color.blue;
         rightHand.GetComponent<MeshRenderer>().material.color = ColorUtility.TryParseHtmlString(rightHandColor, out Color rhColor) ? rhColor : Color.red;
         spherePrefab.GetComponent<MeshRenderer>().sharedMaterial.color = ColorUtility.TryParseHtmlString(targetColor, out Color tColor) ? tColor : Color.gray;
+    }
+
+    public Color GetTargetColor()
+    {
+        return ColorUtility.TryParseHtmlString(targetColor, out Color tColor) ? tColor : Color.gray;
     }
 }

@@ -28,6 +28,12 @@ public class SphereLabel : MonoBehaviour {
             _textLabel.color = GetContrastColor(_renderer.material.color);
         }
     }
+    public void AppendNumber(int newNumber) {
+        // If your label text originally said "1", this will make it say "1,2"
+        if (_textLabel != null) {
+            _textLabel.text += $",{newNumber}";
+        }
+    }
 
     void LateUpdate() {
         Camera activeCamera = Camera.main;

@@ -16,13 +16,13 @@ public class SpawnedObjectBehavior : MonoBehaviour {
         // This saves the CPU from doing heavy math in the Update loop.
         maxDistanceSquared = maxTravelDistance * maxTravelDistance;
 
-        EventBus.StopExperiment += () =>
-        {
-            if (gameObject != null) Destroy(gameObject);
-        };
+        moving = true;
+        EventBus.LastSphere += () => moving = false;
     }
 
     void Update() {
+        if (!moving) return;
+
         // 1. Handle Movement
         Vector3 normalizedDir = SessionManager.Instance.getMovingBackgroundDirection();
         float currentSpeed = SessionManager.Instance.getMovingBackgroundSpeed();

@@ -16,12 +16,7 @@ public class ObjectSpawner : MonoBehaviour {
 
     void Start() {
         spawning = SessionManager.Instance.GetMovingBackground();
-        EventBus.StopExperiment += stopObjects;
-    }
-
-    private void stopObjects()
-    {
-        spawning = false;
+        EventBus.LastSphere += () => spawning = false;
     }
 
     void Update()

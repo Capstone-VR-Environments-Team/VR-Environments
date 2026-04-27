@@ -32,6 +32,7 @@ public class LoggingManager : MonoBehaviour
         EventBus.OnEyesTracked += UpdateEyes;
         EventBus.OnTargetReEntry += LogTargetReEntry;
         EventBus.OnTargetExit += LogTargetExit;
+        EventBus.LastSphere += HitLast;
     }
 
     private void OnDisable()
@@ -46,6 +47,7 @@ public class LoggingManager : MonoBehaviour
         EventBus.OnEyesTracked -= UpdateEyes;
         EventBus.OnTargetReEntry -= LogTargetReEntry;
         EventBus.OnTargetExit -= LogTargetExit;
+        EventBus.LastSphere -= HitLast;
 
 
     }
@@ -101,9 +103,13 @@ public class LoggingManager : MonoBehaviour
         logging = true;
     }
 
+    public void HitLast()
+    {
+        logging = false;
+    }
+
     public void StopRecording()
     {
-        if (logging == false) return;
         _directory = SessionManager.Instance.SaveSessionInformation(collectedTimingData);
         logger.SaveLog(_directory); // Save CSV
         logging = false;

@@ -281,11 +281,6 @@ public class SphereManager : MonoBehaviour
             targetsFlickerRoutine = StartCoroutine(FlickerTargets());
         }
 
-        if (spheres != null && spheres.Length > 0)
-        {
-            EventBus.OnTargetHit?.Invoke(spheres[0].transform.position, 1);
-        }
-
         HandleSphereInteract();
         Debug.Log("Trial Started");
     }

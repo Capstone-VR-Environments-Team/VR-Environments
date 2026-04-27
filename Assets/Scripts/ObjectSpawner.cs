@@ -24,26 +24,28 @@ public class ObjectSpawner : MonoBehaviour {
         spawning = false;
     }
 
-    void Update() {
-        if (spawning) {
-            int objPerMin = SessionManager.Instance.getMovingBackgroundQuantity();
-            // Prevent division by zero if someone sets the rate to 0
-            if (objPerMin <= 0f) return;
+    void Update()
+    {
+        if (!spawning) return;
 
-            // Calculate how many seconds should pass between each spawn
-            float secondsBetweenSpawns = 60f / objPerMin;
+        int objPerMin = SessionManager.Instance.getMovingBackgroundQuantity();
+        // Prevent division by zero if someone sets the rate to 0
+        if (objPerMin <= 0f) return;
 
-            // Advance the timer
-            spawnTimer += Time.deltaTime;
+        // Calculate how many seconds should pass between each spawn
+        float secondsBetweenSpawns = 60f / objPerMin;
 
-            // If enough time has passed, spawn an object
-            if (spawnTimer >= secondsBetweenSpawns) {
-                // Subtract the interval. This keeps any "leftover" time, 
-                // ensuring the spawn rate is perfectly spread out over time.
-                spawnTimer -= secondsBetweenSpawns;
+        // Advance the timer
+        spawnTimer += Time.deltaTime;
 
-                SpawnObject();
-            }
+        // If enough time has passed, spawn an object
+        if (spawnTimer >= secondsBetweenSpawns)
+        { 
+            // Subtract the interval. This keeps any "leftover" time, 
+            // ensuring the spawn rate is perfectly spread out over time.
+            spawnTimer -= secondsBetweenSpawns;
+
+            SpawnObject();
         }
     }
 

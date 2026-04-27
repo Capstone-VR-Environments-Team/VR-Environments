@@ -14,6 +14,8 @@ public class SpawnedObjectBehavior : MonoBehaviour {
         // Calculate the squared distance once at the start. 
         // This saves the CPU from doing heavy math in the Update loop.
         maxDistanceSquared = maxTravelDistance * maxTravelDistance;
+
+        EventBus.StopExperiment += () => Destroy(gameObject);
     }
 
     void Update() {

@@ -8,10 +8,13 @@ public class BackgroundManager : MonoBehaviour
     public Material skyboxMaterial;
     public Material defaultMaterial;
     private VideoPlayer videoPlayer;
+    [SerializeField] private Canvas participantCanvas;
 
     private void Start()
     {
         UpdateBackground();
+        participantCanvas.gameObject.SetActive(false);
+        EventBus.StopExperiment += ClearBackground;
     }
 
     public void UpdateBackground()
@@ -25,6 +28,12 @@ public class BackgroundManager : MonoBehaviour
         } else {
             RenderSettings.skybox = defaultMaterial;
         }
+    }
+
+    private void ClearBackground()
+    {
+        RenderSettings.skybox = defaultMaterial;
+        participantCanvas.gameObject.SetActive(true);
     }
 
     private void UpdateBackgroundFromImage(string filePath)

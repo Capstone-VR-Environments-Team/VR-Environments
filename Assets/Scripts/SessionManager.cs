@@ -30,7 +30,8 @@ public class SessionManager : Singleton<SessionManager>
         EventBus.StartExperiment -= StartTrial;
     }
 
-    public void StartTrial(Vector3 headsetPosition) {
+    public void StartTrial(Vector3 headsetPosition)
+    {
         _startTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
     }
 

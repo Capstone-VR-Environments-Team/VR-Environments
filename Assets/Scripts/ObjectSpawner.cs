@@ -12,8 +12,20 @@ public class ObjectSpawner : MonoBehaviour {
 
     private float spawnTimer = 0f;
 
+    private bool spawning;
+
+    void Start() {
+        spawning = SessionManager.Instance.GetMovingBackground();
+        EventBus.StopExperiment += stopObjects;
+    }
+
+    private void stopObjects()
+    {
+        spawning = false;
+    }
+
     void Update() {
-        if (SessionManager.Instance.GetMovingBackground()) {
+        if (spawning) {
             int objPerMin = SessionManager.Instance.getMovingBackgroundQuantity();
             // Prevent division by zero if someone sets the rate to 0
             if (objPerMin <= 0f) return;

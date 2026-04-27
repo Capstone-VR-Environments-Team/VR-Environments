@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -142,7 +143,7 @@ public class CustomizeSessionManager : MonoBehaviour
         {
             Debug.Log("filename: " + fileName);
             uploadedFileNameText.SetText(fileName);
-            _tempTargetLocations = importedData.targets;
+            _tempTargetLocations = RoundTargetLocations(importedData.targets);
         }
         else
         {
@@ -154,11 +155,11 @@ public class CustomizeSessionManager : MonoBehaviour
 
     public float SafeParse(string input, float defaultValue)
     {
-        if (float.TryParse(input, out float result))
+        if (float.TryParse(input, NumberStyles.Float, CultureInfo.InvariantCulture, out float result))
         {
-            return (float)Math.Round(result, 5);
+            return (float)Math.Round(result, 5, MidpointRounding.AwayFromZero);
         }
-        return (float)Math.Round(defaultValue, 5);
+        return (float)Math.Round(defaultValue, 5, MidpointRounding.AwayFromZero);
     }
 
     public void onFileUpload()
@@ -222,9 +223,25 @@ public class CustomizeSessionManager : MonoBehaviour
                 RightHandColor = string.IsNullOrEmpty(rightHandColor.text) ? "FF0000" : rightHandColor.text,
                 TargetColor = string.IsNullOrEmpty(targetColor.text) ? "C0C0C0" : targetColor.text
             },
-            TargetLocations = _tempTargetLocations
+            TargetLocations = RoundTargetLocations(_tempTargetLocations)
         };
         SessionManager.Instance.SaveSettingsFile(trial, trial.ConfigurationName);
+    }
+
+    private static List<Vector3> RoundTargetLocations(IEnumerable<Vector3> targetLocations) {
+        List<Vector3> roundedTargets = new List<Vector3>();
+        if (targetLocations == null) {
+            return roundedTargets;
+        }
+
+        foreach (Vector3 target in targetLocations) {
+            roundedTargets.Add(new Vector3(
+                (float)Math.Round(target.x, 5, MidpointRounding.AwayFromZero),
+                (float)Math.Round(target.y, 5, MidpointRounding.AwayFromZero),
+                (float)Math.Round(target.z, 5, MidpointRounding.AwayFromZero)));
+        }
+
+        return roundedTargets;
     }
 
     public void ResetInputs()

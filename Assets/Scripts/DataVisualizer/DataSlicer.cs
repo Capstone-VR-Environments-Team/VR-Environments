@@ -56,6 +56,7 @@ public static class DataSlicer {
             foreach (SphereOccupancyWindow window in windowsInSegment) {
                 double windowStart = Math.Max(intervalStart, window.StartTime);
                 double windowEnd = Math.Min(endKey.time, window.EndTime);
+                HitEvent activeProxHit = proxHit != null && proxHit.time >= intervalStart ? proxHit : null;
 
                 if (windowEnd <= windowStart) {
                     continue;
@@ -65,7 +66,7 @@ public static class DataSlicer {
                     i,
                     startKey,
                     endKey,
-                    proxHit,
+                    activeProxHit,
                     intervalStart,
                     windowStart,
                     rawDataPoints,
@@ -92,7 +93,7 @@ public static class DataSlicer {
                 i,
                 startKey,
                 endKey,
-                proxHit,
+                proxHit != null && proxHit.time >= intervalStart ? proxHit : null,
                 intervalStart,
                 endKey.time,
                 rawDataPoints,

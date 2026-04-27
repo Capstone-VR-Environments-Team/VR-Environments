@@ -140,7 +140,7 @@ public static class DataSlicer {
                 segmentIndex,
                 startTime,
                 endTime,
-                AnalysisMode.PREVIOUSSPHERE,
+                AnalysisMode.LINETOTARGET,
                 startKey.location,
                 endKey.location,
                 rawDataPoints,

@@ -11,7 +11,6 @@ public class ProximityAlertTrigger : MonoBehaviour
     {
         _targetId = targetId;
         location = loc;
-        targetId = id;
     }
 
     private void OnEnable()

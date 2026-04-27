@@ -6,6 +6,7 @@ public class SpawnedObjectBehavior : MonoBehaviour {
 
     private Vector3 spawnPosition;
     private float maxDistanceSquared;
+    private bool moving;
 
     void Start() {
         // Record the exact point in space where this object was instantiated
@@ -14,9 +15,15 @@ public class SpawnedObjectBehavior : MonoBehaviour {
         // Calculate the squared distance once at the start. 
         // This saves the CPU from doing heavy math in the Update loop.
         maxDistanceSquared = maxTravelDistance * maxTravelDistance;
+
+
+        moving = true;
+        EventBus.LastSphere += () => moving = false;
     }
 
     void Update() {
+        if (!moving) return;
+
         // 1. Handle Movement
         Vector3 normalizedDir = SessionManager.Instance.getMovingBackgroundDirection();
         float currentSpeed = SessionManager.Instance.getMovingBackgroundSpeed();

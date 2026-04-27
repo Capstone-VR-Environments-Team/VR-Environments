@@ -239,7 +239,7 @@ public class SphereManager : MonoBehaviour
     {
         Debug.Log("Trial complete! All spheres collected.");
         recorder.StopRecording();
-        // - Load next trial
+        EventBus.LastSphere?.Invoke();
         ResetTrial();
     }
 

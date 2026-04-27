@@ -12,26 +12,35 @@ public class ObjectSpawner : MonoBehaviour {
 
     private float spawnTimer = 0f;
 
-    void Update() {
-        if (SessionManager.Instance.GetMovingBackground()) {
-            int objPerMin = SessionManager.Instance.getMovingBackgroundQuantity();
-            // Prevent division by zero if someone sets the rate to 0
-            if (objPerMin <= 0f) return;
+    private bool spawning;
 
-            // Calculate how many seconds should pass between each spawn
-            float secondsBetweenSpawns = 60f / objPerMin;
+    void Start() {
+        spawning = SessionManager.Instance.GetMovingBackground();
+        EventBus.LastSphere += () => spawning = false;
+    }
 
-            // Advance the timer
-            spawnTimer += Time.deltaTime;
+    void Update()
+    {
+        if (!spawning) return;
 
-            // If enough time has passed, spawn an object
-            if (spawnTimer >= secondsBetweenSpawns) {
-                // Subtract the interval. This keeps any "leftover" time, 
-                // ensuring the spawn rate is perfectly spread out over time.
-                spawnTimer -= secondsBetweenSpawns;
+        int objPerMin = SessionManager.Instance.getMovingBackgroundQuantity();
+        // Prevent division by zero if someone sets the rate to 0
+        if (objPerMin <= 0f) return;
 
-                SpawnObject();
-            }
+        // Calculate how many seconds should pass between each spawn
+        float secondsBetweenSpawns = 60f / objPerMin;
+
+        // Advance the timer
+        spawnTimer += Time.deltaTime;
+
+        // If enough time has passed, spawn an object
+        if (spawnTimer >= secondsBetweenSpawns)
+        { 
+            // Subtract the interval. This keeps any "leftover" time, 
+            // ensuring the spawn rate is perfectly spread out over time.
+            spawnTimer -= secondsBetweenSpawns;
+
+            SpawnObject();
         }
     }
 

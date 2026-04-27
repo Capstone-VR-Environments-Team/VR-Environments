@@ -17,6 +17,7 @@ public static class EventBus {
 
 
     public static Action<Vector3> StartExperiment;
+    public static Action LastSphere;
     public static Action StopExperiment;
     public static Action<Vector3> PrimeExperiment;
 

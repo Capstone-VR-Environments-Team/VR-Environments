@@ -266,8 +266,8 @@ public class RawData : IJsonable {
             List<string> row = data[i];
             if (row == null || row.Count == 0) continue;
 
-            if (row.Count <= headerMap.Count) {
-                Debug.LogWarning($"Target Import: Row {i} skipped. It does not have enough columns.");
+            if (row.Count < headerMap.Count) {
+                Debug.LogWarning($"Target Import: Row {i} skipped. It does not have enough columns. {row.Count} rows for {headerMap.Count} headers");
                 continue;
             }
 

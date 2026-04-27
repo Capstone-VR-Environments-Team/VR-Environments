@@ -16,6 +16,7 @@ public class SpawnedObjectBehavior : MonoBehaviour {
         // This saves the CPU from doing heavy math in the Update loop.
         maxDistanceSquared = maxTravelDistance * maxTravelDistance;
 
+
         moving = true;
         EventBus.LastSphere += () => moving = false;
     }

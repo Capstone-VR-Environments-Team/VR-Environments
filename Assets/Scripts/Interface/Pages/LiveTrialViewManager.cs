@@ -9,7 +9,8 @@ public class LiveTrialViewManager : MonoBehaviour
     [Header("Control Panel")]
     [SerializeField] private Button beginTrialButton;
     [SerializeField] private TMP_Text timerText;
-    [SerializeField] private Button endButton;
+    [SerializeField] private Button endTrialButton;
+    [SerializeField] private Button goHomeButton;
 
     [Header("Data Panel")]
     [SerializeField] private TMP_Text experimentNameText;
@@ -30,29 +31,11 @@ public class LiveTrialViewManager : MonoBehaviour
     {
         noteInput.onValueChanged.AddListener(OnNoteValueChanged);
         logButton.onClick.AddListener(OnSaveNoteClicked);
-        beginTrialButton.onClick.AddListener(() => {
-            endButton.interactable = true;
-            beginTrialButton.interactable = false;
-        });
+        beginTrialButton.onClick.AddListener(OnBeginTrialClicked);
+        endTrialButton.onClick.AddListener(OnEndTrialClicked);
+        goHomeButton.onClick.AddListener(OnGoHomeClicked);
 
         ResetLiveTrialViewManager();
-    }
-
-    private void SetEndTrialButton()
-    {
-        beginTrialButton.interactable = true;
-        endButton.GetComponentInChildren<TMP_Text>().text = "End Trial";
-        endButton.interactable = false;
-        endButton.onClick.RemoveListener(OnGoHomeClicked);
-        endButton.onClick.AddListener(disableButtonsOnEnd);
-    }
-
-    private void SetGoHomeButton()
-    {
-        beginTrialButton.interactable = false;
-        endButton.GetComponentInChildren<TMP_Text>().text = "Go Home";
-        endButton.onClick.RemoveListener(disableButtonsOnEnd);
-        endButton.onClick.AddListener(OnGoHomeClicked);
     }
 
     public void AddBeginTrialOnClick(UnityEngine.Events.UnityAction action)
@@ -62,7 +45,7 @@ public class LiveTrialViewManager : MonoBehaviour
 
     public void AddEndTrialOnClick(UnityEngine.Events.UnityAction action)
     {
-        endButton.onClick.AddListener(action);
+        endTrialButton.onClick.AddListener(action);
     }
 
     private void OnEnable()
@@ -103,6 +86,19 @@ public class LiveTrialViewManager : MonoBehaviour
     public void OnDisable() {
         EventBus.StartExperiment -= StartTimer;
         EventBus.StopExperiment -= StopTimer;
+    }
+
+    public void OnBeginTrialClicked()
+    {
+        beginTrialButton.interactable = false;
+        endTrialButton.interactable = true;
+        goHomeButton.interactable = false;
+    }
+
+    public void OnEndTrialClicked()
+    {
+        endTrialButton.interactable = false;
+        goHomeButton.interactable = true;
     }
 
     public void OnGoHomeClicked() {
@@ -206,20 +202,13 @@ public class LiveTrialViewManager : MonoBehaviour
         TimeSpan t = TimeSpan.FromSeconds(time / 1000);
         string timeString = string.Format("{0:D1}:{1:D2}", t.Minutes, t.Seconds);
         AppendToLog($"{timeString} - Data has been saved to folder");
-
-        SetGoHomeButton();
-    }
-
-    public void disableButtonsOnEnd()
-    {
-        beginTrialButton.interactable = false;
-        logButton.interactable = false;
     }
 
     public void ResetLiveTrialViewManager()
     {
-        SetEndTrialButton();
         beginTrialButton.interactable = true;
+        endTrialButton.interactable = false;
+        goHomeButton.interactable = true;
         logButton.interactable = true;
 
         TrialSessionInformation trialInfo = SessionManager.Instance.GetTrialSessionInformation();

@@ -16,10 +16,6 @@ public static class DataSlicer {
 
         SlicingResult results = new SlicingResult();
 
-        if (keyPoints == null || keyPoints.Count < 2) {
-            return results;
-        }
-
         if (rawDataPoints == null || rawDataPoints.Count == 0) {
             return results;
         }
@@ -28,76 +24,63 @@ public static class DataSlicer {
             return results;
         }
 
-        List<HitEvent> sortedKeys = keyPoints.OrderBy(k => k.time).ToList();
-        List<HitEvent> sortedProx = proximityPoints != null
-            ? proximityPoints.OrderBy(p => p.time).ToList()
-            : new List<HitEvent>();
+        List<SlicedEvent> chronologicalEvents = BuildChronologicalEvents(
+            keyPoints,
+            proximityPoints,
+            previousSphereReentryPoints,
+            previousSphereLeavePoints);
 
-        Dictionary<int, HitEvent> proximityBySegment = BuildProximityBySegment(sortedKeys, sortedProx);
-        List<SphereOccupancyWindow> occupancyWindows = BuildPreviousSphereWindows(sortedKeys, previousSphereReentryPoints, previousSphereLeavePoints);
+        if (chronologicalEvents.Count == 0) {
+            return results;
+        }
+
+        List<ModeWindow> windows = BuildModeWindows(chronologicalEvents);
+        double rawStartTime = rawDataTimes[0];
+        double rawEndTime = rawDataTimes[rawDataTimes.Count - 1];
+        Vector3 defaultReferenceLocation = chronologicalEvents[0].Location;
 
         int cursor = 0;
+        double intervalStart = rawStartTime;
 
-        for (int i = 0; i < sortedKeys.Count - 1; i++) {
-            HitEvent startKey = sortedKeys[i];
-            HitEvent endKey = sortedKeys[i + 1];
-
-            proximityBySegment.TryGetValue(i, out HitEvent proxHit);
-
-            double intervalStart = startKey.time;
-            List<SphereOccupancyWindow> windowsInSegment = occupancyWindows
-                .Where(window =>
-                    window.EndTime > startKey.time
-                    && window.StartTime < endKey.time
-                    && IsMatchingLocation(window.SphereLocation, startKey.location))
-                .OrderBy(window => window.StartTime)
-                .ToList();
-
-            foreach (SphereOccupancyWindow window in windowsInSegment) {
-                double windowStart = Math.Max(intervalStart, window.StartTime);
-                double windowEnd = Math.Min(endKey.time, window.EndTime);
-                HitEvent activeProxHit = proxHit != null && proxHit.time >= intervalStart && proxHit.time < windowStart
-                    ? proxHit
-                    : null;
-
-                if (windowEnd <= windowStart) {
-                    continue;
-                }
-
-                AddStandardChunks(
-                    i,
-                    startKey,
-                    endKey,
-                    activeProxHit,
-                    intervalStart,
-                    windowStart,
-                    rawDataPoints,
-                    rawDataTimes,
-                    ref cursor,
-                    results);
-
+        foreach (ModeWindow window in windows.OrderBy(window => window.StartTime)) {
+            if (window.StartTime > intervalStart) {
                 AddChunk(
-                    i,
-                    windowStart,
-                    windowEnd,
+                    0,
+                    intervalStart,
+                    window.StartTime,
                     AnalysisMode.PREVIOUSSPHERE,
-                    window.SphereLocation,
-                    window.SphereLocation,
+                    defaultReferenceLocation,
+                    defaultReferenceLocation,
                     rawDataPoints,
                     rawDataTimes,
                     ref cursor,
                     results);
-
-                intervalStart = windowEnd;
             }
 
-            AddStandardChunks(
-                i,
-                startKey,
-                endKey,
-                proxHit != null && proxHit.time >= intervalStart ? proxHit : null,
+            AddChunk(
+                0,
+                window.StartTime,
+                window.EndTime,
+                window.Mode,
+                window.LinePointA,
+                window.LinePointB,
+                rawDataPoints,
+                rawDataTimes,
+                ref cursor,
+                results);
+
+            intervalStart = Math.Max(intervalStart, window.EndTime);
+            defaultReferenceLocation = window.LinePointB;
+        }
+
+        if (intervalStart < rawEndTime) {
+            AddChunk(
+                0,
                 intervalStart,
-                endKey.time,
+                rawEndTime,
+                AnalysisMode.PREVIOUSSPHERE,
+                defaultReferenceLocation,
+                defaultReferenceLocation,
                 rawDataPoints,
                 rawDataTimes,
                 ref cursor,
@@ -108,104 +91,91 @@ public static class DataSlicer {
     }
 
     public static List<HitEvent> FilterValidProximityHits(List<HitEvent> keyPoints, List<HitEvent> proximityPoints) {
-        if (keyPoints == null || keyPoints.Count < 2 || proximityPoints == null || proximityPoints.Count == 0) {
+        if (keyPoints == null || proximityPoints == null || proximityPoints.Count == 0) {
             return new List<HitEvent>();
         }
 
-        List<HitEvent> sortedKeys = keyPoints.OrderBy(k => k.time).ToList();
-        List<HitEvent> sortedProx = proximityPoints.OrderBy(p => p.time).ToList();
-        Dictionary<int, HitEvent> mapped = BuildProximityBySegment(sortedKeys, sortedProx);
+        List<SlicedEvent> events = BuildChronologicalEvents(keyPoints, proximityPoints, null, null);
+        List<ModeWindow> windows = BuildModeWindows(events);
+        List<HitEvent> filtered = new List<HitEvent>();
 
-        return mapped
-            .OrderBy(kvp => kvp.Key)
-            .Select(kvp => kvp.Value)
-            .ToList();
+        foreach (ModeWindow window in windows) {
+            if (window.Mode == AnalysisMode.POINTTOTARGET) {
+                filtered.Add(new HitEvent(window.StartTime, window.LinePointA));
+            }
+        }
+
+        return filtered;
     }
 
-    private static void AddStandardChunks(
-        int segmentIndex,
-        HitEvent startKey,
-        HitEvent endKey,
-        HitEvent proxHit,
-        double startTime,
-        double endTime,
-        List<Vector3> rawDataPoints,
-        List<double> rawDataTimes,
-        ref int cursor,
-        SlicingResult results) {
+    private static List<SlicedEvent> BuildChronologicalEvents(
+        List<HitEvent> keyPoints,
+        List<HitEvent> proximityPoints,
+        List<HitEvent> previousSphereReentryPoints,
+        List<HitEvent> previousSphereLeavePoints) {
 
-        if (endTime <= startTime) {
-            return;
+        List<SlicedEvent> events = new List<SlicedEvent>();
+
+        if (keyPoints != null) {
+            events.AddRange(keyPoints.Select(hit => new SlicedEvent(hit.time, hit.location, SlicedEventType.TargetHit)));
         }
 
-        if (proxHit == null) {
-            AddChunk(
-                segmentIndex,
-                startTime,
-                endTime,
-                AnalysisMode.LINETOTARGET,
-                startKey.location,
-                endKey.location,
-                rawDataPoints,
-                rawDataTimes,
-                ref cursor,
-                results);
-            return;
+        if (proximityPoints != null) {
+            events.AddRange(proximityPoints.Select(hit => new SlicedEvent(hit.time, hit.location, SlicedEventType.ProximityHit)));
         }
 
-        if (endTime <= proxHit.time) {
-            AddChunk(
-                segmentIndex,
-                startTime,
-                endTime,
-                AnalysisMode.LINETOTARGET,
-                startKey.location,
-                endKey.location,
-                rawDataPoints,
-                rawDataTimes,
-                ref cursor,
-                results);
-            return;
+        if (previousSphereReentryPoints != null) {
+            events.AddRange(previousSphereReentryPoints.Select(hit => new SlicedEvent(hit.time, hit.location, SlicedEventType.TargetReEntry)));
         }
 
-        if (startTime >= proxHit.time) {
-            AddChunk(
-                segmentIndex,
-                startTime,
-                endTime,
-                AnalysisMode.POINTTOTARGET,
-                startKey.location,
-                endKey.location,
-                rawDataPoints,
-                rawDataTimes,
-                ref cursor,
-                results);
-            return;
+        if (previousSphereLeavePoints != null) {
+            events.AddRange(previousSphereLeavePoints.Select(hit => new SlicedEvent(hit.time, hit.location, SlicedEventType.TargetExit)));
         }
 
-        AddChunk(
-            segmentIndex,
-            startTime,
-            proxHit.time,
-            AnalysisMode.LINETOTARGET,
-            startKey.location,
-            endKey.location,
-            rawDataPoints,
-            rawDataTimes,
-            ref cursor,
-            results);
+        return events.OrderBy(evt => evt.Time).ToList();
+    }
 
-        AddChunk(
-            segmentIndex,
-            proxHit.time,
-            endTime,
-            AnalysisMode.POINTTOTARGET,
-            startKey.location,
-            endKey.location,
-            rawDataPoints,
-            rawDataTimes,
-            ref cursor,
-            results);
+    private static List<ModeWindow> BuildModeWindows(List<SlicedEvent> events) {
+        List<ModeWindow> windows = new List<ModeWindow>();
+        if (events == null || events.Count < 2) {
+            return windows;
+        }
+
+        for (int i = 0; i < events.Count - 1; i++) {
+            SlicedEvent startEvent = events[i];
+            SlicedEvent endEvent = events[i + 1];
+            AnalysisMode mode = ClassifyWindow(startEvent.Type, endEvent.Type);
+            windows.Add(new ModeWindow(startEvent.Time, endEvent.Time, mode, startEvent.Location, endEvent.Location));
+        }
+
+        return windows;
+    }
+
+    private static AnalysisMode ClassifyWindow(SlicedEventType startType, SlicedEventType endType) {
+        if (startType == SlicedEventType.TargetExit
+            && endType == SlicedEventType.ProximityHit) {
+            return AnalysisMode.LINETOTARGET;
+        }
+
+        if (startType == SlicedEventType.ProximityHit && endType == SlicedEventType.TargetHit) {
+            return AnalysisMode.POINTTOTARGET;
+        }
+
+        if ((startType == SlicedEventType.TargetHit || startType == SlicedEventType.TargetReEntry)
+            && endType == SlicedEventType.TargetExit) {
+            return AnalysisMode.PREVIOUSSPHERE;
+        }
+
+        if (startType == SlicedEventType.TargetExit
+            && endType == SlicedEventType.TargetReEntry) {
+            return AnalysisMode.PREVIOUSSPHERE;
+        }
+
+        if (startType == SlicedEventType.ProximityHit && endType == SlicedEventType.TargetReEntry) {
+            return AnalysisMode.PREVIOUSSPHERE;
+        }
+
+        return AnalysisMode.PREVIOUSSPHERE;
     }
 
     private static void AddChunk(
@@ -245,99 +215,39 @@ public static class DataSlicer {
         });
     }
 
-    private static Dictionary<int, HitEvent> BuildProximityBySegment(List<HitEvent> sortedKeys, List<HitEvent> sortedProx) {
-        Dictionary<int, HitEvent> segmentMatches = new Dictionary<int, HitEvent>();
-        if (sortedKeys == null || sortedKeys.Count < 2 || sortedProx == null || sortedProx.Count == 0) {
-            return segmentMatches;
+    private sealed class SlicedEvent {
+        public double Time { get; }
+        public Vector3 Location { get; }
+        public SlicedEventType Type { get; }
+
+        public SlicedEvent(double time, Vector3 location, SlicedEventType type) {
+            Time = time;
+            Location = location;
+            Type = type;
         }
-
-        int proxCursor = 0;
-
-        for (int i = 0; i < sortedKeys.Count - 1; i++) {
-            HitEvent startKey = sortedKeys[i];
-            HitEvent endKey = sortedKeys[i + 1];
-
-            while (proxCursor < sortedProx.Count && sortedProx[proxCursor].time <= startKey.time) {
-                proxCursor++;
-            }
-
-            int scan = proxCursor;
-            while (scan < sortedProx.Count && sortedProx[scan].time < endKey.time) {
-                HitEvent candidate = sortedProx[scan];
-                if (IsMatchingLocation(candidate.location, endKey.location)) {
-                    segmentMatches[i] = candidate;
-                    proxCursor = scan + 1;
-                    break;
-                }
-
-                scan++;
-            }
-        }
-
-        return segmentMatches;
     }
 
-    private static List<SphereOccupancyWindow> BuildPreviousSphereWindows(List<HitEvent> keyPoints, List<HitEvent> reentryPoints, List<HitEvent> leavePoints) {
-        List<SphereOccupancyWindow> windows = new List<SphereOccupancyWindow>();
-        if (leavePoints == null || leavePoints.Count == 0) {
-            return windows;
+    private sealed class ModeWindow {
+        public double StartTime { get; }
+        public double EndTime { get; }
+        public AnalysisMode Mode { get; }
+        public Vector3 LinePointA { get; }
+        public Vector3 LinePointB { get; }
+
+        public ModeWindow(double startTime, double endTime, AnalysisMode mode, Vector3 linePointA, Vector3 linePointB) {
+            StartTime = startTime;
+            EndTime = endTime;
+            Mode = mode;
+            LinePointA = linePointA;
+            LinePointB = linePointB;
         }
+    }
 
-        List<HitEvent> sortedLeaves = leavePoints.OrderBy(l => l.time).ToList();
-
-        // Add initial occupancy windows: target hit (original enter) -> first leave of that same target.
-        if (keyPoints != null && keyPoints.Count > 0) {
-            int leaveCursorForInitial = 0;
-            for (int i = 0; i < keyPoints.Count; i++) {
-                HitEvent targetHit = keyPoints[i];
-                double segmentEnd = i < keyPoints.Count - 1 ? keyPoints[i + 1].time : double.PositiveInfinity;
-
-                while (leaveCursorForInitial < sortedLeaves.Count && sortedLeaves[leaveCursorForInitial].time <= targetHit.time) {
-                    leaveCursorForInitial++;
-                }
-
-                int scan = leaveCursorForInitial;
-                while (scan < sortedLeaves.Count && sortedLeaves[scan].time < segmentEnd) {
-                    HitEvent leave = sortedLeaves[scan];
-                    if (!IsMatchingLocation(targetHit.location, leave.location)) {
-                        scan++;
-                        continue;
-                    }
-
-                    windows.Add(new SphereOccupancyWindow(targetHit.time, leave.time, targetHit.location));
-                    break;
-                }
-            }
-        }
-
-        if (reentryPoints == null || reentryPoints.Count == 0) {
-            return windows;
-        }
-
-        List<HitEvent> sortedEntries = reentryPoints.OrderBy(e => e.time).ToList();
-
-        int leaveCursor = 0;
-
-        foreach (HitEvent entry in sortedEntries) {
-            while (leaveCursor < sortedLeaves.Count && sortedLeaves[leaveCursor].time <= entry.time) {
-                leaveCursor++;
-            }
-
-            int scan = leaveCursor;
-            while (scan < sortedLeaves.Count) {
-                HitEvent leave = sortedLeaves[scan];
-                if (!IsMatchingLocation(entry.location, leave.location)) {
-                    scan++;
-                    continue;
-                }
-
-                windows.Add(new SphereOccupancyWindow(entry.time, leave.time, entry.location));
-                leaveCursor = scan + 1;
-                break;
-            }
-        }
-
-        return windows;
+    private enum SlicedEventType {
+        TargetHit,
+        TargetExit,
+        TargetReEntry,
+        ProximityHit
     }
 
     private static bool IsMatchingLocation(Vector3 lhs, Vector3 rhs) {

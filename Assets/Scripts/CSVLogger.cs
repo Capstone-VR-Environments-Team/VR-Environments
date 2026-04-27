@@ -70,7 +70,7 @@ public class CsvLogger : ILogger {
     private void WriteHeader() {
         _buffer.AppendLine("Timestamp," +
                            "Lx,Ly,Lz,LqX,LqY,LqZ,LqW," +
-                           "Rx,Ry,Rz,RqX,RqY,RqZ,RqW" +
+                           "Rx,Ry,Rz,RqX,RqY,RqZ,RqW," +
                            "Gx,Gy,Gz,Glx,Gly,Glz,Gf,Lpd,Rpd");
     }
 

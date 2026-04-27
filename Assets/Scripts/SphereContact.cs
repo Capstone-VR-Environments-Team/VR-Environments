@@ -33,7 +33,7 @@ public class SphereContact : MonoBehaviour
                 sphereManager.OnStartSphereEnter();
                 return; 
             }
-            if (!hasBeenTriggered || targetId == 1)
+            if (!hasBeenTriggered)
             {
                 hasBeenTriggered = true;
                 Debug.Log($"Sphere {targetId} found!");

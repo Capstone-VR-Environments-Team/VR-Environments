@@ -119,7 +119,7 @@ public class SphereManager : MonoBehaviour
                 proximityObject.transform.localScale = Vector3.one * scaleRatio;
                 triggerCollider.center = c.center;
                 ProximityAlertTrigger proximityAlert = proximityObject.AddComponent<ProximityAlertTrigger>();
-                proximityAlert.Initialize(sphereVectors[i], i);
+                proximityAlert.Initialize(i + 1, sphereVectors[i]);
                 EventBus.OnProximityHit += OnProximityEnter;
             }
             spheres[i].SetActive(false);
@@ -128,14 +128,14 @@ public class SphereManager : MonoBehaviour
         SpawnNextSphere();
     }
 
-    private void OnProximityEnter(Vector3 location, int id)
+    private void OnProximityEnter(Vector3 location, int targetId)
     {
         inProximity = true;
         if (showHandsInProximity)
         {
             ShowHandsInProximity();
         }
-        Debug.Log("Proximity Hit");
+        Debug.Log($"Proximity Hit for target {targetId}");
     }
 
     private void ShowHandsInProximity()
@@ -279,11 +279,6 @@ public class SphereManager : MonoBehaviour
         if (targetVisType == 1)
         {
             targetsFlickerRoutine = StartCoroutine(FlickerTargets());
-        }
-
-        if (spheres != null && spheres.Length > 0)
-        {
-            EventBus.OnTargetHit?.Invoke(spheres[0].transform.position, 1);
         }
 
         HandleSphereInteract();

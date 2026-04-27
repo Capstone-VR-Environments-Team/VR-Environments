@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -24,8 +25,10 @@ public class FullAnalysisManager : MonoBehaviour {
 
     private void RunAnalysis(string folderPath) {
         // Find Files
-        string csvPath = Directory.GetFiles(folderPath, "*.csv").FirstOrDefault();
+        string[] csvPaths = Directory.GetFiles(folderPath, "*.csv");
         string jsonPath = Directory.GetFiles(folderPath, "*.json").FirstOrDefault();
+        string targetEventCsvPath = csvPaths.FirstOrDefault(path => Path.GetFileName(path).EndsWith("-TargetEvents.csv", StringComparison.OrdinalIgnoreCase));
+        string csvPath = csvPaths.FirstOrDefault(path => !Path.GetFileName(path).EndsWith("-TargetEvents.csv", StringComparison.OrdinalIgnoreCase));
 
         if (string.IsNullOrEmpty(csvPath) || string.IsNullOrEmpty(jsonPath)) {
             Debug.LogError("Error: Missing .csv or .json in folder.");
@@ -38,17 +41,20 @@ public class FullAnalysisManager : MonoBehaviour {
         _reviewPastSessionsManager.SetSessionInfo();
         List<TrackingData> rawData = FileManager.LoadCSVFile<RawData>(csvPath).trackingData;
 
-        if (rawData == null || rawData.Count == 0) return;
-
         if (trialInfo.CollectedTimingData == null) {
             trialInfo.CollectedTimingData = new CollectedTimingData();
         }
 
-        IReadOnlyList<Vector3> configuredTargets = trialInfo?.TrialSessionInformation?.TrialSettings?.TargetLocations;
+        if (rawData == null || rawData.Count == 0) return;
+
+        if (!string.IsNullOrEmpty(targetEventCsvPath)) {
+            trialInfo.CollectedTimingData.TargetEvents = FileManager.LoadCSVFile<TargetEventLog>(targetEventCsvPath).Events;
+        }
+
         double initialTime = rawData[0].timeStamp;
         trialInfo.CollectedTimingData.TargetHits = TargetHitSequenceBuilder.BuildWithInitialTarget(
             trialInfo.CollectedTimingData.TargetHits,
-            configuredTargets,
+            trialInfo?.TrialSessionInformation?.TrialSettings?.TargetLocations,
             initialTime);
 
         bool includeProximityHits = ShouldIncludeProximityHits(trialInfo);
@@ -65,4 +71,5 @@ public class FullAnalysisManager : MonoBehaviour {
 
         return offsetSettings.TargetProximity > 0f;
     }
+
 }

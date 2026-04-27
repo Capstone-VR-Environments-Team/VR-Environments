@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -141,7 +143,7 @@ public class CustomizeSessionManager : MonoBehaviour
         {
             Debug.Log("filename: " + fileName);
             uploadedFileNameText.SetText(fileName);
-            _tempTargetLocations = importedData.targets;
+            _tempTargetLocations = RoundTargetLocations(importedData.targets);
         }
         else
         {
@@ -153,11 +155,11 @@ public class CustomizeSessionManager : MonoBehaviour
 
     public float SafeParse(string input, float defaultValue)
     {
-        if (float.TryParse(input, out float result))
+        if (float.TryParse(input, NumberStyles.Float, CultureInfo.InvariantCulture, out float result))
         {
-            return result;
+            return (float)Math.Round(result, 5, MidpointRounding.AwayFromZero);
         }
-        return defaultValue;
+        return (float)Math.Round(defaultValue, 5, MidpointRounding.AwayFromZero);
     }
 
     public void onFileUpload()
@@ -188,9 +190,9 @@ public class CustomizeSessionManager : MonoBehaviour
             {
                 OffsetType = offsetTypeDropdown.options[offsetTypeDropdown.value].text,
                 OffsetValues = new Vector3(
-                    SafeParse(offsetXInput.text, 0),
-                    SafeParse(offsetYInput.text, 0),
-                    SafeParse(offsetZInput.text, 0)
+                    (float)SafeParse(offsetXInput.text, 0),
+                    (float)SafeParse(offsetYInput.text, 0),
+                    (float)SafeParse(offsetZInput.text, 0)
                 ),
                 TargetProximity = SafeParse(targetRangeInput.text, 10),
                 ShowHandsInProximity = showHandInProximityToggle.isOn
@@ -204,9 +206,9 @@ public class CustomizeSessionManager : MonoBehaviour
                 NumberOfObjects = (int)SafeParse(numberOfObjectsInput.text, 100),
                 Color = string.IsNullOrEmpty(objectColorInput.text) ? "000000" : objectColorInput.text,
                 ObjectSize = new Vector3(
-                    SafeParse(objectSizeXInput.text, 25),
-                    SafeParse(objectSizeYInput.text, 25),
-                    SafeParse(objectSizeZInput.text, 100)
+                    (float)SafeParse(objectSizeXInput.text, 25),
+                    (float)SafeParse(objectSizeYInput.text, 25),
+                    (float)SafeParse(objectSizeZInput.text, 100)
                     )
             },
             TargetSettings = new TargetSettings
@@ -221,9 +223,25 @@ public class CustomizeSessionManager : MonoBehaviour
                 RightHandColor = string.IsNullOrEmpty(rightHandColor.text) ? "FF0000" : rightHandColor.text,
                 TargetColor = string.IsNullOrEmpty(targetColor.text) ? "C0C0C0" : targetColor.text
             },
-            TargetLocations = _tempTargetLocations
+            TargetLocations = RoundTargetLocations(_tempTargetLocations)
         };
         SessionManager.Instance.SaveSettingsFile(trial, trial.ConfigurationName);
+    }
+
+    private static List<Vector3> RoundTargetLocations(IEnumerable<Vector3> targetLocations) {
+        List<Vector3> roundedTargets = new List<Vector3>();
+        if (targetLocations == null) {
+            return roundedTargets;
+        }
+
+        foreach (Vector3 target in targetLocations) {
+            roundedTargets.Add(new Vector3(
+                (float)Math.Round(target.x, 5, MidpointRounding.AwayFromZero),
+                (float)Math.Round(target.y, 5, MidpointRounding.AwayFromZero),
+                (float)Math.Round(target.z, 5, MidpointRounding.AwayFromZero)));
+        }
+
+        return roundedTargets;
     }
 
     public void ResetInputs()

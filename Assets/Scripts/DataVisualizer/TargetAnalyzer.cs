@@ -6,17 +6,13 @@ public static class TargetAnalyzer
 {
     private const float LocationMatchTolerance = 0.02f;
 
-    public static TargetAnalysisResults AnalyzeData(List<HitEvent> targetData, List<HitEvent> proxHitData)
+    public static TargetAnalysisResults AnalyzeData(CollectedTimingData timingData)
     {
-        if (targetData == null || targetData.Count == 0)
+        List<TargetEventRecord> chronologicalEvents = BuildChronologicalEvents(timingData);
+        if (chronologicalEvents.Count == 0)
         {
             return new TargetAnalysisResults();
         }
-
-        List<HitEvent> sortedHits = targetData.OrderBy(hit => hit.time).ToList();
-        List<HitEvent> sortedProx = proxHitData != null
-            ? proxHitData.OrderBy(hit => hit.time).ToList()
-            : new List<HitEvent>();
 
         List<double> totalTimes = new();
         List<double> totalTimeTimestamps = new();
@@ -25,49 +21,102 @@ public static class TargetAnalyzer
         List<double> preSearchTimes = new();
         List<double> preSearchTimeTimestamps = new();
 
-        int proxCursor = 0;
-        for (int i = 1; i < sortedHits.Count; i++)
+        Dictionary<int, TargetEventRecord> activeLeaveByTarget = new Dictionary<int, TargetEventRecord>();
+        Dictionary<int, TargetEventRecord> activeProximityByTarget = new Dictionary<int, TargetEventRecord>();
+
+        foreach (TargetEventRecord record in chronologicalEvents.OrderBy(evt => evt.time))
         {
-            HitEvent startHit = sortedHits[i - 1];
-            HitEvent endHit = sortedHits[i];
-
-            double totalDelta = endHit.time - startHit.time;
-            totalTimes.Add(totalDelta);
-            totalTimeTimestamps.Add(endHit.time);
-
-            while (proxCursor < sortedProx.Count && sortedProx[proxCursor].time <= startHit.time) {
-                proxCursor++;
+            if (!record.TryGetEventType(out TargetEventType eventType))
+            {
+                continue;
             }
 
-            HitEvent proxHit = null;
-            if (proxCursor < sortedProx.Count) {
-                HitEvent candidate = sortedProx[proxCursor];
-                bool inSegmentWindow = candidate.time < endHit.time;
-                bool matchesTarget = IsMatchingLocation(candidate.location, endHit.location);
-                if (inSegmentWindow && matchesTarget) {
-                    proxHit = candidate;
-                    proxCursor++;
+            int targetId = record.targetId;
+            if (targetId <= 0)
+            {
+                continue;
+            }
+
+            if (eventType == TargetEventType.TargetExit)
+            {
+                activeLeaveByTarget[targetId] = record;
+                activeProximityByTarget.Remove(targetId);
+                continue;
+            }
+
+            if (eventType == TargetEventType.ProximityHit)
+            {
+                if (activeLeaveByTarget.TryGetValue(targetId, out TargetEventRecord activeLeave)
+                    && record.time > activeLeave.time
+                    && !activeProximityByTarget.ContainsKey(targetId))
+                {
+                    activeProximityByTarget[targetId] = record;
                 }
+
+                continue;
             }
 
-            if (proxHit != null) {
-                searchTimes.Add(endHit.time - proxHit.time);
-                searchTimeTimestamps.Add(proxHit.time);
-                preSearchTimes.Add(proxHit.time - startHit.time);
-                preSearchTimeTimestamps.Add(startHit.time);
-            } else {
-                preSearchTimes.Add(totalDelta);
-                preSearchTimeTimestamps.Add(startHit.time);
+            if (eventType != TargetEventType.TargetHit)
+            {
+                continue;
             }
+
+            if (!activeLeaveByTarget.TryGetValue(targetId, out TargetEventRecord targetLeave)
+                || !activeProximityByTarget.TryGetValue(targetId, out TargetEventRecord targetProximity))
+            {
+                continue;
+            }
+
+            if (!IsMatchingLocation(record.location, targetProximity.location))
+            {
+                continue;
+            }
+
+            double preSearchDelta = targetProximity.time - targetLeave.time;
+            double searchDelta = record.time - targetProximity.time;
+            if (preSearchDelta < 0.0 || searchDelta < 0.0)
+            {
+                continue;
+            }
+
+            preSearchTimes.Add(preSearchDelta);
+            preSearchTimeTimestamps.Add(targetLeave.time);
+
+            searchTimes.Add(searchDelta);
+            searchTimeTimestamps.Add(targetProximity.time);
+
+            totalTimes.Add(preSearchDelta + searchDelta);
+            totalTimeTimestamps.Add(record.time);
+
+            activeLeaveByTarget.Remove(targetId);
+            activeProximityByTarget.Remove(targetId);
         }
 
-        TargetAnalysisResults results = new() {
+        return new TargetAnalysisResults {
             targetToTargetTimes = DataAnalyzer.AnalyzeData(totalTimes, totalTimeTimestamps),
             searchTimes = DataAnalyzer.AnalyzeData(searchTimes, searchTimeTimestamps),
             preSearchTimes = DataAnalyzer.AnalyzeData(preSearchTimes, preSearchTimeTimestamps)
         };
+    }
 
-        return results;
+    private static List<TargetEventRecord> BuildChronologicalEvents(CollectedTimingData timingData) {
+        List<TargetEventRecord> events = new List<TargetEventRecord>();
+        if (timingData == null)
+        {
+            return events;
+        }
+
+        if (timingData.TargetEvents != null && timingData.TargetEvents.Count > 0)
+        {
+            events.AddRange(timingData.TargetEvents);
+            return events;
+        }
+
+        events.AddRange(timingData.TargetHits.Select(hit => new TargetEventRecord(hit.time, TargetEventType.TargetHit, hit.location, hit.targetId)));
+        events.AddRange(timingData.TargetProximityHits.Select(hit => new TargetEventRecord(hit.time, TargetEventType.ProximityHit, hit.location, hit.targetId)));
+        events.AddRange(timingData.LeaveTargetHits.Select(hit => new TargetEventRecord(hit.time, TargetEventType.TargetExit, hit.location, hit.targetId)));
+        events.AddRange(timingData.ReEnterTargetHits.Select(hit => new TargetEventRecord(hit.time, TargetEventType.TargetReEntry, hit.location, hit.targetId)));
+        return events;
     }
 
     private static bool IsMatchingLocation(Vector3 lhs, Vector3 rhs) {

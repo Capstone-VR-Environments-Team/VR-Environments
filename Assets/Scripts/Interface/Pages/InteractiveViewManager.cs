@@ -123,25 +123,47 @@ public class InteractiveViewManager : MonoBehaviour
             rightPoints.Add(data.rightHandPos);
         }
 
+        // Dictionary to keep track of spawned spheres and their labels
+        Dictionary<Vector3, SphereLabel> spawnedSpheres = new Dictionary<Vector3, SphereLabel>();
+
         foreach (HitEvent point in targetData) {
             targetPoints.Add(point.location);
+            int currentTargetNumber = targetPoints.Count;
 
-            GameObject sphere = targetSpherePrefab != null
-                ? Instantiate(targetSpherePrefab)
-                : GameObject.CreatePrimitive(PrimitiveType.Sphere);
-
-            sphere.transform.SetParent(_targets.transform);
-            sphere.transform.localPosition = point.location;
-            sphere.transform.localScale = _targetSphereScale;
-
-            MeshRenderer sphereRenderer = sphere.GetComponent<MeshRenderer>();
-            if (sphereRenderer != null) {
-                sphereRenderer.material.color = _targetColor;
+            // Check if a sphere already exists at this location (using a small tolerance for float precision)
+            SphereLabel existingLabel = null;
+            foreach (var kvp in spawnedSpheres) {
+                if (Vector3.Distance(kvp.Key, point.location) < 0.001f) {
+                    existingLabel = kvp.Value;
+                    break;
+                }
             }
 
-            SphereLabel label = sphere.GetComponent<SphereLabel>();
-            if (label != null) {
-                label.Initialize(targetPoints.Count);
+            if (existingLabel != null) {
+                // A sphere already exists here; just update the label
+                existingLabel.AppendNumber(currentTargetNumber);
+            } 
+            else {
+                // No sphere exists here; create a new one
+                GameObject sphere = targetSpherePrefab != null
+                    ? Instantiate(targetSpherePrefab)
+                    : GameObject.CreatePrimitive(PrimitiveType.Sphere);
+
+                sphere.transform.SetParent(_targets.transform);
+                sphere.transform.localPosition = point.location;
+                sphere.transform.localScale = _targetSphereScale;
+
+                MeshRenderer sphereRenderer = sphere.GetComponent<MeshRenderer>();
+                if (sphereRenderer != null) {
+                    sphereRenderer.material.color = _targetColor;
+                }
+
+                SphereLabel label = sphere.GetComponent<SphereLabel>();
+                if (label != null) {
+                    label.Initialize(currentTargetNumber);
+                    // Track this new sphere for future overlap checks
+                    spawnedSpheres.Add(point.location, label);
+                }
             }
         }
 

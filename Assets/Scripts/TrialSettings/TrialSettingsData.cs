@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 
@@ -122,12 +123,15 @@ public class TargetImportData : IJsonable
                 continue;
             }
 
-            bool xSuccess = float.TryParse(row[xIndex].Trim(), out float xVal);
-            bool ySuccess = float.TryParse(row[yIndex].Trim(), out float yVal);
-            bool zSuccess = float.TryParse(row[zIndex].Trim(), out float zVal);
+            bool xSuccess = float.TryParse(row[xIndex].Trim(), NumberStyles.Float, CultureInfo.InvariantCulture, out float xVal);
+            bool ySuccess = float.TryParse(row[yIndex].Trim(), NumberStyles.Float, CultureInfo.InvariantCulture, out float yVal);
+            bool zSuccess = float.TryParse(row[zIndex].Trim(), NumberStyles.Float, CultureInfo.InvariantCulture, out float zVal);
 
             if (xSuccess && ySuccess && zSuccess) {
-                targets.Add(new Vector3(xVal, yVal, zVal));
+                targets.Add(new Vector3(
+                    (float)Math.Round(xVal, 5, MidpointRounding.AwayFromZero),
+                    (float)Math.Round(yVal, 5, MidpointRounding.AwayFromZero),
+                    (float)Math.Round(zVal, 5, MidpointRounding.AwayFromZero)));
             } else {
                 Debug.LogWarning($"Target Import: Row {i} skipped. Invalid number format detected -> x: '{row[xIndex]}', y: '{row[yIndex]}', z: '{row[zIndex]}'");
             }

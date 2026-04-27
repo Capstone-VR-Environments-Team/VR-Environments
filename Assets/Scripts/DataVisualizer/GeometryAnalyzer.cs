@@ -7,18 +7,22 @@ public static class GeometryAnalyzer {
 
         var results = new GeometryResults();
 
-        bool requiresLine = input.Mode != AnalysisMode.PREVIOUSSPHERE;
+        bool requiresLine = input.Mode == AnalysisMode.LINETOTARGET;
 
-        // Calculate the line vector only for approach/search modes.
+        // Calculate the line vector for the modes that actually use it.
         Vector3 lineDir = Vector3.zero;
-        if (requiresLine) {
-            lineDir = (input.LinePointB - input.LinePointA).normalized;
+        Vector3 lineVector = input.LinePointB - input.LinePointA;
+        bool hasValidLine = lineVector.sqrMagnitude > Mathf.Epsilon;
 
-            if (lineDir == Vector3.zero) {
-                Debug.LogError("GeometryAnalyzer: Line points are identical. Cannot form a line.");
-                Debug.LogError("Point A: " + input.LinePointA.ToString() + " Point B: " + input.LinePointB.ToString());
-                return null;
-            }
+        if (requiresLine && !hasValidLine) {
+            Debug.LogError("GeometryAnalyzer: Line points are identical. Cannot form a line.");
+            Debug.LogError("Point A: " + input.LinePointA.ToString() + " Point B: " + input.LinePointB.ToString());
+            return null;
+        }
+
+        if (hasValidLine) {
+            lineDir = lineVector.normalized;
+
         }
 
         // Process all points

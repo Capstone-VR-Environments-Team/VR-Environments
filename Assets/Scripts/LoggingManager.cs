@@ -114,16 +114,18 @@ public class LoggingManager : MonoBehaviour
         if (!logging) return;
 
         double time = SessionManager.Instance.GetTrialTime();
-        collectedTimingData.TargetHits.Add(new HitEvent(time, targetLocation));
+        collectedTimingData.TargetHits.Add(new HitEvent(time, targetLocation, targetId));
+        collectedTimingData.TargetEvents.Add(new TargetEventRecord(time, TargetEventType.TargetHit, targetLocation, targetId));
         LogHitEvent(time, $"Target {targetId} hit");
     }
 
-    public void LogProximityHit(Vector3 targetLocation)
+    public void LogProximityHit(Vector3 targetLocation, int targetId)
     {
         if (!logging) return;
 
-        collectedTimingData.TargetProximityHits.Add(new HitEvent(SessionManager.Instance.GetTrialTime(),
-            targetLocation));
+        double time = SessionManager.Instance.GetTrialTime();
+        collectedTimingData.TargetProximityHits.Add(new HitEvent(time, targetLocation, targetId));
+        collectedTimingData.TargetEvents.Add(new TargetEventRecord(time, TargetEventType.ProximityHit, targetLocation, targetId));
     }
 
     public void LogNote(string content, double timestamp)
@@ -138,7 +140,8 @@ public class LoggingManager : MonoBehaviour
         if (!logging) return;
 
         double time = SessionManager.Instance.GetTrialTime();
-        collectedTimingData.ReEnterTargetHits.Add(new HitEvent(time, targetLocation));
+        collectedTimingData.ReEnterTargetHits.Add(new HitEvent(time, targetLocation, targetId));
+        collectedTimingData.TargetEvents.Add(new TargetEventRecord(time, TargetEventType.TargetReEntry, targetLocation, targetId));
         LogHitEvent(time, $"Target {targetId} re-entered");
     }
 
@@ -147,7 +150,8 @@ public class LoggingManager : MonoBehaviour
         if (!logging) return;
 
         double time = SessionManager.Instance.GetTrialTime();
-        collectedTimingData.LeaveTargetHits.Add(new HitEvent(time, targetLocation));
+        collectedTimingData.LeaveTargetHits.Add(new HitEvent(time, targetLocation, targetId));
+        collectedTimingData.TargetEvents.Add(new TargetEventRecord(time, TargetEventType.TargetExit, targetLocation, targetId));
         LogHitEvent(time, $"Target {targetId} exited");
     }
 

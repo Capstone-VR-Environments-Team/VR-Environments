@@ -9,6 +9,7 @@ public class CollectedTimingData
     public List<HitEvent> TargetProximityHits = new();
     public List<HitEvent> LeaveTargetHits = new();
     public List<HitEvent> ReEnterTargetHits = new();
+    public List<TargetEventRecord> TargetEvents = new();
     public List<NoteEvent> Notes = new();
 }
 
@@ -17,11 +18,20 @@ public class HitEvent
 {
     public double time;
     public Vector3 location;
+    public int targetId;
 
     public HitEvent(double time, Vector3 location)
     {
         this.time = time;
         this.location = location;
+        this.targetId = -1;
+    }
+
+    public HitEvent(double time, Vector3 location, int targetId)
+    {
+        this.time = time;
+        this.location = location;
+        this.targetId = targetId;
     }
 }
 

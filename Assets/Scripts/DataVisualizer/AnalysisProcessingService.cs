@@ -42,7 +42,7 @@ public static class AnalysisProcessingService {
         AnalysisContext context = CreateContext(rawData, timingData);
         Dictionary<Hand, IReadOnlyList<AnalysisMode>> pointTypesByHand = ProcessHands(context, filteredProximityHits);
 
-        TargetAnalysisResults targetAnalysisResults = TargetAnalyzer.AnalyzeData(timingData.TargetHits, filteredProximityHits);
+        TargetAnalysisResults targetAnalysisResults = TargetAnalyzer.AnalyzeData(timingData);
 
         pointTypesByHand.TryGetValue(Hand.LEFT, out IReadOnlyList<AnalysisMode> leftPointTypes);
         pointTypesByHand.TryGetValue(Hand.RIGHT, out IReadOnlyList<AnalysisMode> rightPointTypes);

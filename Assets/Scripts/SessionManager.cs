@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Globalization;
+using System.Linq;
+using System.Text;
 using UnityEngine;
 
 public class SessionManager : Singleton<SessionManager>
@@ -53,7 +56,33 @@ public class SessionManager : Singleton<SessionManager>
         CreateSaveDirectory(fileName);
         string filePath = Path.Combine(_collectedDataDirectoryPath, fileName + ".json");
         FileManager.SaveJsonFile(trialSession, filePath);
+        SaveTargetEventCsv(collectedTimingData, fileName);
         return _collectedDataDirectoryPath;
+    }
+
+    private void SaveTargetEventCsv(CollectedTimingData collectedTimingData, string fileName) {
+        string eventPath = Path.Combine(_collectedDataDirectoryPath, fileName + "-TargetEvents.csv");
+        List<TargetEventRecord> events = collectedTimingData?.TargetEvents != null
+            ? collectedTimingData.TargetEvents.OrderBy(evt => evt.time).ToList()
+            : new List<TargetEventRecord>();
+
+        StringBuilder builder = new StringBuilder();
+        builder.AppendLine("Time,EventType,TargetId,X,Y,Z");
+
+        foreach (TargetEventRecord evt in events) {
+            builder.AppendLine(string.Format(
+                CultureInfo.InvariantCulture,
+                "{0},{1},{2},{3},{4},{5}",
+                evt.time,
+                evt.eventType,
+                evt.targetId,
+                evt.location.x,
+                evt.location.y,
+                evt.location.z));
+        }
+
+        File.WriteAllText(eventPath, builder.ToString());
+        Debug.Log($"Target event CSV saved to: {eventPath}");
     }
 
     private void CreateSaveDirectory(string name) {

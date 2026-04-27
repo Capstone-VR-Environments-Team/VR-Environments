@@ -1,6 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
+
+public enum TargetEventType {
+    TargetHit,
+    TargetExit,
+    TargetReEntry,
+    ProximityHit
+}
 
 public enum AnalysisMode {
     LINETOTARGET,
@@ -109,6 +117,102 @@ public sealed class AnalyzedData {
 public class JsonWrapper : IJsonable {
     public TrialSessionInformation TrialSessionInformation;
     public CollectedTimingData CollectedTimingData;
+}
+
+[Serializable]
+public class TargetEventRecord {
+    public double time;
+    public string eventType;
+    public int targetId;
+    public Vector3 location;
+
+    public TargetEventRecord() {
+        targetId = -1;
+    }
+
+    public TargetEventRecord(double time, TargetEventType eventType, Vector3 location, int targetId = -1) {
+        this.time = time;
+        this.eventType = eventType.ToString();
+        this.location = location;
+        this.targetId = targetId;
+    }
+
+    public bool TryGetEventType(out TargetEventType parsedType) {
+        return Enum.TryParse(eventType, true, out parsedType);
+    }
+}
+
+[Serializable]
+public class TargetEventLog : IJsonable {
+    public List<TargetEventRecord> Events = new();
+
+    public void From2dList(List<List<string>> data) {
+        List<TargetEventRecord> events = new List<TargetEventRecord>();
+        if (data == null || data.Count < 2) {
+            Events = events;
+            return;
+        }
+
+        Dictionary<string, int> headerMap = new Dictionary<string, int>();
+        List<string> headerParts = data[0];
+        for (int i = 0; i < headerParts.Count; i++) {
+            headerMap[headerParts[i].Trim()] = i;
+        }
+
+        double GetDouble(IReadOnlyList<string> row, string key, double defaultValue = 0.0) {
+            if (!headerMap.TryGetValue(key, out int index) || index >= row.Count) {
+                return defaultValue;
+            }
+
+            return double.Parse(row[index], CultureInfo.InvariantCulture);
+        }
+
+        int GetInt(IReadOnlyList<string> row, string key, int defaultValue = -1) {
+            if (!headerMap.TryGetValue(key, out int index) || index >= row.Count) {
+                return defaultValue;
+            }
+
+            if (int.TryParse(row[index], out int parsed)) {
+                return parsed;
+            }
+
+            return defaultValue;
+        }
+
+        string GetString(IReadOnlyList<string> row, string key, string defaultValue = "") {
+            if (!headerMap.TryGetValue(key, out int index) || index >= row.Count) {
+                return defaultValue;
+            }
+
+            return row[index];
+        }
+
+        for (int i = 1; i < data.Count; i++) {
+            List<string> row = data[i];
+            if (row == null || row.Count == 0) {
+                continue;
+            }
+
+            TargetEventRecord record = new TargetEventRecord {
+                time = GetDouble(row, "Time", GetDouble(row, "Timestamp")),
+                eventType = GetString(row, "EventType"),
+                targetId = GetInt(row, "TargetId", -1),
+                location = new Vector3(
+                    (float)GetDouble(row, "X", GetDouble(row, "LocationX")),
+                    (float)GetDouble(row, "Y", GetDouble(row, "LocationY")),
+                    (float)GetDouble(row, "Z", GetDouble(row, "LocationZ")))
+            };
+
+            if (string.IsNullOrWhiteSpace(record.eventType)) {
+                Debug.LogWarning($"Target event import: row {i} skipped because it does not include an event type.");
+                continue;
+            }
+
+            events.Add(record);
+        }
+
+        Events = events;
+    }
 }
 
 [Serializable]

@@ -5,9 +5,11 @@ public class ProximityAlertTrigger : MonoBehaviour
 {
     private bool isHandInProximity = false;
     public Vector3 location;
+    private int _targetId = -1;
 
-    public void Initialize(Vector3 loc)
+    public void Initialize(int targetId, Vector3 loc)
     {
+        _targetId = targetId;
         location = loc;
     }
 
@@ -43,7 +45,7 @@ public class ProximityAlertTrigger : MonoBehaviour
         {
             isHandInProximity = true;
             // Using the null-conditional operator (?.) is a slightly safer way to invoke events
-            EventBus.OnProximityHit?.Invoke(location); 
+            EventBus.OnProximityHit?.Invoke(location, _targetId); 
         }
     }
 

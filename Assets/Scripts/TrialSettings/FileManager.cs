@@ -4,26 +4,38 @@ using System.Linq;
 using UnityEngine;
 
 public static class FileManager {
-    
-    public static (T data, string fileName) LoadFromFile<T>(string filePath) where T : IJsonable, new() {
 
-        if (!File.Exists(filePath)) {
+    public static (T data, string fileName) LoadFromFile<T>(string filePath) where T : IJsonable, new()
+    {
+
+        if (!File.Exists(filePath))
+        {
             Debug.LogError($"File not found at: {filePath}");
             return default;
         }
 
-        string fileContent = File.ReadAllText(filePath);
-        string fileName = Path.GetFileName(filePath);
-        string extension = Path.GetExtension(filePath).ToLower();
+        try
+        {
+            string fileName = Path.GetFileName(filePath);
+            string extension = Path.GetExtension(filePath).ToLower();
 
-        string jsonToProcess = fileContent;
-
-        if (extension == ".csv") {
-            return (LoadCSVFile<T>(filePath), fileName); 
-        } else if (extension == ".json") {
-            return (LoadJsonFile<T>(filePath), fileName);
-        } else {
-            Debug.LogError($"Incorrect file type! Should be .json");
+            if (extension == ".csv")
+            {
+                return (LoadCSVFile<T>(filePath), fileName);
+            }
+            else if (extension == ".json")
+            {
+                return (LoadJsonFile<T>(filePath), fileName);
+            }
+            else
+            {
+                Debug.LogError($"Incorrect file type! Should be .json or .csv");
+                return default;
+            }
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"Error parsing file {filePath}: {e.Message}");
             return default;
         }
     }

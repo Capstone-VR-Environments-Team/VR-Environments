@@ -138,28 +138,78 @@ public class CustomizeSessionManager : MonoBehaviour
     public void OnUploadLocationsClicked()
     {
         string filePath = FileSelector.getFilePath(SessionManager.BaseDataPath, new string[] { "json", "csv" });
-        var (importedData, fileName) = FileManager.LoadFromFile<TargetImportData>(filePath);
-        if (importedData != null && importedData.targets != null)
+        if (string.IsNullOrEmpty(filePath)) return;
+
+        try
         {
-            Debug.Log("filename: " + fileName);
-            uploadedFileNameText.SetText(fileName);
-            _tempTargetLocations = RoundTargetLocations(importedData.targets);
+            var (importedData, fileName) = FileManager.LoadFromFile<TargetImportData>(filePath);
+
+            if (importedData != null && importedData.targets != null && importedData.targets.Count > 0)
+            {
+                Debug.Log("filename: " + fileName);
+                uploadedFileNameText.SetText(fileName);
+                uploadedFileNameText.color = new Color32(56, 56, 56, 255);
+                _tempTargetLocations = RoundTargetLocations(importedData.targets);
+            }
+            else
+            {
+                // Graceful failure for bad data
+                uploadedFileNameText.SetText("Invalid file format");
+                uploadedFileNameText.color = Color.red;
+                _tempTargetLocations.Clear();
+            }
         }
-        else
+        catch (System.Exception ex)
         {
-            uploadedFileNameText.SetText("File Upload Failed");
-            Debug.LogError("Failed to load target locations from file.");
+            Debug.LogError($"Failed to load target locations from file: {ex.Message}");
+            uploadedFileNameText.SetText("File Read Error. Please try uploading again.");
+            uploadedFileNameText.color = Color.red;
+            _tempTargetLocations.Clear();
         }
+
         EnableButtons();
     }
 
-    public float SafeParse(string input, float defaultValue)
+    public float SafeParse(string input, float defaultValue, bool allowNegative = false)
     {
         if (float.TryParse(input, NumberStyles.Float, CultureInfo.InvariantCulture, out float result))
         {
-            return (float)Math.Round(result, 5, MidpointRounding.AwayFromZero);
+            float val = (float)Math.Round(result, 5, MidpointRounding.AwayFromZero);
+            return allowNegative ? val : Mathf.Abs(val);
         }
-        return (float)Math.Round(defaultValue, 5, MidpointRounding.AwayFromZero);
+        return defaultValue;
+    }
+
+    public int SafeParseInt(string input, int defaultValue, bool allowNegative = false)
+    {
+        if (int.TryParse(input, NumberStyles.Integer, CultureInfo.InvariantCulture, out int result))
+        {
+            return allowNegative ? result : Mathf.Abs(result);
+        }
+        return defaultValue;
+    }
+
+    private string ValidateHexColor(string input, string defaultColor)
+    {
+        if (string.IsNullOrWhiteSpace(input))
+            return defaultColor;
+
+        string cleanInput = input.Trim().TrimStart('#');
+
+        if (cleanInput.Length != 6)
+            return defaultColor;
+
+        foreach (char c in cleanInput)
+        {
+            bool isHex = (c >= '0' && c <= '9') ||
+                         (c >= 'A' && c <= 'F') ||
+                         (c >= 'a' && c <= 'f');
+            if (!isHex)
+            {
+                return defaultColor;
+            }
+        }
+        return cleanInput.ToUpper();
     }
 
     public void onFileUpload()
@@ -181,20 +231,20 @@ public class CustomizeSessionManager : MonoBehaviour
             {
                 HandsVisibilityType = handVisibility.options[handVisibility.value].text,
                 TargetVisibilityType = targetVisibility.options[targetVisibility.value].text,
-                HandsFlickerOnDuration = SafeParse(handFlickerShow.text, 1),
-                HandsFlickerOffDuration = SafeParse(handFlickerHide.text, 1),
-                TargetFlickerOnDuration = SafeParse(handFlickerShow.text, 1),
-                TargetFlickerOffDuration = SafeParse(targetFlickerHide.text, 1),
+                HandsFlickerOnDuration = SafeParse(handFlickerShow.text, 1f),
+                HandsFlickerOffDuration = SafeParse(handFlickerHide.text, 1f),
+                TargetFlickerOnDuration = SafeParse(targetFlickerShow.text, 1f), 
+                TargetFlickerOffDuration = SafeParse(targetFlickerHide.text, 1f),
             },
             OffsetSettings = new OffsetSettings
             {
                 OffsetType = offsetTypeDropdown.options[offsetTypeDropdown.value].text,
                 OffsetValues = new Vector3(
-                    (float)SafeParse(offsetXInput.text, 0),
-                    (float)SafeParse(offsetYInput.text, 0),
-                    (float)SafeParse(offsetZInput.text, 0)
+                    SafeParse(offsetXInput.text, 0f, true), 
+                    SafeParse(offsetYInput.text, 0f, true), 
+                    SafeParse(offsetZInput.text, 0f, true)  
                 ),
-                TargetProximity = SafeParse(targetRangeInput.text, 10),
+                TargetProximity = SafeParse(targetRangeInput.text, 10f),
                 ShowHandsInProximity = showHandInProximityToggle.isOn
             },
             BackgroundSettings = new BackgroundSettings
@@ -202,26 +252,22 @@ public class CustomizeSessionManager : MonoBehaviour
                 MovingBackground = movingObjectsToggle.isOn,
                 BackgroundFile = backgroundFilePath,
                 Direction = directionTypeDropdown.options[directionTypeDropdown.value].text,
-                Speed = SafeParse(speedInput.text, 10),
-                NumberOfObjects = (int)SafeParse(numberOfObjectsInput.text, 100),
-                Color = string.IsNullOrEmpty(objectColorInput.text) ? "000000" : objectColorInput.text,
+                Speed = SafeParse(speedInput.text, 10f),
+                NumberOfObjects = SafeParseInt(numberOfObjectsInput.text, 100),
+
+                Color = ValidateHexColor(objectColorInput.text, "000000"),
+
                 ObjectSize = new Vector3(
-                    (float)SafeParse(objectSizeXInput.text, 25),
-                    (float)SafeParse(objectSizeYInput.text, 25),
-                    (float)SafeParse(objectSizeZInput.text, 100)
-                    )
-            },
-            TargetSettings = new TargetSettings
-            {
-                TimeBeforeStart = (int)SafeParse(timeBeforeStart.text, 3),
-                TargetSize = SafeParse(targetSize.text, 5)
+                SafeParse(objectSizeXInput.text, 25f),
+                SafeParse(objectSizeYInput.text, 25f),
+                SafeParse(objectSizeZInput.text, 100f)
+                )
             },
             ColorSettings = new ColorSettings
             {
-                BackgroundObjectColor = string.IsNullOrEmpty(objectColorInput.text) ? "000000" : objectColorInput.text,
-                LeftHandColor = string.IsNullOrEmpty(leftHandColor.text) ? "0000FF" : leftHandColor.text,
-                RightHandColor = string.IsNullOrEmpty(rightHandColor.text) ? "FF0000" : rightHandColor.text,
-                TargetColor = string.IsNullOrEmpty(targetColor.text) ? "C0C0C0" : targetColor.text
+                LeftHandColor = ValidateHexColor(leftHandColor.text, "0000FF"),
+                RightHandColor = ValidateHexColor(rightHandColor.text, "FF0000"),
+                TargetColor = ValidateHexColor(targetColor.text, "C0C0C0")
             },
             TargetLocations = RoundTargetLocations(_tempTargetLocations)
         };

@@ -1,8 +1,8 @@
-using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Security.Cryptography.X509Certificates;
+using JetBrains.Annotations;
 using UnityEngine;
 
 [Serializable]
@@ -75,7 +75,6 @@ public class TargetSettings
 [Serializable]
 public class ColorSettings
 {
-    public string BackgroundObjectColor;
     public string LeftHandColor;
     public string RightHandColor;
     public string TargetColor;
@@ -86,32 +85,40 @@ public class TargetImportData : IJsonable
 {
     public List<Vector3> targets;
 
-    public void From2dList(List<List<string>> data) {
-        targets = new List<Vector3>();
-
-        if (data == null || data.Count == 0) {
+    public void From2dList(List<List<string>> data)
+    {
+        if (data == null || data.Count == 0)
+        {
             Debug.LogError("Target Import Failed: The provided data list is null or completely empty.");
+            targets = null;
             return;
         }
 
         List<string> headers = data[0];
-        if (headers.Count < 3) {
+        if (headers.Count < 3)
+        {
             Debug.LogError("Target Import Failed: The header row has fewer than 3 columns.");
+            targets = null;
             return;
         }
 
         int xIndex = -1, yIndex = -1, zIndex = -1;
-        for (int i = 0; i < headers.Count; i++) {
+        for (int i = 0; i < headers.Count; i++)
+        {
             string header = headers[i].Trim().ToLower();
             if (header == "x") xIndex = i;
             else if (header == "y") yIndex = i;
             else if (header == "z") zIndex = i;
         }
 
-        if (xIndex == -1 || yIndex == -1 || zIndex == -1) {
+        if (xIndex == -1 || yIndex == -1 || zIndex == -1)
+        {
             Debug.LogError("Target Import Failed: The header row is missing 'x', 'y', or 'z'.");
+            targets = null;
             return;
         }
+
+        targets = new List<Vector3>();
 
         for (int i = 1; i < data.Count; i++) {
             List<string> row = data[i];

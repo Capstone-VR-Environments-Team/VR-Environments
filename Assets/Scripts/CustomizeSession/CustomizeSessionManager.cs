@@ -263,6 +263,11 @@ public class CustomizeSessionManager : MonoBehaviour
                 SafeParse(objectSizeZInput.text, 100f)
                 )
             },
+            TargetSettings = new TargetSettings
+            {
+                TimeBeforeStart = (int)SafeParse(timeBeforeStart.text, 3f),
+                TargetSize = SafeParse(targetSize.text, 5f)
+            },
             ColorSettings = new ColorSettings
             {
                 LeftHandColor = ValidateHexColor(leftHandColor.text, "0000FF"),

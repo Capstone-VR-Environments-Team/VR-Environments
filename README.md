@@ -43,9 +43,9 @@ The `Assets/Scripts` folder contains the main runtime code. Each major feature f
 
 - `Assets/Scripts/HomePage/HomePage.md`
 - `Assets/Scripts/StartNewSession/StartNewSession.md`
-- `Assets/Scripts/CustomizeSession/CustomizeSesssion.md`
+- `Assets/Scripts/CustomizeSession/CustomizeSession.md`
 - `Assets/Scripts/LiveTrialView/LiveTrialView.md`
-- `Assets/Scripts/ReviewPastSessions/ReviewPastSesssions.md`
+- `Assets/Scripts/ReviewPastSessions/ReviewPastSessions.md`
 - `Assets/Scripts/StatisticalView/StatisticalView.md`
 - `Assets/Scripts/InteractiveView/InteractiveView.md`
 

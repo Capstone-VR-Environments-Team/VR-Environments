@@ -1,12 +1,12 @@
-# VR-Environments
+# Virtual Reality Environment for Brain-Computer Interface
 
 VR-Environments is a Unity-based VR application for running, logging, and reviewing trial sessions. It supports a simple end-to-end workflow: set up a session, customize the trial, run the live experiment in VR, then review the recorded results in both interactive and statistical views.
 
 ## What The Project Includes
 
 - A home screen for navigating between the main parts of the app.
-- A start-new-session flow for entering participant/session metadata and loading saved trial settings.
 - A customize-session page for editing trial configuration before a run.
+- A start-new-session flow for entering participant/session metadata and loading saved trial settings.
 - A live-trial scene that records experiment data in real time.
 - Review pages for analyzing completed sessions.
 - Dedicated docs under `Assets/Scripts/*/*.md` that explain each major feature folder in more detail.

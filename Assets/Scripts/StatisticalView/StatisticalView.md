@@ -6,7 +6,6 @@ This folder contains the scripts that power the statistical review page. The sce
 
 - `StatisticalViewManager.cs`: Main controller for the statistical review page. It loads processed analysis data from `AnalysisResultsStore`, reacts to dropdown changes, refreshes the numeric summary panels, and redraws the graphs.
 - `StatisticsManager.cs`: Small helper that writes a `Statistics` object into four text labels for average, max, min, and standard deviation.
-- `StatisticalView.md`: This documentation file.
 
 ## Scene Connection
 

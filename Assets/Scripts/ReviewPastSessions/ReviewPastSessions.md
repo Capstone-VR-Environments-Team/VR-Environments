@@ -19,7 +19,6 @@ This folder contains the scripts that let the team load a completed trial, run t
 - `Statistics.cs`: Basic statistics container used throughout the review and export pipeline.
 - `TargetAnalyzer.cs`: Computes target timing metrics such as total target-to-target time, search time, and pre-search time.
 - `TargetHitSequenceBuilder.cs`: Normalizes target-hit order and ensures the first configured target is represented when the recorded sequence is incomplete.
-- `ReviewPastSesssions.md`: This documentation file.
 
 ## Scene Connection
 

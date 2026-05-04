@@ -6,7 +6,6 @@ This folder contains the scripts that create a new trial session before the live
 
 - `StartNewSessionManager.cs`: Main controller for the Start New Session page. It reads the session name, participant ID, and notes, loads a saved trial configuration file, enables the Begin button only when the required data is present, and starts the live trial scene.
 - `SessionInfo.cs`: Small data container for session metadata. It stores the session name, participant ID, and notes in a simple structure.
-- `StartNewSession.md`: This documentation file.
 
 ## Scene Connection
 

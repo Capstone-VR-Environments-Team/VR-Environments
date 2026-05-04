@@ -29,6 +29,7 @@ public class ReviewPastSessionsManager : MonoBehaviour
     public void SetSessionInfo()
     {
         filePathText.SetText(AnalysisResultsStore.Instance.CurrentFileName);
+        filePathText.color = new Color32(26,49,30,255);
 
         TrialSessionInformation sessionInfo = AnalysisResultsStore.Instance.TrialInfo.TrialSessionInformation;
         nameText.SetText(sessionInfo.SessionName);
@@ -36,6 +37,13 @@ public class ReviewPastSessionsManager : MonoBehaviour
         notesText.SetText(sessionInfo.Notes);
 
         UpdateScreen(AnalysisResultsStore.Instance.HasSessionInfo);
+    }
+
+    public void SetErrorMessage(string error)
+    {
+        filePathText.SetText(error);
+        infoPanel.SetActive(false);
+        filePathText.color = Color.red;
     }
 
     private void UpdateScreen(bool mode)

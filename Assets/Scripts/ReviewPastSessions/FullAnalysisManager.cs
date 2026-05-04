@@ -31,7 +31,7 @@ public class FullAnalysisManager : MonoBehaviour {
         string csvPath = csvPaths.FirstOrDefault(path => !Path.GetFileName(path).EndsWith("-TargetEvents.csv", StringComparison.OrdinalIgnoreCase));
 
         if (string.IsNullOrEmpty(csvPath) || string.IsNullOrEmpty(jsonPath)) {
-            Debug.LogError("Error: Missing .csv or .json in folder.");
+            _reviewPastSessionsManager.SetErrorMessage("Error: Missing .csv or .json in folder.");
             return;
         }
 

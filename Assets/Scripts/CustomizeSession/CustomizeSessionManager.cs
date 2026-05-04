@@ -83,6 +83,8 @@ public class CustomizeSessionManager : MonoBehaviour
 
         if (handFlickerState == "Flicker" && targetFlickerState == "Flicker")
         {
+            targetVisibility.gameObject.transform.localPosition =
+                handVisibility.gameObject.transform.localPosition - new Vector3(0, _diffY, 0);
             targetFlickerShow.gameObject.transform.localPosition =
                 handFlickerShow.gameObject.transform.localPosition - new Vector3(0, _diffY, 0);
             targetFlickerHide.gameObject.transform.localPosition =
@@ -91,18 +93,24 @@ public class CustomizeSessionManager : MonoBehaviour
         }
         else if (handFlickerState == "Flicker")
         {
+            targetVisibility.gameObject.transform.localPosition =
+                handVisibility.gameObject.transform.localPosition - new Vector3(0, _diffY, 0);
             UpdateFlickerInputFields(true, false);
         }
         else if (targetFlickerState == "Flicker")
         {
-            targetFlickerShow.gameObject.transform.localPosition =
+            targetVisibility.gameObject.transform.localPosition =
                 handFlickerShow.gameObject.transform.localPosition;
-            targetFlickerHide.gameObject.transform.localPosition =
+            targetFlickerShow.gameObject.transform.localPosition =
                 handFlickerHide.gameObject.transform.localPosition;
+            targetFlickerHide.gameObject.transform.localPosition =
+                handVisibility.gameObject.transform.localPosition - new Vector3(0, _diffY, 0);
             UpdateFlickerInputFields(false, true);
         }
         else
         {
+            targetVisibility.gameObject.transform.localPosition =
+                handFlickerShow.gameObject.transform.localPosition;
             UpdateFlickerInputFields(false, false);
         }
 

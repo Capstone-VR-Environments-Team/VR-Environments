@@ -17,7 +17,6 @@ This folder contains the scripts that run the main live experiment scene. It is 
 - `BackgroundManager.cs`: Applies the configured skybox or video background, restores the default background when the trial is complete, and reveals the participant canvas when the live portion ends.
 - `ObjectSpawner.cs`: Spawns moving background objects during the trial when the moving-background setting is enabled.
 - `SpawnedObjectMover.cs`: Moves spawned background objects through the scene and destroys them after they travel far enough.
-- `EnableSecondDisplay.cs`: Activates a second monitor/display if one is available.
 - `XRManager.cs`: Starts and stops XR subsystems when entering or leaving the live VR scene.
 - `TrackingData.cs`: Serializable data model for one tracking sample, including hand transforms and eye-tracking values.
 - `ILogger.cs`: Logging abstraction used by the CSV logger implementation.

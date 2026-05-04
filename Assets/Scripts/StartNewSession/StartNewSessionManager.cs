@@ -45,7 +45,7 @@ public class StartNewSessionManager : MonoBehaviour
         };
         SessionManager.Instance.SetTrialSessionInformation(trialSession);
         ClearInputs();
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene("LiveTrialView");
 
     }
 

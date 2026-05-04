@@ -21,15 +21,4 @@ The attached `InteractiveView.unity` scene wires these scripts together. The mai
 4. Target hits are turned into spheres, and `SphereLabel` keeps their numbering readable in 3D.
 5. The user can toggle paths and targets on or off, change the selected statistics view, move the camera, or return to `ReviewPastSession`.
 
-## Adding A New Visualization Or Control
-
-If you need to add another display option or review control, the usual workflow is:
-
-1. Decide whether the new feature belongs in the main scene controller, the camera, or a helper component.
-2. Add any new serialized fields or references to the relevant script.
-3. Wire the new UI element or scene object in `InteractiveView.unity`.
-4. Update `InteractiveViewManager.cs` if the feature needs to load, show, hide, or rebuild trial data.
-5. Update supporting helper scripts such as `SphereLabel.cs` if the new visualization needs custom per-object behavior.
-6. Document the new behavior here so the folder stays easy to understand.
-
 The main thing to keep in sync is the data store, the scene objects, and the UI callbacks. If one of those pieces is missing, the review view will either show incomplete data or stop responding to the new control.

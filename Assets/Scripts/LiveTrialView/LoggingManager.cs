@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class LoggingManager : MonoBehaviour
@@ -105,6 +106,12 @@ public class LoggingManager : MonoBehaviour
 
     public void HitLast()
     {
+        StartCoroutine(HitLastCoroutine());
+    }
+
+    private IEnumerator HitLastCoroutine()
+    {
+        yield return new WaitForSeconds(.125f);
         logging = false;
     }
 

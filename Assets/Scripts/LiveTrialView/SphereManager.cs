@@ -51,11 +51,13 @@ public class SphereManager : MonoBehaviour
     private void OnEnable() {
         EventBus.PrimeExperiment += BeginTrial;
         EventBus.StopExperiment += ResetTrial;
+        EventBus.OnProximityHit += OnProximityEnter;
     }
 
     private void OnDisable() {
         EventBus.PrimeExperiment -= BeginTrial;
         EventBus.StopExperiment -= ResetTrial;
+        EventBus.OnProximityHit -= OnProximityEnter;
     }
 
     private void Update()
@@ -120,7 +122,6 @@ public class SphereManager : MonoBehaviour
                 triggerCollider.center = c.center;
                 ProximityAlertTrigger proximityAlert = proximityObject.AddComponent<ProximityAlertTrigger>();
                 proximityAlert.Initialize(i + 1, sphereVectors[i]);
-                EventBus.OnProximityHit += OnProximityEnter;
             }
             spheres[i].SetActive(false);
         }
@@ -238,7 +239,7 @@ public class SphereManager : MonoBehaviour
     void EndTrial()
     {
         Debug.Log("Trial complete! All spheres collected.");
-        recorder.StopRecording();
+        StartCoroutine(StopRecording());
         EventBus.LastSphere?.Invoke();
         ResetTrial();
     }
@@ -365,6 +366,12 @@ public class SphereManager : MonoBehaviour
 
             yield return new WaitForSeconds(targetFlickerOffDuration);
         }
+    }
+
+    private IEnumerator StopRecording()
+    {
+        yield return new WaitForSeconds(.5f);
+        recorder.StopRecording();
     }
 
     private void SetColors()

@@ -21,8 +21,9 @@ public static class TargetAnalyzer
         List<double> preSearchTimes = new();
         List<double> preSearchTimeTimestamps = new();
 
-        Dictionary<int, TargetEventRecord> activeLeaveByTarget = new Dictionary<int, TargetEventRecord>();
+        TargetEventRecord lastExit = null;
         Dictionary<int, TargetEventRecord> activeProximityByTarget = new Dictionary<int, TargetEventRecord>();
+        Dictionary<int, TargetEventRecord> exitByTarget = new Dictionary<int, TargetEventRecord>();
 
         foreach (TargetEventRecord record in chronologicalEvents.OrderBy(evt => evt.time))
         {
@@ -39,18 +40,20 @@ public static class TargetAnalyzer
 
             if (eventType == TargetEventType.TargetExit)
             {
-                activeLeaveByTarget[targetId] = record;
+                lastExit = record;
                 activeProximityByTarget.Remove(targetId);
+                exitByTarget.Remove(targetId);
                 continue;
             }
 
             if (eventType == TargetEventType.ProximityHit)
             {
-                if (activeLeaveByTarget.TryGetValue(targetId, out TargetEventRecord activeLeave)
-                    && record.time > activeLeave.time
+                if (lastExit != null
+                    && record.time > lastExit.time
                     && !activeProximityByTarget.ContainsKey(targetId))
                 {
                     activeProximityByTarget[targetId] = record;
+                    exitByTarget[targetId] = lastExit;
                 }
 
                 continue;
@@ -61,7 +64,7 @@ public static class TargetAnalyzer
                 continue;
             }
 
-            if (!activeLeaveByTarget.TryGetValue(targetId, out TargetEventRecord targetLeave)
+            if (!exitByTarget.TryGetValue(targetId, out TargetEventRecord targetLeave)
                 || !activeProximityByTarget.TryGetValue(targetId, out TargetEventRecord targetProximity))
             {
                 continue;
@@ -88,7 +91,7 @@ public static class TargetAnalyzer
             totalTimes.Add(preSearchDelta + searchDelta);
             totalTimeTimestamps.Add(record.time);
 
-            activeLeaveByTarget.Remove(targetId);
+            exitByTarget.Remove(targetId);
             activeProximityByTarget.Remove(targetId);
         }
 

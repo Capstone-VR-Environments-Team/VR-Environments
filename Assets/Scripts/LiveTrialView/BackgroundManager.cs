@@ -14,7 +14,16 @@ public class BackgroundManager : MonoBehaviour
     {
         UpdateBackground();
         participantCanvas.gameObject.SetActive(false);
+    }
+
+    private void OnEnable()
+    {
         EventBus.LastSphere += ClearBackground;
+    }
+
+    private void OnDisable()
+    {
+        EventBus.LastSphere -= ClearBackground;
     }
 
     public void UpdateBackground()

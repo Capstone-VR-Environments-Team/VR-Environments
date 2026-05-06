@@ -18,7 +18,20 @@ public class SpawnedObjectBehavior : MonoBehaviour {
 
 
         moving = true;
-        EventBus.LastSphere += () => moving = false;
+    }
+
+    private void OnEnable()
+    {
+        EventBus.LastSphere += EndExperiment;
+    }
+
+    private void OnDisable()
+    {
+        EventBus.LastSphere -= EndExperiment;
+    }
+
+    private void EndExperiment() {
+        moving = false;
     }
 
     void Update() {

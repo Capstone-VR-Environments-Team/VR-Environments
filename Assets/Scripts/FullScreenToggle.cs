@@ -1,12 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class FullscreenToggle : MonoBehaviour
+public class FullscreenToggle : Singleton<FullscreenToggle>
 {
-    void Awake()
-    {
-        DontDestroyOnLoad(gameObject);
-    }
 
     void Update()
     {

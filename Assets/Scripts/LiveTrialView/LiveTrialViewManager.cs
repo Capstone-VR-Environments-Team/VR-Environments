@@ -103,7 +103,7 @@ public class LiveTrialViewManager : MonoBehaviour
 
     public void OnGoHomeClicked() {
         xrManager.TurnVROff();
-        Destroy(SessionManager.Instance);
+        Destroy(SessionManager.Instance.gameObject);
         SceneManager.LoadScene("HomeScreen");
     }
 
